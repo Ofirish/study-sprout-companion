@@ -1,3 +1,4 @@
+
 import { Assignment } from "@/types/assignment";
 import { SubjectBadge } from "./SubjectBadge";
 import { Card } from "@/components/ui/card";
@@ -39,7 +40,7 @@ export const AssignmentCard = ({
         <div className="flex items-center space-x-2">
           <Clock className="h-4 w-4 text-gray-400" />
           <span className="text-sm text-gray-600">
-            Due {format(assignment.dueDate, "MMM d, yyyy")}
+            Due {format(new Date(assignment.due_date), "MMM d, yyyy")}
           </span>
         </div>
         

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Assignment, Subject } from "@/types/assignment";
 import { Button } from "@/components/ui/button";
@@ -6,12 +7,14 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { PlusCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/components/AuthProvider";
 
 interface AssignmentFormProps {
   onSubmit: (assignment: Omit<Assignment, "id" | "status">) => void;
 }
 
 export const AssignmentForm = ({ onSubmit }: AssignmentFormProps) => {
+  const { session } = useAuth();
   const { toast } = useToast();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -35,8 +38,9 @@ export const AssignmentForm = ({ onSubmit }: AssignmentFormProps) => {
       title,
       description,
       subject,
-      dueDate: new Date(dueDate),
+      due_date: new Date(dueDate).toISOString(), // Convert to ISO string and use due_date
       type,
+      user_id: session?.user.id!, // Add user_id from session
     });
 
     setTitle("");

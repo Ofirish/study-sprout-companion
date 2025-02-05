@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { Assignment } from "@/types/assignment";
 import { AssignmentCard } from "@/components/AssignmentCard";
@@ -35,7 +34,7 @@ const Index = () => {
     mutationFn: async (newAssignment: Omit<Assignment, "id" | "status">) => {
       const { data, error } = await supabase
         .from("assignments")
-        .insert([{ ...newAssignment, user_id: session?.user.id }])
+        .insert([{ ...newAssignment, status: "Not Started" }])
         .select()
         .single();
 
@@ -113,7 +112,7 @@ const Index = () => {
   const sortedAssignments = [...assignments].sort((a, b) => {
     if (a.status === "Not Started" && b.status !== "Not Started") return -1;
     if (a.status !== "Not Started" && b.status === "Not Started") return 1;
-    return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+    return new Date(a.due_date).getTime() - new Date(b.due_date).getTime();
   });
 
   if (isLoading) {

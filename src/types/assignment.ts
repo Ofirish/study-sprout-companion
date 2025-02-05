@@ -6,9 +6,9 @@ export type AssignmentStatus = "Not Started" | "In Progress" | "Completed";
 export interface Assignment {
   id: string;
   title: string;
-  description: string;
+  description: string | null;
   subject: Subject;
-  dueDate: Date | string;
+  due_date: string;  // Changed from dueDate to match DB column
   status: AssignmentStatus;
   type: "homework" | "test";
   user_id: string;
