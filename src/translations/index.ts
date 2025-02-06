@@ -1,8 +1,3 @@
-/**
- * translations/index.ts
- * Purpose: Centralizes all translation modules and exports them as a unified object
- * Also provides type definitions for the translation system
- */
 import { generalTranslations } from "./general";
 import { actionTranslations } from "./actions";
 import { statsTranslations } from "./stats";
@@ -11,7 +6,6 @@ import { formTranslations } from "./form";
 import { statusTranslations } from "./status";
 import { subjectTranslations } from "./subjects";
 
-// Combine all translations into a single object
 export const translations = {
   ...generalTranslations,
   ...actionTranslations,

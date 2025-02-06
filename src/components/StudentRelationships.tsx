@@ -66,11 +66,17 @@ export const StudentRelationships = () => {
     e.preventDefault();
     if (!session || !studentEmail) return;
 
-    // First, get the student's profile ID using their email
+    // First, get the student's profile using their email
     const { data: userData, error: userError } = await supabase
       .from("profiles")
       .select("id, role")
-      .eq("id", (await supabase.auth.admin.getUserByEmail(studentEmail)).data.user?.id)
+      .eq("id", (
+        await supabase
+          .from("auth")
+          .select("id")
+          .eq("email", studentEmail)
+          .single()
+      )?.data?.id)
       .single();
 
     if (userError || !userData) {
