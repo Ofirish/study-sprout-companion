@@ -11,56 +11,20 @@ export const general = {
     en: "Profile Settings",
     he: "הגדרות פרופיל"
   },
-  firstName: {
-    en: "First Name",
-    he: "שם פרטי"
-  },
-  lastName: {
-    en: "Last Name",
-    he: "שם משפחה"
-  },
-  role: {
-    en: "Role",
-    he: "תפקיד"
-  },
-  saveChanges: {
-    en: "Save Changes",
-    he: "שמור שינויים"
-  },
   home: {
     en: "Home",
-    he: "דף הבית"
+    he: "בית"
   },
-  studentRelationships: {
-    en: "Student Relationships",
-    he: "קשרי תלמידים"
+  viewAll: {
+    en: "View All Assignments",
+    he: "צפה בכל המשימות"
   },
-  addStudent: {
-    en: "Add Student",
-    he: "הוסף תלמיד"
+  viewParent: {
+    en: "View My Assignments",
+    he: "צפה במשימות שלי"
   },
-  studentEmail: {
-    en: "Student Email",
-    he: "אימייל תלמיד"
-  },
-  add: {
-    en: "Add",
-    he: "הוסף"
-  },
-  noStudentsYet: {
-    en: "No students yet",
-    he: "אין תלמידים עדיין"
-  },
-  connectedStudents: {
-    en: "Connected Students",
-    he: "תלמידים מחוברים"
-  },
-  selectStudent: {
-    en: "Select Student",
-    he: "בחר תלמיד"
-  },
-  myAssignments: {
-    en: "My Assignments",
-    he: "המטלות שלי"
+  viewStudent: {
+    en: "View Student Assignments",
+    he: "צפה במשימות התלמיד"
   }
-} as const;
+};

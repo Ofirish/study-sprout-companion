@@ -1,4 +1,3 @@
-
 /**
  * Index.tsx
  * Purpose: Main dashboard page displaying assignments and controls.
@@ -9,7 +8,7 @@ import { Assignment } from "@/types/assignment";
 import { AssignmentForm } from "@/components/AssignmentForm";
 import { StatsCard } from "@/components/StatsCard";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, LogOut } from "lucide-react";
+import { PlusCircle, LogOut, Users } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { AssignmentTabs } from "@/components/AssignmentTabs";
@@ -21,16 +20,41 @@ import { useFunMode } from "@/contexts/FunModeContext";
 import { Sparkles } from "@/components/Sparkles";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+type ViewMode = "all" | "student" | "parent";
 
 const Index = () => {
   const [showForm, setShowForm] = useState(false);
   const [statusFilter, setStatusFilter] = useState<"all" | "completed" | "in_progress" | "not_started">("all");
   const [hideCompleted, setHideCompleted] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>("all");
+  const [hasStudents, setHasStudents] = useState(false);
   const { session } = useAuth();
   const { toast } = useToast();
   const { t, language } = useLanguage();
   const { funMode, toggleFunMode } = useFunMode();
   
+  useEffect(() => {
+    const checkForStudents = async () => {
+      if (!session) return;
+      
+      const { data } = await supabase
+        .from("parent_student_relationships")
+        .select("*")
+        .eq("parent_id", session.user.id);
+      
+      setHasStudents(data && data.length > 0);
+    };
+    
+    checkForStudents();
+  }, [session]);
+
   useEffect(() => {
     const handleHomeworkClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -74,20 +98,25 @@ const Index = () => {
   };
 
   const filteredAssignments = assignments.filter(assignment => {
+    // First apply the completed filter
     if (hideCompleted && assignment.status === "Completed") {
       return false;
     }
     
-    switch (statusFilter) {
-      case "completed":
-        return assignment.status === "Completed";
-      case "in_progress":
-        return assignment.status === "In Progress";
-      case "not_started":
-        return assignment.status === "Not Started";
-      default:
-        return true;
-    }
+    // Then apply the status filter
+    const passesStatusFilter = statusFilter === "all" || 
+      (statusFilter === "completed" && assignment.status === "Completed") ||
+      (statusFilter === "in_progress" && assignment.status === "In Progress") ||
+      (statusFilter === "not_started" && assignment.status === "Not Started");
+
+    if (!passesStatusFilter) return false;
+
+    // Finally apply the view mode filter
+    if (viewMode === "all") return true;
+    if (viewMode === "parent" && assignment.user_id === session?.user.id) return true;
+    if (viewMode === "student" && assignment.user_id !== session?.user.id) return true;
+    
+    return false;
   });
 
   if (isLoading) {
@@ -115,16 +144,43 @@ const Index = () => {
 
         <div className="mt-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-            <Button 
-              variant="outline" 
-              onClick={() => setStatusFilter("all")}
-              size="sm"
-              className={`text-sm ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""} ${
-                funMode ? "rainbow-text" : ""
-              }`}
-            >
-              {t("showAll")}
-            </Button>
+            <div className="flex items-center gap-4">
+              <Button 
+                variant="outline" 
+                onClick={() => setStatusFilter("all")}
+                size="sm"
+                className={`text-sm ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""} ${
+                  funMode ? "rainbow-text" : ""
+                }`}
+              >
+                {t("showAll")}
+              </Button>
+
+              {hasStudents && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <Users className="h-4 w-4" />
+                      {viewMode === "all" && t("viewAll")}
+                      {viewMode === "parent" && t("viewParent")}
+                      {viewMode === "student" && t("viewStudent")}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem onClick={() => setViewMode("all")}>
+                      {t("viewAll")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setViewMode("parent")}>
+                      {t("viewParent")}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setViewMode("student")}>
+                      {t("viewStudent")}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
+
             <Button 
               onClick={() => setShowForm(!showForm)}
               size="sm"
