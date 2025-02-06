@@ -23,7 +23,7 @@ export const useAssignments = () => {
         .from("assignments")
         .select(`
           *,
-          profiles:user_id (
+          profiles (
             first_name,
             last_name
           )
