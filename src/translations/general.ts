@@ -63,5 +63,9 @@ export const general = {
   saveChanges: {
     en: "Save Changes",
     he: "שמור שינויים"
+  },
+  showCompleted: {
+    en: "Show Completed",
+    he: "הצג משימות שהושלמו"
   }
 };

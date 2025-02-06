@@ -1,4 +1,8 @@
 
+/**
+ * Index.tsx
+ * Main dashboard page displaying assignments and filters
+ */
 import { useState, useEffect } from "react";
 import { Assignment } from "@/types/assignment";
 import { AssignmentForm } from "@/components/AssignmentForm";
@@ -19,7 +23,7 @@ type ViewMode = "all" | "student" | "parent";
 const Index = () => {
   const [showForm, setShowForm] = useState(false);
   const [statusFilter, setStatusFilter] = useState<"all" | "completed" | "in_progress" | "not_started">("all");
-  const [hideCompleted, setHideCompleted] = useState(false);
+  const [hideCompleted, setHideCompleted] = useState(true); // Changed to true by default
   const [viewMode, setViewMode] = useState<ViewMode>("all");
   const [hasStudents, setHasStudents] = useState(false);
   const { session } = useAuth();

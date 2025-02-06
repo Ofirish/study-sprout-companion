@@ -62,7 +62,7 @@ export const DashboardFilters = ({
             onCheckedChange={setHideCompleted}
           />
           <Label htmlFor="hide-completed-bottom" className="text-sm">
-            {t("hideCompleted")}
+            {t("showCompleted")}
           </Label>
         </div>
 
@@ -89,7 +89,7 @@ export const DashboardFilters = ({
             onCheckedChange={setHideCompleted}
           />
           <Label htmlFor="hide-completed" className="text-sm">
-            {t("hideCompleted")}
+            {t("showCompleted")}
           </Label>
         </div>
 
