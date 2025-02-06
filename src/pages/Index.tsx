@@ -15,6 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
   const [showForm, setShowForm] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<"all" | "completed" | "in_progress" | "not_started">("all");
   const { session } = useAuth();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -117,15 +118,28 @@ const Index = () => {
     return new Date(a.due_date).getTime() - new Date(b.due_date).getTime();
   });
 
-  const upcomingAssignments = sortedAssignments.filter(
+  const filteredAssignments = sortedAssignments.filter(assignment => {
+    switch (statusFilter) {
+      case "completed":
+        return assignment.status === "Completed";
+      case "in_progress":
+        return assignment.status === "In Progress";
+      case "not_started":
+        return assignment.status === "Not Started";
+      default:
+        return true;
+    }
+  });
+
+  const upcomingAssignments = filteredAssignments.filter(
     (a) => new Date(a.due_date) >= new Date()
   );
 
-  const homeworkAssignments = sortedAssignments.filter(
+  const homeworkAssignments = filteredAssignments.filter(
     (a) => a.type === "homework"
   );
 
-  const testAssignments = sortedAssignments.filter((a) => a.type === "test");
+  const testAssignments = filteredAssignments.filter((a) => a.type === "test");
 
   if (isLoading) {
     return (
@@ -153,11 +167,18 @@ const Index = () => {
           </Button>
         </div>
 
-        <StatsCard assignments={assignments} />
+        <StatsCard 
+          assignments={assignments} 
+          onFilterChange={(filter) => setStatusFilter(filter)}
+        />
 
         <div className="mt-8">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-gray-900">Assignments</h2>
+            <h2 className="text-xl font-semibold text-gray-900">
+              {statusFilter === "all" 
+                ? "All Assignments" 
+                : `${statusFilter.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")} Assignments`}
+            </h2>
             <Button onClick={() => setShowForm(!showForm)}>
               <PlusCircle className="mr-2 h-4 w-4" />
               {showForm ? "Cancel" : "Add Assignment"}
