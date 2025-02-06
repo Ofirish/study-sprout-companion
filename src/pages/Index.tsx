@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Assignment } from "@/types/assignment";
 import { AssignmentForm } from "@/components/AssignmentForm";
@@ -71,13 +70,12 @@ const Index = () => {
         />
 
         <div className="mt-8">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-gray-900">
-              {statusFilter === "all" 
-                ? "All Assignments" 
-                : `${statusFilter.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")} Assignments`}
-            </h2>
-            <Button onClick={() => setShowForm(!showForm)}>
+          <div className="flex justify-end mb-4">
+            <Button 
+              onClick={() => setShowForm(!showForm)}
+              size="sm"
+              className="w-auto text-sm"
+            >
               <PlusCircle className="mr-2 h-4 w-4" />
               {showForm ? "Cancel" : "Add Assignment"}
             </Button>
