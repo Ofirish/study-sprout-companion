@@ -14,12 +14,12 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
   const notStarted = assignments.filter((a) => a.status === "Not Started").length;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-8">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mt-4 sm:mt-8">
       <div className="text-center p-2 sm:p-4 bg-gray-100 rounded-lg">
-        <div className="text-xl sm:text-2xl font-bold">
+        <div className="text-lg sm:text-2xl font-bold">
           {total}
         </div>
-        <div className="text-xs sm:text-sm text-gray-600">Total Assignments</div>
+        <div className="text-xs sm:text-sm text-gray-600">Total</div>
       </div>
 
       <Button
@@ -27,11 +27,11 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
         onClick={() => onFilterChange("completed")}
         className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto"
       >
-        <div className="text-xl sm:text-2xl font-bold text-green-500 flex items-center justify-center">
+        <div className="text-lg sm:text-2xl font-bold text-green-500 flex items-center justify-center">
           <CheckCircle className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
           {completed}
         </div>
-        <div className="text-xs sm:text-sm text-gray-600">Completed</div>
+        <div className="text-xs sm:text-sm text-gray-600">Done</div>
       </Button>
 
       <Button
@@ -39,11 +39,11 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
         onClick={() => onFilterChange("in_progress")}
         className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto"
       >
-        <div className="text-xl sm:text-2xl font-bold text-yellow-500 flex items-center justify-center">
+        <div className="text-lg sm:text-2xl font-bold text-yellow-500 flex items-center justify-center">
           <Clock className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
           {inProgress}
         </div>
-        <div className="text-xs sm:text-sm text-gray-600">In Progress</div>
+        <div className="text-xs sm:text-sm text-gray-600">Active</div>
       </Button>
 
       <Button
@@ -51,11 +51,11 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
         onClick={() => onFilterChange("not_started")}
         className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto"
       >
-        <div className="text-xl sm:text-2xl font-bold text-red-500 flex items-center justify-center">
+        <div className="text-lg sm:text-2xl font-bold text-red-500 flex items-center justify-center">
           <XCircle className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
           {notStarted}
         </div>
-        <div className="text-xs sm:text-sm text-gray-600">Not Started</div>
+        <div className="text-xs sm:text-sm text-gray-600">New</div>
       </Button>
     </div>
   );
