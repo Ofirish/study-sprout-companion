@@ -4,7 +4,7 @@
  * Provides language switching functionality and translation utilities.
  */
 import React, { createContext, useContext, useState } from "react";
-import { translations, Language, TranslationKey } from "@/translations";
+import { translations, Language, TranslationKey, hasTranslation } from "@/translations";
 
 type LanguageContextType = {
   language: Language;
@@ -17,8 +17,12 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
   const [language, setLanguage] = useState<Language>("en");
 
-  const t = (key: TranslationKey) => {
-    return translations[key][language];
+  const t = (key: TranslationKey): string => {
+    if (!hasTranslation(key)) {
+      console.warn(`Translation key "${key}" not found`);
+      return key;
+    }
+    return translations[key][language] || key;
   };
 
   return (
