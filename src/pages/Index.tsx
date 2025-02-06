@@ -3,16 +3,19 @@ import { Assignment } from "@/types/assignment";
 import { AssignmentForm } from "@/components/AssignmentForm";
 import { StatsCard } from "@/components/StatsCard";
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, LogOut } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { AssignmentTabs } from "@/components/AssignmentTabs";
 import { useAssignments } from "@/hooks/useAssignments";
+import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Index = () => {
   const [showForm, setShowForm] = useState(false);
   const [statusFilter, setStatusFilter] = useState<"all" | "completed" | "in_progress" | "not_started">("all");
   const { session } = useAuth();
+  const { toast } = useToast();
   
   const { 
     assignments = [], 
@@ -32,13 +35,18 @@ const Index = () => {
     updateAssignmentMutation.mutate({ id, status });
   };
 
-  const sortedAssignments = [...assignments].sort((a, b) => {
-    if (a.status === "Not Started" && b.status !== "Not Started") return -1;
-    if (a.status !== "Not Started" && b.status === "Not Started") return 1;
-    return new Date(a.due_date).getTime() - new Date(b.due_date).getTime();
-  });
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
 
-  const filteredAssignments = sortedAssignments.filter(assignment => {
+  const filteredAssignments = assignments.filter(assignment => {
     switch (statusFilter) {
       case "completed":
         return assignment.status === "Completed";
@@ -66,11 +74,19 @@ const Index = () => {
 
         <StatsCard 
           assignments={assignments} 
-          onFilterChange={(filter) => setStatusFilter(filter)}
+          onFilterChange={setStatusFilter}
         />
 
         <div className="mt-8">
-          <div className="flex justify-end mb-4">
+          <div className="flex justify-between items-center mb-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setStatusFilter("all")}
+              size="sm"
+              className={`text-sm ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""}`}
+            >
+              Show All Assignments
+            </Button>
             <Button 
               onClick={() => setShowForm(!showForm)}
               size="sm"
@@ -87,6 +103,18 @@ const Index = () => {
             assignments={filteredAssignments}
             onStatusChange={handleStatusChange}
           />
+
+          <div className="mt-8 flex justify-center">
+            <Button 
+              variant="outline" 
+              onClick={handleSignOut} 
+              size="sm"
+              className="w-auto"
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              Sign Out
+            </Button>
+          </div>
         </div>
       </div>
     </div>
