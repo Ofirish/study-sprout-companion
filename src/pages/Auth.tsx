@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -26,11 +25,29 @@ const Auth = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  const validatePassword = (password: string): string | null => {
+    if (password.length < 6) {
+      return "Password must be at least 6 characters long";
+    }
+    return null;
+  };
+
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
+      // Validate password
+      const passwordError = validatePassword(password);
+      if (passwordError) {
+        toast({
+          title: "Invalid Password",
+          description: passwordError,
+          variant: "destructive",
+        });
+        return;
+      }
+
       if (isSignUp) {
         const { error } = await supabase.auth.signUp({
           email,
@@ -44,7 +61,22 @@ const Auth = () => {
           },
         });
 
-        if (error) throw error;
+        if (error) {
+          if (error.message.includes("weak_password")) {
+            toast({
+              title: "Password Too Weak",
+              description: "Password should be at least 6 characters long",
+              variant: "destructive",
+            });
+          } else {
+            toast({
+              title: "Sign Up Failed",
+              description: error.message,
+              variant: "destructive",
+            });
+          }
+          return;
+        }
 
         toast({
           title: "Success!",
@@ -56,7 +88,22 @@ const Auth = () => {
           password,
         });
 
-        if (error) throw error;
+        if (error) {
+          if (error.message.includes("invalid_credentials")) {
+            toast({
+              title: "Login Failed",
+              description: "Invalid email or password",
+              variant: "destructive",
+            });
+          } else {
+            toast({
+              title: "Login Failed",
+              description: error.message,
+              variant: "destructive",
+            });
+          }
+          return;
+        }
         navigate("/");
       }
     } catch (error: any) {
@@ -147,7 +194,11 @@ const Auth = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              minLength={6}
             />
+            <p className="text-sm text-gray-500">
+              Password must be at least 6 characters long
+            </p>
           </div>
 
           <Button type="submit" className="w-full" disabled={isLoading}>
