@@ -32,7 +32,8 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
       <Button
         variant="ghost"
         onClick={() => onFilterChange("completed")}
-        className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto"
+        className="text-center p-2 sm:p-4 hover:bg-[#D3E4FD] rounded-lg transition-colors h-auto group"
+        data-state="completed"
       >
         <div className="text-lg sm:text-2xl font-bold text-green-500 flex items-center justify-center">
           <CheckCircle className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
@@ -44,7 +45,8 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
       <Button
         variant="ghost"
         onClick={() => onFilterChange("in_progress")}
-        className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto"
+        className="text-center p-2 sm:p-4 hover:bg-[#D3E4FD] rounded-lg transition-colors h-auto group"
+        data-state="in_progress"
       >
         <div className="text-lg sm:text-2xl font-bold text-yellow-500 flex items-center justify-center">
           <Clock className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
@@ -56,7 +58,8 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
       <Button
         variant="ghost"
         onClick={() => onFilterChange("not_started")}
-        className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto"
+        className="text-center p-2 sm:p-4 hover:bg-[#D3E4FD] rounded-lg transition-colors h-auto group"
+        data-state="not_started"
       >
         <div className="text-lg sm:text-2xl font-bold text-red-500 flex items-center justify-center">
           <XCircle className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
@@ -64,6 +67,18 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
         </div>
         <div className="text-xs sm:text-sm text-gray-600">{t("new")}</div>
       </Button>
+
+      <style jsx global>{`
+        [data-state="completed"]:active,
+        [data-state="completed"].active,
+        [data-state="in_progress"]:active,
+        [data-state="in_progress"].active,
+        [data-state="not_started"]:active,
+        [data-state="not_started"].active {
+          background-color: #D3E4FD;
+          border: 2px solid #1EAEDB;
+        }
+      `}</style>
     </div>
   );
 };
