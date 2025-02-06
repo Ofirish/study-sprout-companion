@@ -1,5 +1,5 @@
 
-export type Subject = "Math" | "Science" | "English" | "History" | "Other";
+export type Subject = "Math" | "Science" | "English" | "History" | "Other" | string;
 
 export type AssignmentStatus = "Not Started" | "In Progress" | "Completed";
 
