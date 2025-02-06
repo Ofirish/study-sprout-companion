@@ -3,7 +3,7 @@
  * Purpose: Main dashboard page displaying assignments and controls.
  * Shows assignment stats, filtering options, and assignment list.
  */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Assignment } from "@/types/assignment";
 import { AssignmentForm } from "@/components/AssignmentForm";
 import { StatsCard } from "@/components/StatsCard";
@@ -16,6 +16,8 @@ import { useAssignments } from "@/hooks/useAssignments";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useFunMode } from "@/contexts/FunModeContext";
+import { Sparkles } from "@/components/Sparkles";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
@@ -26,7 +28,21 @@ const Index = () => {
   const { session } = useAuth();
   const { toast } = useToast();
   const { t, language } = useLanguage();
+  const { funMode, toggleFunMode } = useFunMode();
   
+  useEffect(() => {
+    const handleHomeworkClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName.toLowerCase() === 'title' && 
+          target.textContent?.toLowerCase().includes('homework')) {
+        toggleFunMode();
+      }
+    };
+
+    document.addEventListener('dblclick', handleHomeworkClick);
+    return () => document.removeEventListener('dblclick', handleHomeworkClick);
+  }, [toggleFunMode]);
+
   const { 
     assignments = [], 
     isLoading, 
@@ -81,8 +97,13 @@ const Index = () => {
     );
   }
 
+  const containerClasses = `min-h-screen py-8 transition-all duration-500 ${
+    funMode ? 'fun-mode' : 'bg-gray-50'
+  }`;
+
   return (
-    <div className="min-h-screen bg-gray-50 py-8" dir={language === "he" ? "rtl" : "ltr"}>
+    <div className={containerClasses} dir={language === "he" ? "rtl" : "ltr"}>
+      {funMode && <Sparkles />}
       <div className="container max-w-4xl">
         <DashboardHeader />
 
@@ -97,14 +118,16 @@ const Index = () => {
               variant="outline" 
               onClick={() => setStatusFilter("all")}
               size="sm"
-              className={`text-sm ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""}`}
+              className={`text-sm ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""} ${
+                funMode ? "rainbow-text" : ""
+              }`}
             >
               {t("showAll")}
             </Button>
             <Button 
               onClick={() => setShowForm(!showForm)}
               size="sm"
-              className="w-auto text-sm"
+              className={`w-auto text-sm ${funMode ? "rainbow-text" : ""}`}
             >
               <PlusCircle className="mr-2 h-4 w-4" />
               {showForm ? t("cancel") : t("addAssignment")}
@@ -134,7 +157,7 @@ const Index = () => {
               variant="outline" 
               onClick={handleSignOut} 
               size="sm"
-              className="w-auto"
+              className={`w-auto ${funMode ? "rainbow-text" : ""}`}
             >
               <LogOut className="mr-2 h-4 w-4" />
               {t("signOut")}
