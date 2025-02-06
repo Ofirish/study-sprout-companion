@@ -32,8 +32,7 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
       <Button
         variant="ghost"
         onClick={() => onFilterChange("completed")}
-        className="text-center p-2 sm:p-4 hover:bg-[#D3E4FD] rounded-lg transition-colors h-auto group data-[state=active]:bg-[#D3E4FD] data-[state=active]:border-2 data-[state=active]:border-[#1EAEDB]"
-        data-state={assignments.filter(a => a.status === "Completed").length > 0 && window.location.search.includes("filter=completed") ? "active" : "default"}
+        className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto"
       >
         <div className="text-lg sm:text-2xl font-bold text-green-500 flex items-center justify-center">
           <CheckCircle className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
@@ -45,8 +44,7 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
       <Button
         variant="ghost"
         onClick={() => onFilterChange("in_progress")}
-        className="text-center p-2 sm:p-4 hover:bg-[#D3E4FD] rounded-lg transition-colors h-auto group data-[state=active]:bg-[#D3E4FD] data-[state=active]:border-2 data-[state=active]:border-[#1EAEDB]"
-        data-state={assignments.filter(a => a.status === "In Progress").length > 0 && window.location.search.includes("filter=in_progress") ? "active" : "default"}
+        className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto"
       >
         <div className="text-lg sm:text-2xl font-bold text-yellow-500 flex items-center justify-center">
           <Clock className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
@@ -58,8 +56,7 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
       <Button
         variant="ghost"
         onClick={() => onFilterChange("not_started")}
-        className="text-center p-2 sm:p-4 hover:bg-[#D3E4FD] rounded-lg transition-colors h-auto group data-[state=active]:bg-[#D3E4FD] data-[state=active]:border-2 data-[state=active]:border-[#1EAEDB]"
-        data-state={assignments.filter(a => a.status === "Not Started").length > 0 && window.location.search.includes("filter=not_started") ? "active" : "default"}
+        className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto"
       >
         <div className="text-lg sm:text-2xl font-bold text-red-500 flex items-center justify-center">
           <XCircle className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
