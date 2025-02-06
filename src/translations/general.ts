@@ -7,6 +7,26 @@ export const generalTranslations = {
     en: "Settings",
     he: "הגדרות"
   },
+  profileSettings: {
+    en: "Profile Settings",
+    he: "הגדרות פרופיל"
+  },
+  firstName: {
+    en: "First Name",
+    he: "שם פרטי"
+  },
+  lastName: {
+    en: "Last Name",
+    he: "שם משפחה"
+  },
+  role: {
+    en: "Role",
+    he: "תפקיד"
+  },
+  saveChanges: {
+    en: "Save Changes",
+    he: "שמור שינויים"
+  },
   studentRelationships: {
     en: "Student Relationships",
     he: "קשרי תלמידים"
