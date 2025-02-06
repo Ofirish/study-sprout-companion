@@ -8,7 +8,7 @@ import { Assignment } from "@/types/assignment";
 import { AssignmentForm } from "@/components/AssignmentForm";
 import { StatsCard } from "@/components/StatsCard";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, LogOut } from "lucide-react";
+import { PlusCircle, LogOut, ChevronRight } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { AssignmentTabs } from "@/components/AssignmentTabs";
@@ -18,6 +18,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+
+const EMOJIS = ["🐶", "🐱", "🐰", "🦊", "🐼", "🦁", "🐸", "🦉"];
 
 const Index = () => {
   const [showForm, setShowForm] = useState(false);
@@ -33,6 +36,33 @@ const Index = () => {
     addAssignmentMutation, 
     updateAssignmentMutation 
   } = useAssignments();
+
+  const [showEmojiToggle, setShowEmojiToggle] = useState(false);
+  const [enableEmojis, setEnableEmojis] = useState(false);
+  const [activeEmoji, setActiveEmoji] = useState("");
+
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!enableEmojis) return;
+    
+    const emoji = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+    setActiveEmoji(emoji);
+    
+    // Create and animate the emoji element
+    const emojiEl = document.createElement("div");
+    emojiEl.textContent = emoji;
+    emojiEl.style.position = "fixed";
+    emojiEl.style.left = `${e.clientX}px`;
+    emojiEl.style.top = `${e.clientY}px`;
+    emojiEl.style.pointerEvents = "none";
+    emojiEl.style.zIndex = "50";
+    emojiEl.className = "animate-emoji";
+    
+    document.body.appendChild(emojiEl);
+    
+    setTimeout(() => {
+      document.body.removeChild(emojiEl);
+    }, 1000);
+  };
 
   const handleAddAssignment = (
     newAssignment: Omit<Assignment, "id" | "status">
@@ -98,6 +128,7 @@ const Index = () => {
               onClick={() => setStatusFilter("all")}
               size="sm"
               className={`text-sm ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""}`}
+              onMouseEnter={handleButtonClick}
             >
               {t("showAll")}
             </Button>
@@ -105,6 +136,7 @@ const Index = () => {
               onClick={() => setShowForm(!showForm)}
               size="sm"
               className="w-auto text-sm"
+              onMouseEnter={handleButtonClick}
             >
               <PlusCircle className="mr-2 h-4 w-4" />
               {showForm ? t("cancel") : t("addAssignment")}
@@ -130,15 +162,39 @@ const Index = () => {
               </Label>
             </div>
             
-            <Button 
-              variant="outline" 
-              onClick={handleSignOut} 
-              size="sm"
-              className="w-auto"
-            >
-              <LogOut className="mr-2 h-4 w-4" />
-              {t("signOut")}
-            </Button>
+            <div className="relative">
+              <Button 
+                variant="outline" 
+                onClick={handleSignOut}
+                size="sm"
+                className="w-auto group"
+                onMouseEnter={() => setShowEmojiToggle(true)}
+                onMouseLeave={() => setShowEmojiToggle(false)}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                {t("signOut")}
+                <ChevronRight className={cn(
+                  "h-4 w-4 ml-2 transition-transform duration-200",
+                  showEmojiToggle ? "rotate-90" : ""
+                )} />
+              </Button>
+              
+              <div className={cn(
+                "absolute left-0 -top-12 transition-all duration-200 opacity-0 pointer-events-none",
+                showEmojiToggle && "opacity-100 pointer-events-auto"
+              )}>
+                <div className="flex items-center space-x-2 bg-white p-2 rounded-lg shadow-md">
+                  <Switch
+                    id="enable-emojis"
+                    checked={enableEmojis}
+                    onCheckedChange={setEnableEmojis}
+                  />
+                  <Label htmlFor="enable-emojis" className="text-sm whitespace-nowrap">
+                    Fun Mode {activeEmoji}
+                  </Label>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
