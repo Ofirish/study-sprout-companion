@@ -67,19 +67,13 @@ export const StudentRelationships = () => {
     if (!session || !studentEmail) return;
 
     // First, get the student's profile using their email
-    const { data: userData, error: userError } = await supabase
+    const { data: studentData, error: studentError } = await supabase
       .from("profiles")
       .select("id, role")
-      .eq("id", (
-        await supabase
-          .from("auth")
-          .select("id")
-          .eq("email", studentEmail)
-          .single()
-      ).data?.id)
+      .eq("email", studentEmail)
       .single();
 
-    if (userError || !userData) {
+    if (studentError || !studentData) {
       toast({
         title: "Error",
         description: "Student not found",
@@ -88,7 +82,7 @@ export const StudentRelationships = () => {
       return;
     }
 
-    if (userData.role !== "student") {
+    if (studentData.role !== "student") {
       toast({
         title: "Error",
         description: "User is not a student",
@@ -102,7 +96,7 @@ export const StudentRelationships = () => {
       .from("parent_student_relationships")
       .select("id")
       .eq("parent_id", session.user.id)
-      .eq("student_id", userData.id)
+      .eq("student_id", studentData.id)
       .single();
 
     if (existingRelationship) {
@@ -119,7 +113,7 @@ export const StudentRelationships = () => {
       .from("parent_student_relationships")
       .insert({
         parent_id: session.user.id,
-        student_id: userData.id,
+        student_id: studentData.id,
       });
 
     if (relationshipError) {
