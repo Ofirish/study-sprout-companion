@@ -27,12 +27,16 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 sm:mt-8" dir={language === "he" ? "rtl" : "ltr"}>
-      <div className="text-center p-4 bg-gray-100 rounded-lg shadow hover:shadow-md transition-shadow">
+      <Button
+        variant="ghost"
+        onClick={() => onFilterChange("all")}
+        className="text-center p-4 bg-gray-100 rounded-lg hover:shadow-md transition-shadow cursor-pointer"
+      >
         <div className="text-xl sm:text-2xl font-bold">
           {total}
         </div>
         <div className="text-sm text-gray-600 mt-1">{t("total")}</div>
-      </div>
+      </Button>
 
       <Button
         variant="ghost"

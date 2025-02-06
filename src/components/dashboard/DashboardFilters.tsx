@@ -81,17 +81,17 @@ export const DashboardFilters = ({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-4">
-        <Button 
-          variant="outline" 
-          onClick={() => setStatusFilter("all")}
-          size="sm"
-          className={`text-sm sm:w-32 ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""} ${
-            funMode ? "rainbow-text" : ""
-          }`}
-        >
-          Show All
-        </Button>
+      <div className="flex items-center gap-4">
+        <div className="flex items-center space-x-2 rtl:space-x-reverse">
+          <Switch
+            id="hide-completed"
+            checked={hideCompleted}
+            onCheckedChange={setHideCompleted}
+          />
+          <Label htmlFor="hide-completed" className="text-sm">
+            {t("hideCompleted")}
+          </Label>
+        </div>
 
         {hasStudents && (
           <DropdownMenu>
