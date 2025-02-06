@@ -2,11 +2,17 @@ import { Card } from "@/components/ui/card";
 import { Assignment } from "@/types/assignment";
 import { CheckCircle, Clock, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Circle } from "lucide-react";
 
 interface StatsCardProps {
   assignments: Assignment[];
   onFilterChange: (filter: "all" | "completed" | "in_progress" | "not_started") => void;
 }
+
+const TabDot = ({ show }: { show: boolean }) => {
+  if (!show) return null;
+  return <Circle className="w-2 h-2 ml-2 fill-[#ea384c] text-[#ea384c]" />;
+};
 
 export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
   const total = assignments.length;
@@ -32,11 +38,12 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
         <Button
           variant="ghost"
           onClick={() => onFilterChange("completed")}
-          className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto"
+          className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto relative"
         >
           <div className="text-xl sm:text-2xl font-bold text-green-500 flex items-center justify-center">
             <CheckCircle className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
             {completed}
+            <TabDot show={completed > 0} />
           </div>
           <div className="text-xs sm:text-sm text-gray-600">Completed</div>
         </Button>
@@ -44,11 +51,12 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
         <Button
           variant="ghost"
           onClick={() => onFilterChange("in_progress")}
-          className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto"
+          className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto relative"
         >
           <div className="text-xl sm:text-2xl font-bold text-yellow-500 flex items-center justify-center">
             <Clock className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
             {inProgress}
+            <TabDot show={inProgress > 0} />
           </div>
           <div className="text-xs sm:text-sm text-gray-600">In Progress</div>
         </Button>
@@ -56,11 +64,12 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
         <Button
           variant="ghost"
           onClick={() => onFilterChange("not_started")}
-          className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto"
+          className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto relative"
         >
           <div className="text-xl sm:text-2xl font-bold text-red-500 flex items-center justify-center">
             <XCircle className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
             {notStarted}
+            <TabDot show={notStarted > 0} />
           </div>
           <div className="text-xs sm:text-sm text-gray-600">Not Started</div>
         </Button>
