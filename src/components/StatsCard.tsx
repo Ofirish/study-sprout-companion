@@ -5,7 +5,7 @@
  * Shows counts of assignments by status and provides filtering functionality.
  */
 import { Assignment } from "@/types/assignment";
-import { CheckCircle, Clock, XCircle } from "lucide-react";
+import { CheckCircle, Clock, XCircle, ListFilter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -30,9 +30,12 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
       <Button
         variant="ghost"
         onClick={() => onFilterChange("all")}
-        className="text-center p-4 bg-gray-100 rounded-lg hover:shadow-md transition-shadow cursor-pointer"
+        className={`relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto ${
+          currentFilter === 'all' ? 'ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]' : 'shadow hover:shadow-md'
+        }`}
       >
-        <div className="text-xl sm:text-2xl font-bold">
+        <div className="text-xl sm:text-2xl font-bold text-blue-500 flex items-center gap-2">
+          <ListFilter className="h-5 w-5 sm:h-6 sm:w-6" />
           {total}
         </div>
         <div className="text-sm text-gray-600 mt-1">{t("total")}</div>
