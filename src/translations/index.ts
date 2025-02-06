@@ -1,4 +1,4 @@
-import { generalTranslations } from "./general";
+import { general } from "./general";
 import { actionTranslations } from "./actions";
 import { statsTranslations } from "./stats";
 import { tabTranslations } from "./tabs";
@@ -7,7 +7,7 @@ import { statusTranslations } from "./status";
 import { subjectTranslations } from "./subjects";
 
 export const translations = {
-  ...generalTranslations,
+  ...general,
   ...actionTranslations,
   ...statsTranslations,
   ...tabTranslations,
