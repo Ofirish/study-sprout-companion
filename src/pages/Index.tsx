@@ -1,9 +1,14 @@
-import { useState, useEffect } from "react";
+/**
+ * Index.tsx
+ * Purpose: Main dashboard page displaying assignments and controls.
+ * Shows assignment stats, filtering options, and assignment list.
+ */
+import { useState } from "react";
 import { Assignment } from "@/types/assignment";
 import { AssignmentForm } from "@/components/AssignmentForm";
 import { StatsCard } from "@/components/StatsCard";
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, LogOut } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { AssignmentTabs } from "@/components/AssignmentTabs";
@@ -11,11 +16,8 @@ import { useAssignments } from "@/hooks/useAssignments";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { StudentSelector } from "@/components/StudentSelector";
-import { FunModeControls } from "@/components/FunModeControls";
-import { useQuery } from "@tanstack/react-query";
-
-const EMOJIS = ["🐶", "🐱", "🐰", "🦊", "🐼", "🦁", "🐸", "🦉"];
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 const Index = () => {
   const [showForm, setShowForm] = useState(false);
@@ -24,91 +26,13 @@ const Index = () => {
   const { session } = useAuth();
   const { toast } = useToast();
   const { t, language } = useLanguage();
-  const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   
-  const [funModeEnabled, setFunModeEnabled] = useState(false);
-  const [showEmojiToggle, setShowEmojiToggle] = useState(false);
-  const [enableEmojis, setEnableEmojis] = useState(false);
-  const [activeEmoji, setActiveEmoji] = useState("");
-
-  useEffect(() => {
-    if (funModeEnabled) {
-      const handleSparkle = (e: MouseEvent) => {
-        const sparkle = document.createElement('div');
-        sparkle.className = 'sparkle';
-        sparkle.style.left = `${e.clientX - 10}px`;
-        sparkle.style.top = `${e.clientY - 10}px`;
-        document.body.appendChild(sparkle);
-        
-        setTimeout(() => {
-          document.body.removeChild(sparkle);
-        }, 600);
-      };
-
-      document.addEventListener('click', handleSparkle);
-      document.addEventListener('touchstart', handleSparkle);
-
-      return () => {
-        document.removeEventListener('click', handleSparkle);
-        document.removeEventListener('touchstart', handleSparkle);
-      };
-    }
-  }, [funModeEnabled]);
-
-  const handleHomeworkClick = () => {
-    setFunModeEnabled(prev => !prev);
-    if (!funModeEnabled) {
-      toast({
-        title: "✨ Fun Mode Activated! ✨",
-        description: "Click anywhere to create sparkles!",
-      });
-    }
-  };
-
-  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!enableEmojis) return;
-    
-    const emoji = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
-    setActiveEmoji(emoji);
-    
-    const emojiEl = document.createElement("div");
-    emojiEl.textContent = emoji;
-    emojiEl.style.position = "fixed";
-    emojiEl.style.left = `${e.clientX}px`;
-    emojiEl.style.top = `${e.clientY}px`;
-    emojiEl.style.pointerEvents = "none";
-    emojiEl.style.zIndex = "50";
-    emojiEl.className = "animate-emoji";
-    
-    document.body.appendChild(emojiEl);
-    
-    setTimeout(() => {
-      document.body.removeChild(emojiEl);
-    }, 1000);
-  };
-
   const { 
     assignments = [], 
     isLoading, 
     addAssignmentMutation, 
     updateAssignmentMutation 
-  } = useAssignments(selectedStudentId);
-
-  const { data: selectedStudentProfile } = useQuery({
-    queryKey: ["selectedStudentProfile", selectedStudentId],
-    queryFn: async () => {
-      if (!selectedStudentId) return null;
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", selectedStudentId)
-        .maybeSingle();
-      
-      if (error) throw error;
-      return data;
-    },
-    enabled: !!selectedStudentId,
-  });
+  } = useAssignments();
 
   const handleAddAssignment = (
     newAssignment: Omit<Assignment, "id" | "status">
@@ -159,15 +83,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8" dir={language === "he" ? "rtl" : "ltr"}>
-      {funModeEnabled && <div className="rainbow-mode" />}
       <div className="container max-w-4xl">
         <DashboardHeader />
-
-        <StudentSelector
-          userId={session?.user?.id}
-          selectedStudentId={selectedStudentId}
-          onStudentSelect={setSelectedStudentId}
-        />
 
         <StatsCard 
           assignments={assignments} 
@@ -181,47 +98,48 @@ const Index = () => {
               onClick={() => setStatusFilter("all")}
               size="sm"
               className={`text-sm ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""}`}
-              onMouseEnter={handleButtonClick}
             >
               {t("showAll")}
             </Button>
-            {!selectedStudentId && (
-              <Button 
-                onClick={() => setShowForm(!showForm)}
-                size="sm"
-                className="w-auto text-sm"
-                onMouseEnter={handleButtonClick}
-              >
-                <PlusCircle className="mr-2 h-4 w-4" />
-                {showForm ? t("cancel") : t("addAssignment")}
-              </Button>
-            )}
+            <Button 
+              onClick={() => setShowForm(!showForm)}
+              size="sm"
+              className="w-auto text-sm"
+            >
+              <PlusCircle className="mr-2 h-4 w-4" />
+              {showForm ? t("cancel") : t("addAssignment")}
+            </Button>
           </div>
 
-          {showForm && !selectedStudentId && <AssignmentForm onSubmit={handleAddAssignment} />}
-
-          <h2 
-            className="text-2xl font-bold mb-4 cursor-pointer select-none"
-            onDoubleClick={handleHomeworkClick}
-          >
-            {selectedStudentId && selectedStudentProfile 
-              ? `${t("assignmentsFor")} ${selectedStudentProfile.first_name}` 
-              : t("tabHomework")}
-          </h2>
+          {showForm && <AssignmentForm onSubmit={handleAddAssignment} />}
 
           <AssignmentTabs
             assignments={filteredAssignments}
             onStatusChange={handleStatusChange}
           />
 
-          <FunModeControls
-            onSignOut={handleSignOut}
-            showEmojiToggle={showEmojiToggle}
-            setShowEmojiToggle={setShowEmojiToggle}
-            enableEmojis={enableEmojis}
-            setEnableEmojis={setEnableEmojis}
-            activeEmoji={activeEmoji}
-          />
+          <div className="mt-8 flex flex-col items-center gap-4">
+            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+              <Switch
+                id="hide-completed"
+                checked={hideCompleted}
+                onCheckedChange={setHideCompleted}
+              />
+              <Label htmlFor="hide-completed" className="text-sm">
+                {t("hideCompleted")}
+              </Label>
+            </div>
+            
+            <Button 
+              variant="outline" 
+              onClick={handleSignOut} 
+              size="sm"
+              className="w-auto"
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              {t("signOut")}
+            </Button>
+          </div>
         </div>
       </div>
     </div>
