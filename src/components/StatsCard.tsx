@@ -1,3 +1,4 @@
+
 /**
  * StatsCard.tsx
  * Purpose: Displays assignment statistics and filtering options.
@@ -20,6 +21,10 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
   const inProgress = assignments.filter((a) => a.status === "In Progress").length;
   const notStarted = assignments.filter((a) => a.status === "Not Started").length;
 
+  // Get the current filter from the URL search params
+  const urlParams = new URLSearchParams(window.location.search);
+  const currentFilter = urlParams.get('filter') || 'all';
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mt-4 sm:mt-8" dir={language === "he" ? "rtl" : "ltr"}>
       <div className="text-center p-2 sm:p-4 bg-gray-100 rounded-lg">
@@ -32,7 +37,9 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
       <Button
         variant="ghost"
         onClick={() => onFilterChange("completed")}
-        className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto"
+        className={`text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto ${
+          currentFilter === 'completed' ? 'border-2 border-[#0EA5E9]' : ''
+        }`}
       >
         <div className="text-lg sm:text-2xl font-bold text-green-500 flex items-center justify-center">
           <CheckCircle className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
@@ -44,7 +51,9 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
       <Button
         variant="ghost"
         onClick={() => onFilterChange("in_progress")}
-        className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto"
+        className={`text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto ${
+          currentFilter === 'in_progress' ? 'border-2 border-[#0EA5E9]' : ''
+        }`}
       >
         <div className="text-lg sm:text-2xl font-bold text-yellow-500 flex items-center justify-center">
           <Clock className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
@@ -56,7 +65,9 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
       <Button
         variant="ghost"
         onClick={() => onFilterChange("not_started")}
-        className="text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto"
+        className={`text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto ${
+          currentFilter === 'not_started' ? 'border-2 border-[#0EA5E9]' : ''
+        }`}
       >
         <div className="text-lg sm:text-2xl font-bold text-red-500 flex items-center justify-center">
           <XCircle className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
