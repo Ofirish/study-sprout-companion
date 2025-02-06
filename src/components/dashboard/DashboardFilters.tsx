@@ -81,7 +81,7 @@ export const DashboardFilters = ({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col gap-4">
         <Button 
           variant="outline" 
           onClick={() => setStatusFilter("all")}
