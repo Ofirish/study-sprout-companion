@@ -90,7 +90,7 @@ export const DashboardFilters = ({
             funMode ? "rainbow-text" : ""
           }`}
         >
-          {t("showAll")}
+          Show All
         </Button>
 
         {hasStudents && (
