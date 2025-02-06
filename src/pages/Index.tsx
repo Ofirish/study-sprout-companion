@@ -10,12 +10,14 @@ import { AssignmentTabs } from "@/components/AssignmentTabs";
 import { useAssignments } from "@/hooks/useAssignments";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Index = () => {
   const [showForm, setShowForm] = useState(false);
   const [statusFilter, setStatusFilter] = useState<"all" | "completed" | "in_progress" | "not_started">("all");
   const { session } = useAuth();
   const { toast } = useToast();
+  const { t, language } = useLanguage();
   
   const { 
     assignments = [], 
@@ -68,7 +70,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-8" dir={language === "he" ? "rtl" : "ltr"}>
       <div className="container max-w-4xl">
         <DashboardHeader />
 
@@ -85,7 +87,7 @@ const Index = () => {
               size="sm"
               className={`text-sm ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""}`}
             >
-              Show All Assignments
+              {t("showAll")}
             </Button>
             <Button 
               onClick={() => setShowForm(!showForm)}
@@ -93,7 +95,7 @@ const Index = () => {
               className="w-auto text-sm"
             >
               <PlusCircle className="mr-2 h-4 w-4" />
-              {showForm ? "Cancel" : "Add Assignment"}
+              {showForm ? t("cancel") : t("addAssignment")}
             </Button>
           </div>
 
@@ -112,7 +114,7 @@ const Index = () => {
               className="w-auto"
             >
               <LogOut className="mr-2 h-4 w-4" />
-              Sign Out
+              {t("signOut")}
             </Button>
           </div>
         </div>

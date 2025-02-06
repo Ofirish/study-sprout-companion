@@ -14,12 +14,21 @@ export const AssignmentCard = ({
   assignment,
   onStatusChange,
 }: AssignmentCardProps) => {
-  const { language } = useLanguage();
+  const { t, language } = useLanguage();
   
   const statusColors = {
     "Not Started": "text-red-500",
     "In Progress": "text-yellow-500",
     Completed: "text-green-500",
+  };
+
+  const getStatusTranslationKey = (status: Assignment["status"]) => {
+    const statusMap = {
+      "Not Started": "notStarted",
+      "In Progress": "inProgress",
+      Completed: "completed",
+    };
+    return statusMap[status];
   };
 
   return (
@@ -54,9 +63,9 @@ export const AssignmentCard = ({
           } border-2 border-current w-full sm:w-auto`}
           dir={language === "he" ? "rtl" : "ltr"}
         >
-          <option value="Not Started">Not Started</option>
-          <option value="In Progress">In Progress</option>
-          <option value="Completed">Completed</option>
+          <option value="Not Started">{t("notStarted")}</option>
+          <option value="In Progress">{t("inProgress")}</option>
+          <option value="Completed">{t("completed")}</option>
         </select>
       </div>
     </Card>

@@ -100,6 +100,20 @@ const translations = {
     he: "המטלה נוספה בהצלחה!",
   },
 
+  // Status translations
+  notStarted: {
+    en: "Not Started",
+    he: "טרם התחיל",
+  },
+  inProgress: {
+    en: "In Progress",
+    he: "בתהליך",
+  },
+  completed: {
+    en: "Completed",
+    he: "הושלם",
+  },
+
   // Subject translations
   Math: {
     en: "Math",
