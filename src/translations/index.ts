@@ -56,18 +56,6 @@ export const translations = {
   },
 
   // Tabs
-  upcoming: {
-    en: "Upcoming",
-    he: "קרוב",
-  },
-  homework: {
-    en: "Homework",
-    he: "שיעורי בית",
-  },
-  tests: {
-    en: "Tests",
-    he: "מבחנים",
-  },
   tabUpcoming: {
     en: "Upcoming",
     he: "קרוב",
