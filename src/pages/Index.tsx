@@ -1,3 +1,4 @@
+
 /**
  * Index.tsx
  * Purpose: Main dashboard page displaying assignments and controls.
@@ -33,8 +34,8 @@ const Index = () => {
   useEffect(() => {
     const handleHomeworkClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.tagName.toLowerCase() === 'title' && 
-          target.textContent?.toLowerCase().includes('homework')) {
+      const text = target.textContent?.toLowerCase() || '';
+      if (text.includes('homework')) {
         toggleFunMode();
       }
     };
