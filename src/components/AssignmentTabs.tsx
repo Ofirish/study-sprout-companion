@@ -24,29 +24,41 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
 
   const testAssignments = assignments.filter((a) => a.type === "test");
 
-  const hasUpcoming = upcomingAssignments.length > 0;
-  const hasHomework = homeworkAssignments.length > 0;
-  const hasTests = testAssignments.length > 0;
+  const hasUpcomingInProgress = upcomingAssignments.some(a => a.status === "In Progress");
+  const hasUpcomingCompleted = upcomingAssignments.some(a => a.status === "Completed");
+  const hasUpcomingNotStarted = upcomingAssignments.some(a => a.status === "Not Started");
+
+  const hasHomeworkInProgress = homeworkAssignments.some(a => a.status === "In Progress");
+  const hasHomeworkCompleted = homeworkAssignments.some(a => a.status === "Completed");
+  const hasHomeworkNotStarted = homeworkAssignments.some(a => a.status === "Not Started");
+
+  const hasTestsInProgress = testAssignments.some(a => a.status === "In Progress");
+  const hasTestsCompleted = testAssignments.some(a => a.status === "Completed");
+  const hasTestsNotStarted = testAssignments.some(a => a.status === "Not Started");
+
+  const showUpcomingDot = hasUpcomingInProgress || hasUpcomingCompleted || hasUpcomingNotStarted;
+  const showHomeworkDot = hasHomeworkInProgress || hasHomeworkCompleted || hasHomeworkNotStarted;
+  const showTestsDot = hasTestsInProgress || hasTestsCompleted || hasTestsNotStarted;
 
   return (
     <Tabs defaultValue="upcoming" className="mt-4">
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="upcoming" className="flex items-center justify-center">
           Upcoming
-          <TabDot show={hasUpcoming} />
+          <TabDot show={showUpcomingDot} />
         </TabsTrigger>
         <TabsTrigger value="homework" className="flex items-center justify-center">
           Homework
-          <TabDot show={hasHomework} />
+          <TabDot show={showHomeworkDot} />
         </TabsTrigger>
         <TabsTrigger value="tests" className="flex items-center justify-center">
           Tests
-          <TabDot show={hasTests} />
+          <TabDot show={showTestsDot} />
         </TabsTrigger>
       </TabsList>
       
       <TabsContent value="upcoming" className="mt-4 space-y-4">
-        {!hasUpcoming ? (
+        {upcomingAssignments.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
             No upcoming assignments
           </div>
@@ -62,7 +74,7 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
       </TabsContent>
 
       <TabsContent value="homework" className="mt-4 space-y-4">
-        {!hasHomework ? (
+        {homeworkAssignments.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
             No homework assignments
           </div>
@@ -78,7 +90,7 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
       </TabsContent>
 
       <TabsContent value="tests" className="mt-4 space-y-4">
-        {!hasTests ? (
+        {testAssignments.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
             No tests
           </div>
