@@ -21,7 +21,13 @@ export const useAssignments = () => {
     queryFn: async () => {
       const { data: userAssignments, error } = await supabase
         .from("assignments")
-        .select("*, profiles(first_name, last_name)")
+        .select(`
+          *,
+          profiles:user_id (
+            first_name,
+            last_name
+          )
+        `)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
