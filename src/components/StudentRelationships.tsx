@@ -34,7 +34,8 @@ export const StudentRelationships = () => {
         student:profiles!parent_student_relationships_student_id_fkey (
           id,
           first_name,
-          last_name
+          last_name,
+          email
         )
       `)
       .eq("parent_id", session.user.id);
@@ -52,6 +53,7 @@ export const StudentRelationships = () => {
       id: item.student.id,
       first_name: item.student.first_name,
       last_name: item.student.last_name,
+      email: item.student.email,
     }));
 
     setStudents(formattedStudents);
@@ -71,9 +73,18 @@ export const StudentRelationships = () => {
       .from("profiles")
       .select("id, role")
       .eq("email", studentEmail)
-      .single();
+      .maybeSingle();
 
-    if (studentError || !studentData) {
+    if (studentError) {
+      toast({
+        title: "Error",
+        description: "Error finding student",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!studentData) {
       toast({
         title: "Error",
         description: "Student not found",
@@ -97,7 +108,7 @@ export const StudentRelationships = () => {
       .select("id")
       .eq("parent_id", session.user.id)
       .eq("student_id", studentData.id)
-      .single();
+      .maybeSingle();
 
     if (existingRelationship) {
       toast({
