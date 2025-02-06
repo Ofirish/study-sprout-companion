@@ -3,7 +3,7 @@
  * Purpose: Main dashboard page displaying assignments and controls.
  * Shows assignment stats, filtering options, and assignment list.
  */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Assignment } from "@/types/assignment";
 import { AssignmentForm } from "@/components/AssignmentForm";
 import { StatsCard } from "@/components/StatsCard";
@@ -30,6 +30,11 @@ const Index = () => {
   const { toast } = useToast();
   const { t, language } = useLanguage();
   
+  const [funModeEnabled, setFunModeEnabled] = useState(false);
+  const [showEmojiToggle, setShowEmojiToggle] = useState(false);
+  const [enableEmojis, setEnableEmojis] = useState(false);
+  const [activeEmoji, setActiveEmoji] = useState("");
+
   const { 
     assignments = [], 
     isLoading, 
@@ -37,9 +42,39 @@ const Index = () => {
     updateAssignmentMutation 
   } = useAssignments();
 
-  const [showEmojiToggle, setShowEmojiToggle] = useState(false);
-  const [enableEmojis, setEnableEmojis] = useState(false);
-  const [activeEmoji, setActiveEmoji] = useState("");
+  useEffect(() => {
+    if (funModeEnabled) {
+      const handleSparkle = (e: MouseEvent) => {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.style.left = `${e.clientX - 10}px`;
+        sparkle.style.top = `${e.clientY - 10}px`;
+        document.body.appendChild(sparkle);
+        
+        setTimeout(() => {
+          document.body.removeChild(sparkle);
+        }, 600);
+      };
+
+      document.addEventListener('click', handleSparkle);
+      document.addEventListener('touchstart', handleSparkle);
+
+      return () => {
+        document.removeEventListener('click', handleSparkle);
+        document.removeEventListener('touchstart', handleSparkle);
+      };
+    }
+  }, [funModeEnabled]);
+
+  const handleHomeworkClick = () => {
+    setFunModeEnabled(prev => !prev);
+    if (!funModeEnabled) {
+      toast({
+        title: "✨ Fun Mode Activated! ✨",
+        description: "Click anywhere to create sparkles!",
+      });
+    }
+  };
 
   const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (!enableEmojis) return;
@@ -47,7 +82,6 @@ const Index = () => {
     const emoji = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
     setActiveEmoji(emoji);
     
-    // Create and animate the emoji element
     const emojiEl = document.createElement("div");
     emojiEl.textContent = emoji;
     emojiEl.style.position = "fixed";
@@ -113,6 +147,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8" dir={language === "he" ? "rtl" : "ltr"}>
+      {funModeEnabled && <div className="rainbow-mode" />}
       <div className="container max-w-4xl">
         <DashboardHeader />
 
@@ -144,6 +179,13 @@ const Index = () => {
           </div>
 
           {showForm && <AssignmentForm onSubmit={handleAddAssignment} />}
+
+          <h2 
+            className="text-2xl font-bold mb-4 cursor-pointer select-none"
+            onDoubleClick={handleHomeworkClick}
+          >
+            {t("tabHomework")}
+          </h2>
 
           <AssignmentTabs
             assignments={filteredAssignments}
