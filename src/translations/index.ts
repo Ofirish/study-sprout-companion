@@ -1,155 +1,29 @@
-/**
- * translations/index.ts
- * Purpose: Centralizes all application translations in a maintainable structure.
- * Exports translations object used by the LanguageContext.
- */
+export type Language = "en" | "he";
 
-export const translations = {
-  // Navigation and general UI
-  appTitle: {
-    en: "All Your Homework Are Belong to Us",
-    he: "All Your Homework Are Belong to Us - Heb",
-  },
-  appDescription: {
-    en: "Keep track of all your assignments and tests in one place",
-    he: "עקוב אחר כל המטלות והמבחנים שלך במקום אחד",
-  },
-  
-  // Actions
-  addAssignment: {
-    en: "Add Assignment",
-    he: "הוסף מטלה",
-  },
-  showAll: {
-    en: "Show All Assignments",
-    he: "הצג את כל המטלות",
-  },
-  signOut: {
-    en: "Sign Out",
-    he: "התנתק",
-  },
-  cancel: {
-    en: "Cancel",
-    he: "ביטול",
-  },
-  hideCompleted: {
-    en: "Hide Completed",
-    he: "הסתר משימות שהושלמו",
-  },
+export type TranslationKey =
+  | "Math"
+  | "Science"
+  | "English"
+  | "History"
+  | "Other"
+  | "homework"
+  | "completed"
+  | "hideCompleted"
+  | "cancel"
+  | "appTitle"
+  | "appDescription"
+  | "addAssignment"
+  | "showAll"
+  | "signOut"
+  | "tabHomework"
+  | "notStarted"
+  | "inProgress"
+  | "viewingAssignments"
+  | "selectStudent"
+  | "myAssignments"
+  | "assignmentsFor";
 
-  // Stats
-  total: {
-    en: "Total",
-    he: "סה״כ",
-  },
-  done: {
-    en: "Done",
-    he: "הושלם",
-  },
-  active: {
-    en: "Active",
-    he: "פעיל",
-  },
-  new: {
-    en: "New",
-    he: "חדש",
-  },
-
-  // Tabs
-  upcoming: {
-    en: "Upcoming",
-    he: "קרוב",
-  },
-  homework: {
-    en: "Homework",
-    he: "שיעורי בית",
-  },
-  tests: {
-    en: "Tests",
-    he: "מבחנים",
-  },
-  tabUpcoming: {
-    en: "Upcoming",
-    he: "קרוב",
-  },
-  tabHomework: {
-    en: "Homework",
-    he: "שיעורי בית",
-  },
-  tabTests: {
-    en: "Tests",
-    he: "מבחנים",
-  },
-  noUpcoming: {
-    en: "No upcoming assignments",
-    he: "אין מטלות קרובות",
-  },
-  noHomework: {
-    en: "No homework assignments",
-    he: "אין שיעורי בית",
-  },
-  noTests: {
-    en: "No tests",
-    he: "אין מבחנים",
-  },
-
-  // Form
-  formTitle: {
-    en: "Title",
-    he: "כותרת",
-  },
-  formDescription: {
-    en: "Description",
-    he: "תיאור",
-  },
-  formSubject: {
-    en: "Subject",
-    he: "מקצוע",
-  },
-  formDueDate: {
-    en: "Due Date",
-    he: "תאריך יעד",
-  },
-  formType: {
-    en: "Type",
-    he: "סוג",
-  },
-  formHomework: {
-    en: "Homework",
-    he: "שיעורי בית",
-  },
-  formTest: {
-    en: "Test",
-    he: "מבחן",
-  },
-  formSubmit: {
-    en: "Add Assignment",
-    he: "הוסף מטלה",
-  },
-  formRequired: {
-    en: "Please fill in all required fields",
-    he: "נא למלא את כל השדות הנדרשים",
-  },
-  formSuccess: {
-    en: "Assignment added successfully!",
-    he: "המטלה נוספה בהצלחה!",
-  },
-
-  // Status
-  notStarted: {
-    en: "Not Started",
-    he: "טרם התחיל",
-  },
-  inProgress: {
-    en: "In Progress",
-    he: "בתהליך",
-  },
-  completed: {
-    en: "Completed",
-    he: "הושלם",
-  },
-
-  // Subjects
+export const translations: Record<TranslationKey, Record<Language, string>> = {
   Math: {
     en: "Math",
     he: "מתמטיקה",
@@ -170,7 +44,68 @@ export const translations = {
     en: "Other",
     he: "אחר",
   },
-} as const;
-
-export type Language = "en" | "he";
-export type TranslationKey = keyof typeof translations;
+  homework: {
+    en: "Homework",
+    he: "שיעורי בית",
+  },
+  completed: {
+    en: "Completed",
+    he: "הושלם",
+  },
+  hideCompleted: {
+    en: "Hide Completed",
+    he: "הסתר הושלמו",
+  },
+  cancel: {
+    en: "Cancel",
+    he: "ביטול",
+  },
+  appTitle: {
+    en: "My App",
+    he: "היישום שלי",
+  },
+  appDescription: {
+    en: "This is my app description.",
+    he: "זו תיאור היישום שלי.",
+  },
+  addAssignment: {
+    en: "Add Assignment",
+    he: "הוסף מטלה",
+  },
+  showAll: {
+    en: "Show All",
+    he: "הצג הכל",
+  },
+  signOut: {
+    en: "Sign Out",
+    he: "התנתק",
+  },
+  tabHomework: {
+    en: "Homework",
+    he: "שיעורי בית",
+  },
+  notStarted: {
+    en: "Not Started",
+    he: "לא התחיל",
+  },
+  inProgress: {
+    en: "In Progress",
+    he: "בתהליך",
+  },
+  viewingAssignments: {
+    en: "Viewing Assignments",
+    he: "צפייה במטלות",
+  },
+  selectStudent: {
+    en: "Select Student",
+    he: "בחר תלמיד",
+  },
+  myAssignments: {
+    en: "My Assignments",
+    he: "המטלות שלי",
+  },
+  assignmentsFor: {
+    en: "Assignments for",
+    he: "מטלות עבור",
+  },
+};

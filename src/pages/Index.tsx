@@ -46,28 +46,31 @@ const Index = () => {
 
   // Fetch user profile to check if they're a parent
   const { data: userProfile } = useQuery({
-    queryKey: ["profile"],
+    queryKey: ["profile", session?.user?.id],
     queryFn: async () => {
+      if (!session?.user?.id) return null;
+      
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
-        .eq("id", session?.user?.id)
-        .single();
+        .eq("id", session.user.id)
+        .maybeSingle();
       
       if (error) throw error;
       return data;
     },
+    enabled: !!session?.user?.id,
   });
 
   // Fetch students if user is a parent
   const { data: students = [] } = useQuery({
     queryKey: ["students", session?.user?.id],
-    enabled: userProfile?.role === "parent",
+    enabled: !!session?.user?.id && userProfile?.role === "parent",
     queryFn: async () => {
       const { data, error } = await supabase
         .from("parent_student_relationships")
         .select(`
-          student:student_id (
+          student:profiles!parent_student_relationships_student_id_fkey (
             id,
             first_name,
             last_name
