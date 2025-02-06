@@ -11,10 +11,13 @@ import { useAssignments } from "@/hooks/useAssignments";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 const Index = () => {
   const [showForm, setShowForm] = useState(false);
   const [statusFilter, setStatusFilter] = useState<"all" | "completed" | "in_progress" | "not_started">("all");
+  const [hideCompleted, setHideCompleted] = useState(false);
   const { session } = useAuth();
   const { toast } = useToast();
   const { t, language } = useLanguage();
@@ -49,6 +52,12 @@ const Index = () => {
   };
 
   const filteredAssignments = assignments.filter(assignment => {
+    // First apply the hide completed filter
+    if (hideCompleted && assignment.status === "Completed") {
+      return false;
+    }
+    
+    // Then apply the status filter
     switch (statusFilter) {
       case "completed":
         return assignment.status === "Completed";
@@ -80,15 +89,27 @@ const Index = () => {
         />
 
         <div className="mt-8">
-          <div className="flex justify-between items-center mb-4">
-            <Button 
-              variant="outline" 
-              onClick={() => setStatusFilter("all")}
-              size="sm"
-              className={`text-sm ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""}`}
-            >
-              {t("showAll")}
-            </Button>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+            <div className="flex items-center space-x-4 rtl:space-x-reverse">
+              <Button 
+                variant="outline" 
+                onClick={() => setStatusFilter("all")}
+                size="sm"
+                className={`text-sm ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""}`}
+              >
+                {t("showAll")}
+              </Button>
+              <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                <Switch
+                  id="hide-completed"
+                  checked={hideCompleted}
+                  onCheckedChange={setHideCompleted}
+                />
+                <Label htmlFor="hide-completed" className="text-sm">
+                  {t("hideCompleted")}
+                </Label>
+              </div>
+            </div>
             <Button 
               onClick={() => setShowForm(!showForm)}
               size="sm"
