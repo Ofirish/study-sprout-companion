@@ -33,7 +33,7 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
         variant="ghost"
         onClick={() => onFilterChange("completed")}
         className="text-center p-2 sm:p-4 hover:bg-[#D3E4FD] rounded-lg transition-colors h-auto group data-[state=active]:bg-[#D3E4FD] data-[state=active]:border-2 data-[state=active]:border-[#1EAEDB]"
-        data-state="completed"
+        data-state={assignments.every(a => a.status === "Completed") ? "active" : "default"}
       >
         <div className="text-lg sm:text-2xl font-bold text-green-500 flex items-center justify-center">
           <CheckCircle className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
@@ -46,7 +46,7 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
         variant="ghost"
         onClick={() => onFilterChange("in_progress")}
         className="text-center p-2 sm:p-4 hover:bg-[#D3E4FD] rounded-lg transition-colors h-auto group data-[state=active]:bg-[#D3E4FD] data-[state=active]:border-2 data-[state=active]:border-[#1EAEDB]"
-        data-state="in_progress"
+        data-state={assignments.every(a => a.status === "In Progress") ? "active" : "default"}
       >
         <div className="text-lg sm:text-2xl font-bold text-yellow-500 flex items-center justify-center">
           <Clock className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
@@ -59,7 +59,7 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
         variant="ghost"
         onClick={() => onFilterChange("not_started")}
         className="text-center p-2 sm:p-4 hover:bg-[#D3E4FD] rounded-lg transition-colors h-auto group data-[state=active]:bg-[#D3E4FD] data-[state=active]:border-2 data-[state=active]:border-[#1EAEDB]"
-        data-state="not_started"
+        data-state={assignments.every(a => a.status === "Not Started") ? "active" : "default"}
       >
         <div className="text-lg sm:text-2xl font-bold text-red-500 flex items-center justify-center">
           <XCircle className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
