@@ -61,6 +61,10 @@ const translations = {
     en: "Tests",
     he: "מבחנים",
   },
+  hideCompleted: {
+    en: "Hide Completed",
+    he: "הסתר משימות שהושלמו",
+  },
   
   // Form translations
   formTitle: {
