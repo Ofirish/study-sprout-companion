@@ -3,6 +3,10 @@ export const general = {
     en: "Settings",
     he: "הגדרות"
   },
+  dashboard: {
+    en: "Dashboard",
+    he: "לוח בקרה"
+  },
   profileSettings: {
     en: "Profile Settings",
     he: "הגדרות פרופיל"
@@ -46,5 +50,9 @@ export const general = {
   noStudentsYet: {
     en: "No students yet",
     he: "אין תלמידים עדיין"
+  },
+  connectedStudents: {
+    en: "Connected Students",
+    he: "תלמידים מחוברים"
   }
 } as const;
