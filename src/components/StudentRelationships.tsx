@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/components/AuthProvider";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -67,13 +67,19 @@ export const StudentRelationships = () => {
     if (!session || !studentEmail) return;
 
     // First, get the student's profile using their email
-    const { data: studentData, error: studentError } = await supabase
+    const { data: userData, error: userError } = await supabase
       .from("profiles")
       .select("id, role")
-      .eq("id", session.user.id)
+      .eq("id", (
+        await supabase
+          .from("auth")
+          .select("id")
+          .eq("email", studentEmail)
+          .single()
+      ).data?.id)
       .single();
 
-    if (studentError || !studentData) {
+    if (userError || !userData) {
       toast({
         title: "Error",
         description: "Student not found",
@@ -82,10 +88,27 @@ export const StudentRelationships = () => {
       return;
     }
 
-    if (studentData.role !== "student") {
+    if (userData.role !== "student") {
       toast({
         title: "Error",
         description: "User is not a student",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Check if relationship already exists
+    const { data: existingRelationship } = await supabase
+      .from("parent_student_relationships")
+      .select("id")
+      .eq("parent_id", session.user.id)
+      .eq("student_id", userData.id)
+      .single();
+
+    if (existingRelationship) {
+      toast({
+        title: "Error",
+        description: "This student is already connected to your account",
         variant: "destructive",
       });
       return;
@@ -96,7 +119,7 @@ export const StudentRelationships = () => {
       .from("parent_student_relationships")
       .insert({
         parent_id: session.user.id,
-        student_id: studentData.id,
+        student_id: userData.id,
       });
 
     if (relationshipError) {
