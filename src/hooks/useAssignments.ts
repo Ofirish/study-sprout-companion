@@ -1,4 +1,3 @@
-
 /**
  * useAssignments.ts
  * Purpose: Custom hook for managing assignments data.
@@ -8,30 +7,22 @@ import { Assignment } from "@/types/assignment";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import { useAuth } from "@/components/AuthProvider";
 
 export const useAssignments = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { session } = useAuth();
 
   // Fetch assignments
   const { data: assignments = [], isLoading } = useQuery({
     queryKey: ["assignments"],
     queryFn: async () => {
-      const { data: userAssignments, error } = await supabase
+      const { data, error } = await supabase
         .from("assignments")
-        .select(`
-          *,
-          profiles!assignments_user_id_fkey (
-            first_name,
-            last_name
-          )
-        `)
+        .select("*")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      return userAssignments as (Assignment & { profiles: { first_name: string; last_name: string } })[];
+      return data as Assignment[];
     },
   });
 
