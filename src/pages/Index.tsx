@@ -1,4 +1,3 @@
-
 /**
  * Index.tsx
  * Purpose: Main dashboard page displaying assignments and controls.
@@ -21,11 +20,13 @@ import { useFunMode } from "@/contexts/FunModeContext";
 import { Sparkles } from "@/components/Sparkles";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Index = () => {
   const [showForm, setShowForm] = useState(false);
   const [statusFilter, setStatusFilter] = useState<"all" | "completed" | "in_progress" | "not_started">("all");
   const [hideCompleted, setHideCompleted] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const { session } = useAuth();
   const { toast } = useToast();
   const { t, language } = useLanguage();
@@ -51,6 +52,40 @@ const Index = () => {
     updateAssignmentMutation 
   } = useAssignments();
 
+  const filteredAssignments = assignments.filter(assignment => {
+    if (selectedUserId && assignment.user_id !== selectedUserId) {
+      return false;
+    }
+    if (hideCompleted && assignment.status === "Completed") {
+      return false;
+    }
+    
+    switch (statusFilter) {
+      case "completed":
+        return assignment.status === "Completed";
+      case "in_progress":
+        return assignment.status === "In Progress";
+      case "not_started":
+        return assignment.status === "Not Started";
+      default:
+        return true;
+    }
+  });
+
+  // Group assignments by user for the selector
+  const userGroups = assignments.reduce((acc, assignment) => {
+    const userId = assignment.user_id;
+    if (!acc[userId]) {
+      acc[userId] = {
+        id: userId,
+        name: assignment.profiles ? 
+          `${assignment.profiles.first_name} ${assignment.profiles.last_name}` : 
+          'Unknown User'
+      };
+    }
+    return acc;
+  }, {} as Record<string, { id: string; name: string }>);
+
   const handleAddAssignment = (
     newAssignment: Omit<Assignment, "id" | "status">
   ) => {
@@ -73,23 +108,6 @@ const Index = () => {
     }
   };
 
-  const filteredAssignments = assignments.filter(assignment => {
-    if (hideCompleted && assignment.status === "Completed") {
-      return false;
-    }
-    
-    switch (statusFilter) {
-      case "completed":
-        return assignment.status === "Completed";
-      case "in_progress":
-        return assignment.status === "In Progress";
-      case "not_started":
-        return assignment.status === "Not Started";
-      default:
-        return true;
-    }
-  });
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -108,34 +126,59 @@ const Index = () => {
       <div className="container max-w-4xl">
         <DashboardHeader />
 
+        <div className="mt-4 mb-6">
+          <Select
+            value={selectedUserId || session?.user?.id || ''}
+            onValueChange={(value) => setSelectedUserId(value === session?.user?.id ? null : value)}
+          >
+            <SelectTrigger className="w-full sm:w-[300px]">
+              <SelectValue placeholder={t("selectStudent")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={session?.user?.id || ''}>
+                {t("myAssignments")}
+              </SelectItem>
+              {Object.values(userGroups)
+                .filter(user => user.id !== session?.user?.id)
+                .map(user => (
+                  <SelectItem key={user.id} value={user.id}>
+                    {user.name}
+                  </SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
+        </div>
+
         <StatsCard 
-          assignments={assignments} 
+          assignments={filteredAssignments} 
           onFilterChange={setStatusFilter}
         />
 
         <div className="mt-8">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-            <Button 
-              variant="outline" 
-              onClick={() => setStatusFilter("all")}
-              size="sm"
-              className={`text-sm ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""} ${
-                funMode ? "rainbow-text" : ""
-              }`}
-            >
-              {t("showAll")}
-            </Button>
-            <Button 
-              onClick={() => setShowForm(!showForm)}
-              size="sm"
-              className={`w-auto text-sm ${funMode ? "rainbow-text" : ""}`}
-            >
-              <PlusCircle className="mr-2 h-4 w-4" />
-              {showForm ? t("cancel") : t("addAssignment")}
-            </Button>
-          </div>
+          {!selectedUserId && (
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+              <Button 
+                variant="outline" 
+                onClick={() => setStatusFilter("all")}
+                size="sm"
+                className={`text-sm ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""} ${
+                  funMode ? "rainbow-text" : ""
+                }`}
+              >
+                {t("showAll")}
+              </Button>
+              <Button 
+                onClick={() => setShowForm(!showForm)}
+                size="sm"
+                className={`w-auto text-sm ${funMode ? "rainbow-text" : ""}`}
+              >
+                <PlusCircle className="mr-2 h-4 w-4" />
+                {showForm ? t("cancel") : t("addAssignment")}
+              </Button>
+            </div>
+          )}
 
-          {showForm && <AssignmentForm onSubmit={handleAddAssignment} />}
+          {showForm && !selectedUserId && <AssignmentForm onSubmit={handleAddAssignment} />}
 
           <AssignmentTabs
             assignments={filteredAssignments}

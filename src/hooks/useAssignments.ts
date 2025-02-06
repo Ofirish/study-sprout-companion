@@ -7,26 +7,46 @@ import { Assignment } from "@/types/assignment";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/components/AuthProvider";
 
 export const useAssignments = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { session } = useAuth();
 
-  // Fetch assignments
+  // Fetch assignments for user and related students
   const { data: assignments = [], isLoading } = useQuery({
     queryKey: ["assignments"],
     queryFn: async () => {
+      if (!session?.user?.id) return [];
+
+      const { data: relationships, error: relationshipsError } = await supabase
+        .from("parent_student_relationships")
+        .select("student_id")
+        .eq("parent_id", session.user.id);
+
+      if (relationshipsError) throw relationshipsError;
+
+      const studentIds = relationships?.map(r => r.student_id) || [];
+      const userIds = [session.user.id, ...studentIds];
+
       const { data, error } = await supabase
         .from("assignments")
-        .select("*")
+        .select(`
+          *,
+          profiles:user_id (
+            first_name,
+            last_name
+          )
+        `)
+        .in("user_id", userIds)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      return data as Assignment[];
+      return data as (Assignment & { profiles: { first_name: string; last_name: string } })[];
     },
   });
 
-  // Add new assignment
   const addAssignmentMutation = useMutation({
     mutationFn: async (newAssignment: Omit<Assignment, "id" | "status">) => {
       const { data, error } = await supabase
