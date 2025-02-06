@@ -1,3 +1,8 @@
+/**
+ * Index.tsx
+ * Purpose: Main dashboard page displaying assignments and controls.
+ * Shows assignment stats, filtering options, and assignment list.
+ */
 import { useState } from "react";
 import { Assignment } from "@/types/assignment";
 import { AssignmentForm } from "@/components/AssignmentForm";
@@ -52,12 +57,10 @@ const Index = () => {
   };
 
   const filteredAssignments = assignments.filter(assignment => {
-    // First apply the hide completed filter
     if (hideCompleted && assignment.status === "Completed") {
       return false;
     }
     
-    // Then apply the status filter
     switch (statusFilter) {
       case "completed":
         return assignment.status === "Completed";
@@ -90,26 +93,14 @@ const Index = () => {
 
         <div className="mt-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-            <div className="flex items-center space-x-4 rtl:space-x-reverse">
-              <Button 
-                variant="outline" 
-                onClick={() => setStatusFilter("all")}
-                size="sm"
-                className={`text-sm ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""}`}
-              >
-                {t("showAll")}
-              </Button>
-              <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                <Switch
-                  id="hide-completed"
-                  checked={hideCompleted}
-                  onCheckedChange={setHideCompleted}
-                />
-                <Label htmlFor="hide-completed" className="text-sm">
-                  {t("hideCompleted")}
-                </Label>
-              </div>
-            </div>
+            <Button 
+              variant="outline" 
+              onClick={() => setStatusFilter("all")}
+              size="sm"
+              className={`text-sm ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""}`}
+            >
+              {t("showAll")}
+            </Button>
             <Button 
               onClick={() => setShowForm(!showForm)}
               size="sm"
@@ -127,7 +118,18 @@ const Index = () => {
             onStatusChange={handleStatusChange}
           />
 
-          <div className="mt-8 flex justify-center">
+          <div className="mt-8 flex flex-col items-center gap-4">
+            <div className="flex items-center space-x-2 rtl:space-x-reverse">
+              <Switch
+                id="hide-completed"
+                checked={hideCompleted}
+                onCheckedChange={setHideCompleted}
+              />
+              <Label htmlFor="hide-completed" className="text-sm">
+                {t("hideCompleted")}
+              </Label>
+            </div>
+            
             <Button 
               variant="outline" 
               onClick={handleSignOut} 
