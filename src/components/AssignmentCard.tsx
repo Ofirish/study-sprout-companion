@@ -6,13 +6,21 @@
 import { Assignment } from "@/types/assignment";
 import { SubjectBadge } from "./SubjectBadge";
 import { Card } from "@/components/ui/card";
-import { CheckCircle, Clock, FileText, GraduationCap } from "lucide-react";
+import { CheckCircle, Clock, FileText, GraduationCap, User } from "lucide-react";
 import { format } from "date-fns";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/components/AuthProvider";
 
 interface AssignmentCardProps {
   assignment: Assignment;
   onStatusChange: (id: string, status: Assignment["status"]) => void;
+}
+
+interface Profile {
+  first_name: string;
+  last_name: string;
 }
 
 export const AssignmentCard = ({
@@ -20,12 +28,32 @@ export const AssignmentCard = ({
   onStatusChange,
 }: AssignmentCardProps) => {
   const { t, language } = useLanguage();
+  const { session } = useAuth();
+  const [studentProfile, setStudentProfile] = useState<Profile | null>(null);
   
   const statusColors = {
     "Not Started": "text-red-500",
     "In Progress": "text-yellow-500",
     Completed: "text-green-500",
   };
+
+  useEffect(() => {
+    const fetchStudentProfile = async () => {
+      if (!session || assignment.user_id === session.user.id) return;
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("first_name, last_name")
+        .eq("id", assignment.user_id)
+        .single();
+
+      if (!error && data) {
+        setStudentProfile(data);
+      }
+    };
+
+    fetchStudentProfile();
+  }, [assignment.user_id, session]);
 
   return (
     <Card className="p-3 sm:p-4 hover:shadow-lg transition-shadow">
@@ -42,6 +70,13 @@ export const AssignmentCard = ({
       </div>
       
       <p className="mt-2 text-xs sm:text-sm text-gray-600 line-clamp-2">{assignment.description}</p>
+      
+      {studentProfile && (
+        <div className="mt-2 flex items-center gap-1 text-xs text-gray-500">
+          <User className="h-3 w-3" />
+          <span>{studentProfile.first_name} {studentProfile.last_name}</span>
+        </div>
+      )}
       
       <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
         <div className="flex items-center space-x-2">
