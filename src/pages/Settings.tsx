@@ -4,10 +4,9 @@ import { useAuth } from "@/components/AuthProvider";
 import { useToast } from "@/components/ui/use-toast";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { StudentRelationships } from "@/components/StudentRelationships";
+import { StudentRelationships } from "@/components/student/StudentRelationships";
+import { ProfileForm } from "@/components/settings/ProfileForm";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Home } from "lucide-react";
@@ -100,39 +99,14 @@ const Settings = () => {
       
       <Card className="p-6 mb-6">
         <h2 className="text-xl font-semibold mb-4">{t("profileSettings")}</h2>
-        <form onSubmit={handleUpdateProfile} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="firstName">{t("firstName")}</Label>
-            <Input
-              id="firstName"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              placeholder={t("firstName")}
-            />
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="lastName">{t("lastName")}</Label>
-            <Input
-              id="lastName"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              placeholder={t("lastName")}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="role">{t("role")}</Label>
-            <Input
-              id="role"
-              value={role}
-              disabled
-              className="bg-gray-100"
-            />
-          </div>
-
-          <Button type="submit">{t("saveChanges")}</Button>
-        </form>
+        <ProfileForm
+          firstName={firstName}
+          lastName={lastName}
+          role={role}
+          onFirstNameChange={setFirstName}
+          onLastNameChange={setLastName}
+          onSubmit={handleUpdateProfile}
+        />
       </Card>
 
       {role === "parent" && (

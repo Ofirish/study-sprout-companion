@@ -54,5 +54,13 @@ export const general = {
   connectedStudents: {
     en: "Connected Students",
     he: "תלמידים מחוברים"
+  },
+  selectStudent: {
+    en: "Select Student",
+    he: "בחר תלמיד"
+  },
+  myAssignments: {
+    en: "My Assignments",
+    he: "המטלות שלי"
   }
 } as const;
