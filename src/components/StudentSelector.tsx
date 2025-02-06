@@ -60,7 +60,8 @@ export const StudentSelector = ({
     },
   });
 
-  if (!userProfile?.role === "parent" || students.length === 0) {
+  // Check if the user is a parent and has students
+  if (!userProfile?.role || userProfile.role !== "parent" || students.length === 0) {
     return null;
   }
 

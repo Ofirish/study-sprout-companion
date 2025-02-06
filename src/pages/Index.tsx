@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { StudentSelector } from "@/components/StudentSelector";
 import { FunModeControls } from "@/components/FunModeControls";
+import { useQuery } from "@tanstack/react-query";
 
 const EMOJIS = ["🐶", "🐱", "🐰", "🦊", "🐼", "🦁", "🐸", "🦉"];
 
@@ -92,6 +93,22 @@ const Index = () => {
     addAssignmentMutation, 
     updateAssignmentMutation 
   } = useAssignments(selectedStudentId);
+
+  const { data: selectedStudentProfile } = useQuery({
+    queryKey: ["selectedStudentProfile", selectedStudentId],
+    queryFn: async () => {
+      if (!selectedStudentId) return null;
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", selectedStudentId)
+        .maybeSingle();
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!selectedStudentId,
+  });
 
   const handleAddAssignment = (
     newAssignment: Omit<Assignment, "id" | "status">
@@ -187,7 +204,9 @@ const Index = () => {
             className="text-2xl font-bold mb-4 cursor-pointer select-none"
             onDoubleClick={handleHomeworkClick}
           >
-            {selectedStudentId ? `${t("assignmentsFor")} ${assignments.find(s => s.user_id === selectedStudentId)?.first_name}` : t("tabHomework")}
+            {selectedStudentId && selectedStudentProfile 
+              ? `${t("assignmentsFor")} ${selectedStudentProfile.first_name}` 
+              : t("tabHomework")}
           </h2>
 
           <AssignmentTabs
