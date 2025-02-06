@@ -1,4 +1,3 @@
-
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,16 +18,16 @@ export const DashboardHeader = () => {
   };
 
   return (
-    <div className="flex justify-between items-center mb-8">
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
           Homework Tracker
         </h1>
-        <p className="text-gray-600">
+        <p className="text-sm sm:text-base text-gray-600">
           Keep track of all your assignments and tests in one place
         </p>
       </div>
-      <Button variant="outline" onClick={handleSignOut}>
+      <Button variant="outline" onClick={handleSignOut} className="w-full sm:w-auto">
         <LogOut className="mr-2 h-4 w-4" />
         Sign Out
       </Button>
