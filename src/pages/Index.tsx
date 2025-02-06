@@ -8,7 +8,7 @@ import { Assignment } from "@/types/assignment";
 import { AssignmentForm } from "@/components/AssignmentForm";
 import { StatsCard } from "@/components/StatsCard";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, LogOut, Users } from "lucide-react";
+import { PlusCircle, LogOut, Users, ChevronDown } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { AssignmentTabs } from "@/components/AssignmentTabs";
@@ -161,12 +161,15 @@ const Index = () => {
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="sm" className="gap-2">
                       <Users className="h-4 w-4" />
-                      {viewMode === "all" && t("viewAll")}
-                      {viewMode === "parent" && t("viewParent")}
-                      {viewMode === "student" && t("viewStudent")}
+                      <span>
+                        {viewMode === "all" && t("viewAll")}
+                        {viewMode === "parent" && t("viewParent")}
+                        {viewMode === "student" && t("viewStudent")}
+                      </span>
+                      <ChevronDown className="h-4 w-4 opacity-50" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuContent align="end" className="w-48 bg-popover">
                     <DropdownMenuItem onClick={() => setViewMode("all")}>
                       {t("viewAll")}
                     </DropdownMenuItem>
