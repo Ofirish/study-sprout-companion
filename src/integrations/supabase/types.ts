@@ -48,6 +48,69 @@ export type Database = {
         }
         Relationships: []
       }
+      parent_student_relationships: {
+        Row: {
+          created_at: string | null
+          id: string
+          parent_id: string
+          student_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          parent_id: string
+          student_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          parent_id?: string
+          student_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parent_student_relationships_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "parent_student_relationships_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+          role: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          role: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          role?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
