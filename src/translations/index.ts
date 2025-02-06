@@ -21,7 +21,26 @@ export type TranslationKey =
   | "viewingAssignments"
   | "selectStudent"
   | "myAssignments"
-  | "assignmentsFor";
+  | "assignmentsFor"
+  | "formRequired"
+  | "formSuccess"
+  | "formTitle"
+  | "formDescription"
+  | "formSubject"
+  | "formType"
+  | "formHomework"
+  | "formTest"
+  | "formDueDate"
+  | "formSubmit"
+  | "tabUpcoming"
+  | "tabTests"
+  | "noUpcoming"
+  | "noHomework"
+  | "noTests"
+  | "total"
+  | "done"
+  | "active"
+  | "new";
 
 export const translations: Record<TranslationKey, Record<Language, string>> = {
   Math: {
@@ -107,5 +126,81 @@ export const translations: Record<TranslationKey, Record<Language, string>> = {
   assignmentsFor: {
     en: "Assignments for",
     he: "מטלות עבור",
+  },
+  formRequired: {
+    en: "Please fill in all required fields",
+    he: "נא למלא את כל השדות הנדרשים",
+  },
+  formSuccess: {
+    en: "Assignment added successfully",
+    he: "המטלה נוספה בהצלחה",
+  },
+  formTitle: {
+    en: "Title",
+    he: "כותרת",
+  },
+  formDescription: {
+    en: "Description",
+    he: "תיאור",
+  },
+  formSubject: {
+    en: "Subject",
+    he: "נושא",
+  },
+  formType: {
+    en: "Type",
+    he: "סוג",
+  },
+  formHomework: {
+    en: "Homework",
+    he: "שיעורי בית",
+  },
+  formTest: {
+    en: "Test",
+    he: "מבחן",
+  },
+  formDueDate: {
+    en: "Due Date",
+    he: "תאריך יעד",
+  },
+  formSubmit: {
+    en: "Add Assignment",
+    he: "הוסף מטלה",
+  },
+  tabUpcoming: {
+    en: "Upcoming",
+    he: "קרוב",
+  },
+  tabTests: {
+    en: "Tests",
+    he: "מבחנים",
+  },
+  noUpcoming: {
+    en: "No upcoming assignments",
+    he: "אין מטלות קרובות",
+  },
+  noHomework: {
+    en: "No homework assignments",
+    he: "אין שיעורי בית",
+  },
+  noTests: {
+    en: "No tests",
+    he: "אין מבחנים",
+  },
+  total: {
+    en: "Total",
+    he: "סך הכל",
+  },
+  done: {
+    en: "Done",
+    he: "הושלם",
+  },
+  active: {
+    en: "Active",
+    he: "פעיל",
+  },
+  new: {
+    en: "New",
+    he: "חדש",
   },
 };
