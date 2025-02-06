@@ -1,4 +1,3 @@
-
 /**
  * useAssignments.ts
  * Purpose: Custom hook for managing assignments data.
@@ -19,7 +18,7 @@ export const useAssignments = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("assignments")
-        .select("*, profiles(first_name, last_name)")
+        .select("*")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
