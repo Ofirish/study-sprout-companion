@@ -10,7 +10,7 @@ interface AssignmentTabsProps {
 
 const TabDot = ({ show }: { show: boolean }) => {
   if (!show) return null;
-  return <Circle className="w-2 h-2 ml-2 fill-[#ea384c] text-[#ea384c]" />;
+  return <Circle className="w-2 h-2 ml-2 fill-[#ea384c] text-[#ea384c] shrink-0" />;
 };
 
 export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsProps) => {
@@ -24,36 +24,24 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
 
   const testAssignments = assignments.filter((a) => a.type === "test");
 
-  const hasUpcomingInProgress = upcomingAssignments.some(a => a.status === "In Progress");
-  const hasUpcomingCompleted = upcomingAssignments.some(a => a.status === "Completed");
-  const hasUpcomingNotStarted = upcomingAssignments.some(a => a.status === "Not Started");
-
-  const hasHomeworkInProgress = homeworkAssignments.some(a => a.status === "In Progress");
-  const hasHomeworkCompleted = homeworkAssignments.some(a => a.status === "Completed");
-  const hasHomeworkNotStarted = homeworkAssignments.some(a => a.status === "Not Started");
-
-  const hasTestsInProgress = testAssignments.some(a => a.status === "In Progress");
-  const hasTestsCompleted = testAssignments.some(a => a.status === "Completed");
-  const hasTestsNotStarted = testAssignments.some(a => a.status === "Not Started");
-
-  const showUpcomingDot = hasUpcomingInProgress || hasUpcomingCompleted || hasUpcomingNotStarted;
-  const showHomeworkDot = hasHomeworkInProgress || hasHomeworkCompleted || hasHomeworkNotStarted;
-  const showTestsDot = hasTestsInProgress || hasTestsCompleted || hasTestsNotStarted;
+  const hasUpcoming = upcomingAssignments.length > 0;
+  const hasHomework = homeworkAssignments.length > 0;
+  const hasTests = testAssignments.length > 0;
 
   return (
     <Tabs defaultValue="upcoming" className="mt-4">
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="upcoming" className="flex items-center justify-center">
           Upcoming
-          <TabDot show={showUpcomingDot} />
+          <TabDot show={hasUpcoming} />
         </TabsTrigger>
         <TabsTrigger value="homework" className="flex items-center justify-center">
           Homework
-          <TabDot show={showHomeworkDot} />
+          <TabDot show={hasHomework} />
         </TabsTrigger>
         <TabsTrigger value="tests" className="flex items-center justify-center">
           Tests
-          <TabDot show={showTestsDot} />
+          <TabDot show={hasTests} />
         </TabsTrigger>
       </TabsList>
       
