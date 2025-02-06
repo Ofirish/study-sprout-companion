@@ -8,18 +8,24 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 
-export const useAssignments = () => {
+export const useAssignments = (studentId?: string | null) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   // Fetch assignments
   const { data: assignments = [], isLoading } = useQuery({
-    queryKey: ["assignments"],
+    queryKey: ["assignments", studentId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const query = supabase
         .from("assignments")
         .select("*")
         .order("created_at", { ascending: false });
+
+      if (studentId) {
+        query.eq("user_id", studentId);
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
       return data as Assignment[];

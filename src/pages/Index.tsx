@@ -8,7 +8,7 @@ import { Assignment } from "@/types/assignment";
 import { AssignmentForm } from "@/components/AssignmentForm";
 import { StatsCard } from "@/components/StatsCard";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, LogOut, ChevronRight } from "lucide-react";
+import { PlusCircle, LogOut, ChevronRight, Users } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { AssignmentTabs } from "@/components/AssignmentTabs";
@@ -19,6 +19,14 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useQuery } from "@tanstack/react-query";
 
 const EMOJIS = ["🐶", "🐱", "🐰", "🦊", "🐼", "🦁", "🐸", "🦉"];
 
@@ -29,18 +37,55 @@ const Index = () => {
   const { session } = useAuth();
   const { toast } = useToast();
   const { t, language } = useLanguage();
+  const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   
   const [funModeEnabled, setFunModeEnabled] = useState(false);
   const [showEmojiToggle, setShowEmojiToggle] = useState(false);
   const [enableEmojis, setEnableEmojis] = useState(false);
   const [activeEmoji, setActiveEmoji] = useState("");
 
+  // Fetch user profile to check if they're a parent
+  const { data: userProfile } = useQuery({
+    queryKey: ["profile"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session?.user?.id)
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  // Fetch students if user is a parent
+  const { data: students = [] } = useQuery({
+    queryKey: ["students", session?.user?.id],
+    enabled: userProfile?.role === "parent",
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("parent_student_relationships")
+        .select(`
+          student:student_id (
+            id,
+            first_name,
+            last_name
+          )
+        `)
+        .eq("parent_id", session?.user?.id);
+      
+      if (error) throw error;
+      return data.map(d => d.student);
+    },
+  });
+
   const { 
     assignments = [], 
     isLoading, 
     addAssignmentMutation, 
     updateAssignmentMutation 
-  } = useAssignments();
+  } = useAssignments(selectedStudentId);
 
   useEffect(() => {
     if (funModeEnabled) {
@@ -151,6 +196,31 @@ const Index = () => {
       <div className="container max-w-4xl">
         <DashboardHeader />
 
+        {userProfile?.role === "parent" && students.length > 0 && (
+          <div className="mb-6">
+            <div className="flex items-center gap-2 mb-2">
+              <Users className="h-4 w-4" />
+              <span className="text-sm font-medium">{t("viewingAssignments")}</span>
+            </div>
+            <Select
+              value={selectedStudentId || session?.user?.id}
+              onValueChange={(value) => setSelectedStudentId(value === session?.user?.id ? null : value)}
+            >
+              <SelectTrigger className="w-full sm:w-[300px]">
+                <SelectValue placeholder={t("selectStudent")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={session?.user?.id}>{t("myAssignments")}</SelectItem>
+                {students.map((student) => (
+                  <SelectItem key={student.id} value={student.id}>
+                    {student.first_name} {student.last_name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
         <StatsCard 
           assignments={assignments} 
           onFilterChange={setStatusFilter}
@@ -167,24 +237,26 @@ const Index = () => {
             >
               {t("showAll")}
             </Button>
-            <Button 
-              onClick={() => setShowForm(!showForm)}
-              size="sm"
-              className="w-auto text-sm"
-              onMouseEnter={handleButtonClick}
-            >
-              <PlusCircle className="mr-2 h-4 w-4" />
-              {showForm ? t("cancel") : t("addAssignment")}
-            </Button>
+            {!selectedStudentId && (
+              <Button 
+                onClick={() => setShowForm(!showForm)}
+                size="sm"
+                className="w-auto text-sm"
+                onMouseEnter={handleButtonClick}
+              >
+                <PlusCircle className="mr-2 h-4 w-4" />
+                {showForm ? t("cancel") : t("addAssignment")}
+              </Button>
+            )}
           </div>
 
-          {showForm && <AssignmentForm onSubmit={handleAddAssignment} />}
+          {showForm && !selectedStudentId && <AssignmentForm onSubmit={handleAddAssignment} />}
 
           <h2 
             className="text-2xl font-bold mb-4 cursor-pointer select-none"
             onDoubleClick={handleHomeworkClick}
           >
-            {t("tabHomework")}
+            {selectedStudentId ? `${t("assignmentsFor")} ${students.find(s => s.id === selectedStudentId)?.first_name}` : t("tabHomework")}
           </h2>
 
           <AssignmentTabs
