@@ -1,102 +1,58 @@
 export const general = {
-  en: {
-    role: "Role",
-    completed: "Completed",
-    hideCompleted: "Hide completed",
-    cancel: "Cancel",
-    notStarted: "Not Started",
-    inProgress: "In Progress",
-    selectStudent: "Select Student",
-    myAssignments: "My Assignments",
-    Math: "Math",
-    Science: "Science",
-    English: "English",
-    History: "History",
-    Other: "Other",
-    done: "Done",
-    active: "Active",
-    new: "New",
-    total: "Total",
-    tabUpcoming: "Upcoming",
-    tabHomework: "Homework",
-    tabTests: "Tests",
-    noUpcoming: "No upcoming assignments",
-    noHomework: "No homework assignments",
-    noTests: "No tests",
-    showAll: "Show All",
-    addAssignment: "Add Assignment",
-    signOut: "Sign Out",
-    formTitle: "Title",
-    formDescription: "Description",
-    formSubject: "Subject",
-    formDueDate: "Due Date",
-    formType: "Type",
-    formSubmit: "Submit",
-    homework: "Homework",
-    test: "Test",
-    dueDate: "Due Date",
-    status: "Status",
-    settings: "Settings",
-    dashboard: "Dashboard",
-    profileSettings: "Profile Settings",
-    firstName: "First Name",
-    lastName: "Last Name",
-    saveChanges: "Save Changes",
-    home: "Home",
-    studentRelationships: "Student Relationships",
-    addStudent: "Add Student",
-    studentEmail: "Student Email",
-    noStudentsYet: "No students yet",
-    connectedStudents: "Connected Students"
+  settings: {
+    en: "Settings",
+    he: "הגדרות"
   },
-  he: {
-    role: "תפקיד",
-    completed: "הושלם",
-    hideCompleted: "הסתר משימות שהושלמו",
-    cancel: "ביטול",
-    notStarted: "טרם התחיל",
-    inProgress: "בתהליך",
-    selectStudent: "בחר תלמיד",
-    myAssignments: "המשימות שלי",
-    Math: "מתמטיקה",
-    Science: "מדע",
-    English: "אנגלית",
-    History: "היסטוריה",
-    Other: "אחר",
-    done: "הושלם",
-    active: "פעיל",
-    new: "חדש",
-    total: "סה״כ",
-    tabUpcoming: "קרובים",
-    tabHomework: "שיעורי בית",
-    tabTests: "מבחנים",
-    noUpcoming: "אין משימות קרובות",
-    noHomework: "אין שיעורי בית",
-    noTests: "אין מבחנים",
-    showAll: "הצג הכל",
-    addAssignment: "הוסף משימה",
-    signOut: "התנתק",
-    formTitle: "כותרת",
-    formDescription: "תיאור",
-    formSubject: "מקצוע",
-    formDueDate: "תאריך יעד",
-    formType: "סוג",
-    formSubmit: "שלח",
-    homework: "שיעורי בית",
-    test: "מבחן",
-    dueDate: "תאריך יעד",
-    status: "סטטוס",
-    settings: "הגדרות",
-    dashboard: "לוח בקרה",
-    profileSettings: "הגדרות פרופיל",
-    firstName: "שם פרטי",
-    lastName: "שם משפחה",
-    saveChanges: "שמור שינויים",
-    home: "דף הבית",
-    studentRelationships: "קשרי תלמידים",
-    addStudent: "הוסף תלמיד",
-    studentEmail: "אימייל תלמיד",
-    noStudentsYet: "אין תלמידים עדיין",
-    connectedStudents: "תלמידים מחוברים"
+  dashboard: {
+    en: "Dashboard",
+    he: "לוח בקרה"
+  },
+  profileSettings: {
+    en: "Profile Settings",
+    he: "הגדרות פרופיל"
+  },
+  firstName: {
+    en: "First Name",
+    he: "שם פרטי"
+  },
+  lastName: {
+    en: "Last Name",
+    he: "שם משפחה"
+  },
+  role: {
+    en: "Role",
+    he: "תפקיד"
+  },
+  saveChanges: {
+    en: "Save Changes",
+    he: "שמור שינויים"
+  },
+  home: {
+    en: "Home",
+    he: "דף הבית"
+  },
+  studentRelationships: {
+    en: "Student Relationships",
+    he: "קשרי תלמידים"
+  },
+  addStudent: {
+    en: "Add Student",
+    he: "הוסף תלמיד"
+  },
+  studentEmail: {
+    en: "Student Email",
+    he: "אימייל תלמיד"
+  },
+  add: {
+    en: "Add",
+    he: "הוסף"
+  },
+  noStudentsYet: {
+    en: "No students yet",
+    he: "אין תלמידים עדיין"
+  },
+  connectedStudents: {
+    en: "Connected Students",
+    he: "תלמידים מחוברים"
   }
-};
+} as const;
