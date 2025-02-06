@@ -1,3 +1,4 @@
+
 /**
  * AssignmentCard.tsx
  * Purpose: Displays individual assignment information.
@@ -6,12 +7,13 @@
 import { Assignment } from "@/types/assignment";
 import { SubjectBadge } from "./SubjectBadge";
 import { Card } from "@/components/ui/card";
-import { CheckCircle, Clock, FileText, GraduationCap } from "lucide-react";
+import { CheckCircle, Clock, FileText, GraduationCap, User } from "lucide-react";
 import { format } from "date-fns";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/components/AuthProvider";
 
 interface AssignmentCardProps {
-  assignment: Assignment;
+  assignment: Assignment & { profiles?: { first_name: string; last_name: string } };
   onStatusChange: (id: string, status: Assignment["status"]) => void;
 }
 
@@ -20,6 +22,7 @@ export const AssignmentCard = ({
   onStatusChange,
 }: AssignmentCardProps) => {
   const { t, language } = useLanguage();
+  const { session } = useAuth();
   
   const statusColors = {
     "Not Started": "text-red-500",
@@ -27,10 +30,12 @@ export const AssignmentCard = ({
     Completed: "text-green-500",
   };
 
+  const isParentView = session?.user.id !== assignment.user_id;
+
   return (
     <Card className="p-3 sm:p-4 hover:shadow-lg transition-shadow">
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-0" dir={language === "he" ? "rtl" : "ltr"}>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 rtl:space-x-reverse">
           {assignment.type === "homework" ? (
             <FileText className="h-5 w-5 text-primary flex-shrink-0" />
           ) : (
@@ -43,6 +48,13 @@ export const AssignmentCard = ({
       
       <p className="mt-2 text-xs sm:text-sm text-gray-600 line-clamp-2">{assignment.description}</p>
       
+      {isParentView && assignment.profiles && (
+        <div className="mt-2 flex items-center gap-2 text-xs sm:text-sm text-gray-600">
+          <User className="h-4 w-4" />
+          <span>{`${assignment.profiles.first_name} ${assignment.profiles.last_name}`}</span>
+        </div>
+      )}
+
       <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
         <div className="flex items-center space-x-2">
           <Clock className="h-4 w-4 text-gray-400" />
