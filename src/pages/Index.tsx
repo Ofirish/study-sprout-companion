@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { Assignment } from "@/types/assignment";
 import { AssignmentCard } from "@/components/AssignmentCard";
@@ -10,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
   const [showForm, setShowForm] = useState(false);
@@ -115,6 +117,16 @@ const Index = () => {
     return new Date(a.due_date).getTime() - new Date(b.due_date).getTime();
   });
 
+  const upcomingAssignments = sortedAssignments.filter(
+    (a) => new Date(a.due_date) >= new Date()
+  );
+
+  const homeworkAssignments = sortedAssignments.filter(
+    (a) => a.type === "homework"
+  );
+
+  const testAssignments = sortedAssignments.filter((a) => a.type === "test");
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -154,21 +166,61 @@ const Index = () => {
 
           {showForm && <AssignmentForm onSubmit={handleAddAssignment} />}
 
-          <div className="mt-4 space-y-4">
-            {sortedAssignments.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                No assignments yet. Add your first one!
-              </div>
-            ) : (
-              sortedAssignments.map((assignment) => (
-                <AssignmentCard
-                  key={assignment.id}
-                  assignment={assignment}
-                  onStatusChange={handleStatusChange}
-                />
-              ))
-            )}
-          </div>
+          <Tabs defaultValue="upcoming" className="mt-4">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
+              <TabsTrigger value="homework">Homework</TabsTrigger>
+              <TabsTrigger value="tests">Tests</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="upcoming" className="mt-4 space-y-4">
+              {upcomingAssignments.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  No upcoming assignments
+                </div>
+              ) : (
+                upcomingAssignments.map((assignment) => (
+                  <AssignmentCard
+                    key={assignment.id}
+                    assignment={assignment}
+                    onStatusChange={handleStatusChange}
+                  />
+                ))
+              )}
+            </TabsContent>
+
+            <TabsContent value="homework" className="mt-4 space-y-4">
+              {homeworkAssignments.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  No homework assignments
+                </div>
+              ) : (
+                homeworkAssignments.map((assignment) => (
+                  <AssignmentCard
+                    key={assignment.id}
+                    assignment={assignment}
+                    onStatusChange={handleStatusChange}
+                  />
+                ))
+              )}
+            </TabsContent>
+
+            <TabsContent value="tests" className="mt-4 space-y-4">
+              {testAssignments.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  No tests
+                </div>
+              ) : (
+                testAssignments.map((assignment) => (
+                  <AssignmentCard
+                    key={assignment.id}
+                    assignment={assignment}
+                    onStatusChange={handleStatusChange}
+                  />
+                ))
+              )}
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>
