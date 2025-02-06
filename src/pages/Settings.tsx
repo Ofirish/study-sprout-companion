@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import { useToast } from "@/components/ui/use-toast";
 import { Card } from "@/components/ui/card";
@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { StudentRelationships } from "@/components/StudentRelationships";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Home } from "lucide-react";
 
 const Settings = () => {
   const { session } = useAuth();
@@ -87,7 +88,15 @@ const Settings = () => {
 
   return (
     <div className="container max-w-4xl py-8">
-      <h1 className="text-2xl font-bold mb-6">{t("settings")}</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">{t("settings")}</h1>
+        <Link to="/">
+          <Button variant="outline" size="sm">
+            <Home className="mr-2 h-4 w-4" />
+            {t("home")}
+          </Button>
+        </Link>
+      </div>
       
       <Card className="p-6 mb-6">
         <h2 className="text-xl font-semibold mb-4">{t("profileSettings")}</h2>

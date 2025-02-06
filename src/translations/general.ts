@@ -1,8 +1,4 @@
-export const generalTranslations = {
-  dashboard: {
-    en: "Dashboard",
-    he: "לוח בקרה"
-  },
+export const general = {
   settings: {
     en: "Settings",
     he: "הגדרות"
@@ -27,24 +23,28 @@ export const generalTranslations = {
     en: "Save Changes",
     he: "שמור שינויים"
   },
+  home: {
+    en: "Home",
+    he: "דף הבית"
+  },
   studentRelationships: {
     en: "Student Relationships",
     he: "קשרי תלמידים"
-  },
-  studentEmail: {
-    en: "Student Email",
-    he: "אימייל תלמיד"
   },
   addStudent: {
     en: "Add Student",
     he: "הוסף תלמיד"
   },
-  connectedStudents: {
-    en: "Connected Students",
-    he: "תלמידים מחוברים"
+  studentEmail: {
+    en: "Student Email",
+    he: "אימייל תלמיד"
+  },
+  add: {
+    en: "Add",
+    he: "הוסף"
   },
   noStudentsYet: {
-    en: "No students connected yet",
-    he: "אין תלמידים מחוברים עדיין"
+    en: "No students yet",
+    he: "אין תלמידים עדיין"
   }
 } as const;
