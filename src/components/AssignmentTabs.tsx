@@ -2,6 +2,7 @@ import { Assignment } from "@/types/assignment";
 import { AssignmentCard } from "@/components/AssignmentCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Circle } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface AssignmentTabsProps {
   assignments: Assignment[];
@@ -14,6 +15,8 @@ const TabDot = ({ show }: { show: boolean }) => {
 };
 
 export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsProps) => {
+  const { t, language } = useLanguage();
+  
   const upcomingAssignments = assignments.filter(
     (a) => new Date(a.due_date) >= new Date()
   );
@@ -29,18 +32,18 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
   const hasTests = testAssignments.length > 0;
 
   return (
-    <Tabs defaultValue="upcoming" className="mt-4">
+    <Tabs defaultValue="upcoming" className="mt-4" dir={language === "he" ? "rtl" : "ltr"}>
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger value="upcoming" className="flex items-center justify-center">
-          Upcoming
+          {t("tabUpcoming")}
           <TabDot show={hasUpcoming} />
         </TabsTrigger>
         <TabsTrigger value="homework" className="flex items-center justify-center">
-          Homework
+          {t("tabHomework")}
           <TabDot show={hasHomework} />
         </TabsTrigger>
         <TabsTrigger value="tests" className="flex items-center justify-center">
-          Tests
+          {t("tabTests")}
           <TabDot show={hasTests} />
         </TabsTrigger>
       </TabsList>
@@ -48,7 +51,7 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
       <TabsContent value="upcoming" className="mt-4 space-y-4">
         {upcomingAssignments.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
-            No upcoming assignments
+            {t("noUpcoming")}
           </div>
         ) : (
           upcomingAssignments.map((assignment) => (
@@ -64,7 +67,7 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
       <TabsContent value="homework" className="mt-4 space-y-4">
         {homeworkAssignments.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
-            No homework assignments
+            {t("noHomework")}
           </div>
         ) : (
           homeworkAssignments.map((assignment) => (
@@ -80,7 +83,7 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
       <TabsContent value="tests" className="mt-4 space-y-4">
         {testAssignments.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
-            No tests
+            {t("noTests")}
           </div>
         ) : (
           testAssignments.map((assignment) => (

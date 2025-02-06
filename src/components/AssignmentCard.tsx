@@ -3,6 +3,7 @@ import { SubjectBadge } from "./SubjectBadge";
 import { Card } from "@/components/ui/card";
 import { CheckCircle, Clock, FileText, GraduationCap } from "lucide-react";
 import { format } from "date-fns";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface AssignmentCardProps {
   assignment: Assignment;
@@ -13,6 +14,8 @@ export const AssignmentCard = ({
   assignment,
   onStatusChange,
 }: AssignmentCardProps) => {
+  const { language } = useLanguage();
+  
   const statusColors = {
     "Not Started": "text-red-500",
     "In Progress": "text-yellow-500",
@@ -21,7 +24,7 @@ export const AssignmentCard = ({
 
   return (
     <Card className="p-3 sm:p-4 hover:shadow-lg transition-shadow">
-      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-0">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-0" dir={language === "he" ? "rtl" : "ltr"}>
         <div className="flex items-center space-x-2">
           {assignment.type === "homework" ? (
             <FileText className="h-5 w-5 text-primary flex-shrink-0" />
@@ -49,6 +52,7 @@ export const AssignmentCard = ({
           className={`rounded-full px-2 sm:px-3 py-1 text-xs sm:text-sm font-medium ${
             statusColors[assignment.status]
           } border-2 border-current w-full sm:w-auto`}
+          dir={language === "he" ? "rtl" : "ltr"}
         >
           <option value="Not Started">Not Started</option>
           <option value="In Progress">In Progress</option>

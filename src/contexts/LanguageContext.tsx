@@ -69,41 +69,57 @@ const translations = {
     en: "No tests",
     he: "אין מבחנים",
   },
-  title: {
+  formTitle: {
     en: "Title",
     he: "כותרת",
   },
-  description: {
+  formDescription: {
     en: "Description",
     he: "תיאור",
   },
-  subject: {
+  formSubject: {
     en: "Subject",
     he: "מקצוע",
   },
-  dueDate: {
+  formDueDate: {
     en: "Due Date",
-    he: "תאריך הגשה",
+    he: "תאריך יעד",
   },
-  math: {
-    en: "Math",
-    he: "מתמטיקה",
+  formType: {
+    en: "Type",
+    he: "סוג",
   },
-  science: {
-    en: "Science",
-    he: "מדעים",
+  formHomework: {
+    en: "Homework",
+    he: "שיעורי בית",
   },
-  english: {
-    en: "English",
-    he: "אנגלית",
+  formTest: {
+    en: "Test",
+    he: "מבחן",
   },
-  history: {
-    en: "History",
-    he: "היסטוריה",
+  formSubmit: {
+    en: "Add Assignment",
+    he: "הוסף מטלה",
   },
-  other: {
-    en: "Other",
-    he: "אחר",
+  formRequired: {
+    en: "Please fill in all required fields",
+    he: "נא למלא את כל השדות הנדרשים",
+  },
+  formSuccess: {
+    en: "Assignment added successfully!",
+    he: "המטלה נוספה בהצלחה!",
+  },
+  tabUpcoming: {
+    en: "Upcoming",
+    he: "קרוב",
+  },
+  tabHomework: {
+    en: "Homework",
+    he: "שיעורי בית",
+  },
+  tabTests: {
+    en: "Tests",
+    he: "מבחנים",
   },
 };
 
