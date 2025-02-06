@@ -1,6 +1,9 @@
+
 import { Button } from "@/components/ui/button";
-import { Users, ChevronDown } from "lucide-react";
+import { Users, ChevronDown, LogOut } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/components/AuthProvider";
+import { useToast } from "@/components/ui/use-toast";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +22,7 @@ interface DashboardFiltersProps {
   setHideCompleted: (hide: boolean) => void;
   hasStudents: boolean;
   funMode: boolean;
+  showOnlyBottomControls?: boolean;
 }
 
 export const DashboardFilters = ({
@@ -30,8 +34,50 @@ export const DashboardFilters = ({
   setHideCompleted,
   hasStudents,
   funMode,
+  showOnlyBottomControls = false,
 }: DashboardFiltersProps) => {
   const { t } = useLanguage();
+  const { signOut } = useAuth();
+  const { toast } = useToast();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "An unexpected error occurred",
+        variant: "destructive",
+      });
+    }
+  };
+
+  if (showOnlyBottomControls) {
+    return (
+      <div className="flex justify-between items-center">
+        <div className="flex items-center space-x-2 rtl:space-x-reverse">
+          <Switch
+            id="hide-completed-bottom"
+            checked={hideCompleted}
+            onCheckedChange={setHideCompleted}
+          />
+          <Label htmlFor="hide-completed-bottom" className="text-sm">
+            {t("hideCompleted")}
+          </Label>
+        </div>
+
+        <Button 
+          variant="outline" 
+          onClick={handleSignOut} 
+          size="sm"
+          className="w-auto"
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          {t("signOut")}
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -73,17 +119,6 @@ export const DashboardFilters = ({
             </DropdownMenuContent>
           </DropdownMenu>
         )}
-      </div>
-
-      <div className="flex items-center space-x-2 rtl:space-x-reverse">
-        <Switch
-          id="hide-completed"
-          checked={hideCompleted}
-          onCheckedChange={setHideCompleted}
-        />
-        <Label htmlFor="hide-completed" className="text-sm">
-          {t("hideCompleted")}
-        </Label>
       </div>
     </div>
   );

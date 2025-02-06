@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Assignment } from "@/types/assignment";
 import { AssignmentForm } from "@/components/AssignmentForm";
@@ -105,20 +106,42 @@ const Index = () => {
   return (
     <div className={containerClasses} dir={language === "he" ? "rtl" : "ltr"}>
       {funMode && <Sparkles />}
-      <div className="container max-w-4xl">
-        <DashboardHeader />
+      <div className="container max-w-4xl flex flex-col min-h-screen">
+        <div className="flex-grow">
+          <DashboardHeader />
 
-        <StatsCard 
-          assignments={assignments} 
-          onFilterChange={setStatusFilter}
-        />
-
-        <div className="mt-8">
-          <DashboardActions 
-            showForm={showForm}
-            setShowForm={setShowForm}
+          <StatsCard 
+            assignments={assignments} 
+            onFilterChange={setStatusFilter}
           />
 
+          <div className="mt-8">
+            <DashboardActions 
+              showForm={showForm}
+              setShowForm={setShowForm}
+            />
+
+            <DashboardFilters
+              statusFilter={statusFilter}
+              setStatusFilter={setStatusFilter}
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+              hideCompleted={hideCompleted}
+              setHideCompleted={setHideCompleted}
+              hasStudents={hasStudents}
+              funMode={funMode}
+            />
+
+            {showForm && <AssignmentForm onSubmit={handleAddAssignment} />}
+
+            <AssignmentTabs
+              assignments={filteredAssignments}
+              onStatusChange={handleStatusChange}
+            />
+          </div>
+        </div>
+
+        <div className="mt-8 border-t pt-4">
           <DashboardFilters
             statusFilter={statusFilter}
             setStatusFilter={setStatusFilter}
@@ -128,13 +151,7 @@ const Index = () => {
             setHideCompleted={setHideCompleted}
             hasStudents={hasStudents}
             funMode={funMode}
-          />
-
-          {showForm && <AssignmentForm onSubmit={handleAddAssignment} />}
-
-          <AssignmentTabs
-            assignments={filteredAssignments}
-            onStatusChange={handleStatusChange}
+            showOnlyBottomControls={true}
           />
         </div>
       </div>
