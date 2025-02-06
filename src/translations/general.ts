@@ -4,8 +4,8 @@ export const general = {
     he: "הגדרות"
   },
   dashboard: {
-    en: "Dashboard",
-    he: "לוח בקרה"
+    en: "All Your Homework Are Belong To Us",
+    he: "כל שיעורי הבית שייכים לנו"
   },
   profileSettings: {
     en: "Profile Settings",
