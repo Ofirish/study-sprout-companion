@@ -57,18 +57,8 @@ const translations = {
     en: "Tests",
     he: "מבחנים",
   },
-  noUpcoming: {
-    en: "No upcoming assignments",
-    he: "אין מטלות קרובות",
-  },
-  noHomework: {
-    en: "No homework assignments",
-    he: "אין שיעורי בית",
-  },
-  noTests: {
-    en: "No tests",
-    he: "אין מבחנים",
-  },
+  
+  // Form translations
   formTitle: {
     en: "Title",
     he: "כותרת",
@@ -109,6 +99,30 @@ const translations = {
     en: "Assignment added successfully!",
     he: "המטלה נוספה בהצלחה!",
   },
+
+  // Subject translations
+  Math: {
+    en: "Math",
+    he: "מתמטיקה",
+  },
+  Science: {
+    en: "Science",
+    he: "מדע",
+  },
+  English: {
+    en: "English",
+    he: "אנגלית",
+  },
+  History: {
+    en: "History",
+    he: "היסטוריה",
+  },
+  Other: {
+    en: "Other",
+    he: "אחר",
+  },
+
+  // Tab translations
   tabUpcoming: {
     en: "Upcoming",
     he: "קרוב",
@@ -120,6 +134,18 @@ const translations = {
   tabTests: {
     en: "Tests",
     he: "מבחנים",
+  },
+  noUpcoming: {
+    en: "No upcoming assignments",
+    he: "אין מטלות קרובות",
+  },
+  noHomework: {
+    en: "No homework assignments",
+    he: "אין שיעורי בית",
+  },
+  noTests: {
+    en: "No tests",
+    he: "אין מבחנים",
   },
 };
 

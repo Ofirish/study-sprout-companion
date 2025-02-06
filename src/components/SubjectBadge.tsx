@@ -17,17 +17,6 @@ const subjectColors = {
 export const SubjectBadge = ({ subject }: SubjectBadgeProps) => {
   const { t } = useLanguage();
   
-  const getSubjectTranslation = (subject: Subject) => {
-    const translationMap: Record<Subject, string> = {
-      Math: "subjectMath",
-      Science: "subjectScience",
-      English: "subjectEnglish",
-      History: "subjectHistory",
-      Other: "subjectOther",
-    };
-    return t(translationMap[subject]);
-  };
-
   return (
     <span
       className={cn(
@@ -35,7 +24,7 @@ export const SubjectBadge = ({ subject }: SubjectBadgeProps) => {
         subjectColors[subject]
       )}
     >
-      {getSubjectTranslation(subject)}
+      {t(subject)}
     </span>
   );
 };

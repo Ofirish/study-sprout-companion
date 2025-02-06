@@ -88,11 +88,11 @@ export const AssignmentForm = ({ onSubmit }: AssignmentFormProps) => {
               onChange={(e) => setSubject(e.target.value as Subject)}
               className="w-full rounded-md border border-input bg-background px-3 py-2"
             >
-              <option value="Math">{t("subjectMath")}</option>
-              <option value="Science">{t("subjectScience")}</option>
-              <option value="English">{t("subjectEnglish")}</option>
-              <option value="History">{t("subjectHistory")}</option>
-              <option value="Other">{t("subjectOther")}</option>
+              <option value="Math">{t("Math")}</option>
+              <option value="Science">{t("Science")}</option>
+              <option value="English">{t("English")}</option>
+              <option value="History">{t("History")}</option>
+              <option value="Other">{t("Other")}</option>
             </select>
           </div>
 
