@@ -32,7 +32,11 @@ cd <YOUR_PROJECT_NAME>
 # Step 3: Install the necessary dependencies.
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Create a .env file in the root directory with the following content:
+VITE_SUPABASE_URL=https://beciomevymwkjaptdigo.supabase.co
+VITE_SUPABASE_ANON_KEY=your_anon_key_here
+
+# Step 5: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
 
@@ -52,13 +56,25 @@ npm run dev
 
 ## What technologies are used for this project?
 
-This project is built with .
+This project is built with:
 
 - Vite
 - TypeScript
 - React
 - shadcn-ui
 - Tailwind CSS
+- Supabase (for backend and authentication)
+
+## Environment Variables
+
+This project requires the following environment variables to be set in a `.env` file:
+
+```
+VITE_SUPABASE_URL=https://beciomevymwkjaptdigo.supabase.co
+VITE_SUPABASE_ANON_KEY=your_anon_key_here
+```
+
+You can get these values from your Supabase project settings.
 
 ## How can I deploy this project?
 
