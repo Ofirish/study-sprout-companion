@@ -26,54 +26,54 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
   const currentFilter = urlParams.get('filter') || 'all';
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mt-4 sm:mt-8" dir={language === "he" ? "rtl" : "ltr"}>
-      <div className="text-center p-2 sm:p-4 bg-gray-100 rounded-lg">
-        <div className="text-lg sm:text-2xl font-bold">
+    <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 mt-4 sm:mt-8 px-2 sm:px-0" dir={language === "he" ? "rtl" : "ltr"}>
+      <div className="text-center p-4 bg-gray-100 rounded-lg shadow-sm">
+        <div className="text-2xl font-bold">
           {total}
         </div>
-        <div className="text-xs sm:text-sm text-gray-600">{t("total")}</div>
+        <div className="text-sm text-gray-600">{t("total")}</div>
       </div>
 
       <Button
         variant="ghost"
         onClick={() => onFilterChange("completed")}
-        className={`text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto ${
+        className={`flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto shadow-sm ${
           currentFilter === 'completed' ? 'border-2 border-[#0EA5E9]' : ''
         }`}
       >
-        <div className="text-lg sm:text-2xl font-bold text-green-500 flex items-center justify-center">
-          <CheckCircle className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
+        <div className="text-2xl font-bold text-green-500 flex items-center gap-2">
+          <CheckCircle className="h-6 w-6" />
           {completed}
         </div>
-        <div className="text-xs sm:text-sm text-gray-600">{t("done")}</div>
+        <div className="text-sm text-gray-600">{t("done")}</div>
       </Button>
 
       <Button
         variant="ghost"
         onClick={() => onFilterChange("in_progress")}
-        className={`text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto ${
+        className={`flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto shadow-sm ${
           currentFilter === 'in_progress' ? 'border-2 border-[#0EA5E9]' : ''
         }`}
       >
-        <div className="text-lg sm:text-2xl font-bold text-yellow-500 flex items-center justify-center">
-          <Clock className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
+        <div className="text-2xl font-bold text-yellow-500 flex items-center gap-2">
+          <Clock className="h-6 w-6" />
           {inProgress}
         </div>
-        <div className="text-xs sm:text-sm text-gray-600">{t("active")}</div>
+        <div className="text-sm text-gray-600">{t("active")}</div>
       </Button>
 
       <Button
         variant="ghost"
         onClick={() => onFilterChange("not_started")}
-        className={`text-center p-2 sm:p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto ${
+        className={`flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-colors h-auto shadow-sm ${
           currentFilter === 'not_started' ? 'border-2 border-[#0EA5E9]' : ''
         }`}
       >
-        <div className="text-lg sm:text-2xl font-bold text-red-500 flex items-center justify-center">
-          <XCircle className="mr-1 h-4 w-4 sm:h-6 sm:w-6" />
+        <div className="text-2xl font-bold text-red-500 flex items-center gap-2">
+          <XCircle className="h-6 w-6" />
           {notStarted}
         </div>
-        <div className="text-xs sm:text-sm text-gray-600">{t("new")}</div>
+        <div className="text-sm text-gray-600">{t("new")}</div>
       </Button>
     </div>
   );
