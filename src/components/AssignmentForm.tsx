@@ -15,6 +15,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/AuthProvider";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
+import { formTranslations } from "@/translations/form";
 
 interface AssignmentFormProps {
   onSubmit: (assignment: Omit<Assignment, "id" | "status">) => void;
@@ -31,7 +32,7 @@ export const AssignmentForm = ({ onSubmit }: AssignmentFormProps) => {
   const [subject, setSubject] = useState<Subject>("Other");
   const [dueDate, setDueDate] = useState("");
   const [type, setType] = useState<"homework" | "test">("homework");
-  const [showCustomSubject, setShowCustomSubject] = useState(false);
+  const [showCustomSubject, setShowCustomSubject] = useState(true); // Changed to true by default when subject is "Other"
   const [customSubjectEn, setCustomSubjectEn] = useState("");
   const [customSubjectHe, setCustomSubjectHe] = useState("");
   const [customSubjects, setCustomSubjects] = useState<{ name_en: string; name_he: string; }[]>([]);
@@ -58,11 +59,7 @@ export const AssignmentForm = ({ onSubmit }: AssignmentFormProps) => {
 
   const handleSubjectChange = (value: string) => {
     setSubject(value as Subject);
-    if (value === "Other") {
-      setShowCustomSubject(true);
-    } else {
-      setShowCustomSubject(false);
-    }
+    setShowCustomSubject(value === "Other");
   };
 
   const handleAddCustomSubject = async () => {
