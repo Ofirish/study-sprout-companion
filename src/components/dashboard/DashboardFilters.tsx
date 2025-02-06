@@ -86,7 +86,7 @@ export const DashboardFilters = ({
           variant="outline" 
           onClick={() => setStatusFilter("all")}
           size="sm"
-          className={`text-sm ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""} ${
+          className={`text-sm sm:w-32 ${statusFilter === "all" ? "bg-primary text-white hover:bg-primary/90" : ""} ${
             funMode ? "rainbow-text" : ""
           }`}
         >
