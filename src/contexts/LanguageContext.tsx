@@ -26,8 +26,8 @@ const translations = {
     he: "חדש",
   },
   appTitle: {
-    en: "Study Sprout",
-    he: "ניצן הלמידה",
+    en: "All Your Homework Are Belong to Us",
+    he: "All Your Homework Are Belong to Us - Heb",
   },
   appDescription: {
     en: "Keep track of all your assignments and tests in one place",
