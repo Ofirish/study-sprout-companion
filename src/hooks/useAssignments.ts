@@ -23,7 +23,7 @@ export const useAssignments = () => {
         .from("assignments")
         .select(`
           *,
-          profiles (
+          profile:user_id (
             first_name,
             last_name
           )
@@ -31,7 +31,7 @@ export const useAssignments = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      return userAssignments as (Assignment & { profiles: { first_name: string; last_name: string } })[];
+      return userAssignments as (Assignment & { profile: { first_name: string; last_name: string } })[];
     },
   });
 

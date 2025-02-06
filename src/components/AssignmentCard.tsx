@@ -13,7 +13,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/components/AuthProvider";
 
 interface AssignmentCardProps {
-  assignment: Assignment & { profiles?: { first_name: string; last_name: string } };
+  assignment: Assignment & { profile?: { first_name: string; last_name: string } };
   onStatusChange: (id: string, status: Assignment["status"]) => void;
 }
 
@@ -48,10 +48,10 @@ export const AssignmentCard = ({
       
       <p className="mt-2 text-xs sm:text-sm text-gray-600 line-clamp-2">{assignment.description}</p>
       
-      {isParentView && assignment.profiles && (
+      {isParentView && assignment.profile && (
         <div className="mt-2 flex items-center gap-2 text-xs sm:text-sm text-gray-600">
           <User className="h-4 w-4" />
-          <span>{`${assignment.profiles.first_name} ${assignment.profiles.last_name}`}</span>
+          <span>{`${assignment.profile.first_name} ${assignment.profile.last_name}`}</span>
         </div>
       )}
 
