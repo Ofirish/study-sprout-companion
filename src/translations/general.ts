@@ -1,22 +1,46 @@
-/**
- * general.ts
- * Purpose: Contains general UI and navigation translations
- */
 export const generalTranslations = {
-  appTitle: {
-    en: "All Your Homework Are Belong to Us",
-    he: "All Your Homework Are Belong to Us - Heb",
+  settings: {
+    en: "Settings",
+    he: "הגדרות",
   },
-  appDescription: {
-    en: "Keep track of all your assignments and tests in one place",
-    he: "עקוב אחר כל המטלות והמבחנים שלך במקום אחד",
+  profileSettings: {
+    en: "Profile Settings",
+    he: "הגדרות פרופיל",
   },
-  loading: {
-    en: "Loading...",
-    he: "טוען...",
+  firstName: {
+    en: "First Name",
+    he: "שם פרטי",
   },
-  error: {
-    en: "An error occurred",
-    he: "אירעה שגיאה",
+  lastName: {
+    en: "Last Name",
+    he: "שם משפחה",
+  },
+  role: {
+    en: "Role",
+    he: "תפקיד",
+  },
+  saveChanges: {
+    en: "Save Changes",
+    he: "שמור שינויים",
+  },
+  studentRelationships: {
+    en: "Student Relationships",
+    he: "קשרי תלמידים",
+  },
+  studentEmail: {
+    en: "Student Email",
+    he: "אימייל תלמיד",
+  },
+  addStudent: {
+    en: "Add Student",
+    he: "הוסף תלמיד",
+  },
+  connectedStudents: {
+    en: "Connected Students",
+    he: "תלמידים מחוברים",
+  },
+  noStudentsYet: {
+    en: "No students connected yet",
+    he: "אין תלמידים מחוברים עדיין",
   },
 } as const;
