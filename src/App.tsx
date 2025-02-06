@@ -18,9 +18,9 @@ const App = () => (
       <LanguageProvider>
         <Toaster />
         <Sonner />
-        <LanguageToggle />
         <BrowserRouter>
           <AuthProvider>
+            <LanguageToggle />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
