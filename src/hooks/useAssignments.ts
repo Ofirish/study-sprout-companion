@@ -32,18 +32,16 @@ export const useAssignments = () => {
 
       const { data, error } = await supabase
         .from("assignments")
-        .select(`
-          *,
-          profiles:user_id (
-            first_name,
-            last_name
-          )
-        `)
+        .select("*, user:user_id (first_name, last_name)")
         .in("user_id", userIds)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      return data as (Assignment & { profiles: { first_name: string; last_name: string } })[];
+      
+      return data.map(assignment => ({
+        ...assignment,
+        profiles: assignment.user
+      })) as (Assignment & { profiles: { first_name: string; last_name: string } })[];
     },
   });
 

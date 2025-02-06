@@ -128,14 +128,14 @@ const Index = () => {
 
         <div className="mt-4 mb-6">
           <Select
-            value={selectedUserId || session?.user?.id || ''}
-            onValueChange={(value) => setSelectedUserId(value === session?.user?.id ? null : value)}
+            value={selectedUserId || "current"}
+            onValueChange={(value) => setSelectedUserId(value === "current" ? null : value)}
           >
             <SelectTrigger className="w-full sm:w-[300px]">
               <SelectValue placeholder={t("selectStudent")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={session?.user?.id || ''}>
+              <SelectItem value="current">
                 {t("myAssignments")}
               </SelectItem>
               {Object.values(userGroups)
