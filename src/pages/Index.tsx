@@ -26,7 +26,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useNavigate } from "react-router-dom";
 
 type ViewMode = "all" | "student" | "parent";
 
@@ -36,11 +35,10 @@ const Index = () => {
   const [hideCompleted, setHideCompleted] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("all");
   const [hasStudents, setHasStudents] = useState(false);
-  const { session } = useAuth();
+  const { session, signOut } = useAuth();
   const { toast } = useToast();
   const { t, language } = useLanguage();
   const { funMode, toggleFunMode } = useFunMode();
-  const navigate = useNavigate();
   
   useEffect(() => {
     const checkForStudents = async () => {
@@ -90,20 +88,11 @@ const Index = () => {
 
   const handleSignOut = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      } else {
-        navigate("/auth");
-      }
-    } catch (error) {
+      await signOut();
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: "An unexpected error occurred",
+        description: error.message || "An unexpected error occurred",
         variant: "destructive",
       });
     }
