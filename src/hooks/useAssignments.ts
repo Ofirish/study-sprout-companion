@@ -1,8 +1,3 @@
-/**
- * useAssignments.ts
- * Purpose: Custom hook for managing assignments data.
- * Handles CRUD operations for assignments using Supabase.
- */
 import { Assignment } from "@/types/assignment";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -32,15 +27,15 @@ export const useAssignments = () => {
 
       const { data, error } = await supabase
         .from("assignments")
-        .select("*, user:user_id (first_name, last_name)")
+        .select("*, profiles!assignments_user_id_fkey (first_name, last_name)")
         .in("user_id", userIds)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
       
-      return data.map(assignment => ({
+      return (data || []).map(assignment => ({
         ...assignment,
-        profiles: assignment.user
+        profiles: assignment.profiles || { first_name: "", last_name: "" }
       })) as (Assignment & { profiles: { first_name: string; last_name: string } })[];
     },
   });

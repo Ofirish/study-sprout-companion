@@ -36,6 +36,17 @@ export const general = {
     test: "Test",
     dueDate: "Due Date",
     status: "Status",
+    settings: "Settings",
+    dashboard: "Dashboard",
+    profileSettings: "Profile Settings",
+    firstName: "First Name",
+    lastName: "Last Name",
+    saveChanges: "Save Changes",
+    home: "Home",
+    studentRelationships: "Student Relationships",
+    addStudent: "Add Student",
+    studentEmail: "Student Email",
+    noStudentsYet: "No students yet",
     connectedStudents: "Connected Students"
   },
   he: {
@@ -75,6 +86,17 @@ export const general = {
     test: "מבחן",
     dueDate: "תאריך יעד",
     status: "סטטוס",
+    settings: "הגדרות",
+    dashboard: "לוח בקרה",
+    profileSettings: "הגדרות פרופיל",
+    firstName: "שם פרטי",
+    lastName: "שם משפחה",
+    saveChanges: "שמור שינויים",
+    home: "דף הבית",
+    studentRelationships: "קשרי תלמידים",
+    addStudent: "הוסף תלמיד",
+    studentEmail: "אימייל תלמיד",
+    noStudentsYet: "אין תלמידים עדיין",
     connectedStudents: "תלמידים מחוברים"
   }
 };
