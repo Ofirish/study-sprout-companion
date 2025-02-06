@@ -1,3 +1,8 @@
+/**
+ * StatsCard.tsx
+ * Purpose: Displays assignment statistics and filtering options.
+ * Shows counts of assignments by status and provides filtering functionality.
+ */
 import { Assignment } from "@/types/assignment";
 import { CheckCircle, Clock, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";

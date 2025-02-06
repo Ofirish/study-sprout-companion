@@ -1,3 +1,8 @@
+/**
+ * AssignmentCard.tsx
+ * Purpose: Displays individual assignment information.
+ * Shows assignment details and allows status updates.
+ */
 import { Assignment } from "@/types/assignment";
 import { SubjectBadge } from "./SubjectBadge";
 import { Card } from "@/components/ui/card";
@@ -20,15 +25,6 @@ export const AssignmentCard = ({
     "Not Started": "text-red-500",
     "In Progress": "text-yellow-500",
     Completed: "text-green-500",
-  };
-
-  const getStatusTranslationKey = (status: Assignment["status"]) => {
-    const statusMap = {
-      "Not Started": "notStarted",
-      "In Progress": "inProgress",
-      Completed: "completed",
-    };
-    return statusMap[status];
   };
 
   return (

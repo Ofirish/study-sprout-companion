@@ -1,3 +1,8 @@
+/**
+ * AssignmentTabs.tsx
+ * Purpose: Organizes assignments into different tabs.
+ * Manages the display of assignments by type and status.
+ */
 import { Assignment } from "@/types/assignment";
 import { AssignmentCard } from "@/components/AssignmentCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -25,7 +30,9 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
     (a) => a.type === "homework"
   );
 
-  const testAssignments = assignments.filter((a) => a.type === "test");
+  const testAssignments = assignments.filter(
+    (a) => a.type === "test"
+  );
 
   const hasUpcoming = upcomingAssignments.length > 0;
   const hasHomework = homeworkAssignments.length > 0;

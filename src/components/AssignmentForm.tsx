@@ -1,3 +1,8 @@
+/**
+ * AssignmentForm.tsx
+ * Purpose: Form component for creating new assignments.
+ * Handles user input and submission of new assignments.
+ */
 import { useState } from "react";
 import { Assignment, Subject } from "@/types/assignment";
 import { Button } from "@/components/ui/button";
@@ -17,6 +22,8 @@ export const AssignmentForm = ({ onSubmit }: AssignmentFormProps) => {
   const { session } = useAuth();
   const { toast } = useToast();
   const { t, language } = useLanguage();
+  
+  // Form state
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [subject, setSubject] = useState<Subject>("Other");
@@ -44,6 +51,7 @@ export const AssignmentForm = ({ onSubmit }: AssignmentFormProps) => {
       user_id: session?.user.id!,
     });
 
+    // Reset form
     setTitle("");
     setDescription("");
     setSubject("Other");

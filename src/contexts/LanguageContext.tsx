@@ -1,30 +1,15 @@
+/**
+ * LanguageContext.tsx
+ * Purpose: Manages the application's language state and translations.
+ * Provides language switching functionality and translation utilities.
+ */
 import React, { createContext, useContext, useState } from "react";
 
 type Language = "en" | "he";
 
-type LanguageContextType = {
-  language: Language;
-  setLanguage: (lang: Language) => void;
-  t: (key: keyof typeof translations) => string;
-};
-
+// Separate translations into a dedicated object for better maintainability
 const translations = {
-  total: {
-    en: "Total",
-    he: "סה״כ",
-  },
-  done: {
-    en: "Done",
-    he: "הושלם",
-  },
-  active: {
-    en: "Active",
-    he: "פעיל",
-  },
-  new: {
-    en: "New",
-    he: "חדש",
-  },
+  // Navigation and general UI
   appTitle: {
     en: "All Your Homework Are Belong to Us",
     he: "All Your Homework Are Belong to Us - Heb",
@@ -33,6 +18,8 @@ const translations = {
     en: "Keep track of all your assignments and tests in one place",
     he: "עקוב אחר כל המטלות והמבחנים שלך במקום אחד",
   },
+  
+  // Actions
   addAssignment: {
     en: "Add Assignment",
     he: "הוסף מטלה",
@@ -49,6 +36,30 @@ const translations = {
     en: "Cancel",
     he: "ביטול",
   },
+  hideCompleted: {
+    en: "Hide Completed",
+    he: "הסתר משימות שהושלמו",
+  },
+
+  // Stats
+  total: {
+    en: "Total",
+    he: "סה״כ",
+  },
+  done: {
+    en: "Done",
+    he: "הושלם",
+  },
+  active: {
+    en: "Active",
+    he: "פעיל",
+  },
+  new: {
+    en: "New",
+    he: "חדש",
+  },
+
+  // Tabs
   upcoming: {
     en: "Upcoming",
     he: "קרוב",
@@ -61,12 +72,32 @@ const translations = {
     en: "Tests",
     he: "מבחנים",
   },
-  hideCompleted: {
-    en: "Hide Completed",
-    he: "הסתר משימות שהושלמו",
+  tabUpcoming: {
+    en: "Upcoming",
+    he: "קרוב",
   },
-  
-  // Form translations
+  tabHomework: {
+    en: "Homework",
+    he: "שיעורי בית",
+  },
+  tabTests: {
+    en: "Tests",
+    he: "מבחנים",
+  },
+  noUpcoming: {
+    en: "No upcoming assignments",
+    he: "אין מטלות קרובות",
+  },
+  noHomework: {
+    en: "No homework assignments",
+    he: "אין שיעורי בית",
+  },
+  noTests: {
+    en: "No tests",
+    he: "אין מבחנים",
+  },
+
+  // Form
   formTitle: {
     en: "Title",
     he: "כותרת",
@@ -108,7 +139,7 @@ const translations = {
     he: "המטלה נוספה בהצלחה!",
   },
 
-  // Status translations
+  // Status
   notStarted: {
     en: "Not Started",
     he: "טרם התחיל",
@@ -122,7 +153,7 @@ const translations = {
     he: "הושלם",
   },
 
-  // Subject translations
+  // Subjects
   Math: {
     en: "Math",
     he: "מתמטיקה",
@@ -143,32 +174,14 @@ const translations = {
     en: "Other",
     he: "אחר",
   },
+};
 
-  // Tab translations
-  tabUpcoming: {
-    en: "Upcoming",
-    he: "קרוב",
-  },
-  tabHomework: {
-    en: "Homework",
-    he: "שיעורי בית",
-  },
-  tabTests: {
-    en: "Tests",
-    he: "מבחנים",
-  },
-  noUpcoming: {
-    en: "No upcoming assignments",
-    he: "אין מטלות קרובות",
-  },
-  noHomework: {
-    en: "No homework assignments",
-    he: "אין שיעורי בית",
-  },
-  noTests: {
-    en: "No tests",
-    he: "אין מבחנים",
-  },
+type TranslationKey = keyof typeof translations;
+
+type LanguageContextType = {
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: (key: TranslationKey) => string;
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -176,7 +189,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
   const [language, setLanguage] = useState<Language>("en");
 
-  const t = (key: keyof typeof translations) => {
+  const t = (key: TranslationKey) => {
     return translations[key][language];
   };
 
