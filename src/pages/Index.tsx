@@ -1,11 +1,10 @@
-
 import { useEffect } from "react";
 import { Assignment } from "@/types/assignment";
 import { AssignmentCard } from "@/components/AssignmentCard";
 import { AssignmentForm } from "@/components/AssignmentForm";
 import { StatsCard } from "@/components/StatsCard";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, LogOut } from "lucide-react";
+import { PlusCircle, LogOut, Circle } from "lucide-react";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
@@ -149,6 +148,13 @@ const Index = () => {
     );
   }
 
+  const TabDot = ({ show }: { show: boolean }) => {
+    if (!show) return null;
+    return (
+      <Circle className="w-2 h-2 ml-2 fill-[#ea384c] text-[#ea384c]" />
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container max-w-4xl">
@@ -189,9 +195,18 @@ const Index = () => {
 
           <Tabs defaultValue="upcoming" className="mt-4">
             <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-              <TabsTrigger value="homework">Homework</TabsTrigger>
-              <TabsTrigger value="tests">Tests</TabsTrigger>
+              <TabsTrigger value="upcoming" className="flex items-center">
+                Upcoming
+                <TabDot show={upcomingAssignments.length > 0} />
+              </TabsTrigger>
+              <TabsTrigger value="homework" className="flex items-center">
+                Homework
+                <TabDot show={homeworkAssignments.length > 0} />
+              </TabsTrigger>
+              <TabsTrigger value="tests" className="flex items-center">
+                Tests
+                <TabDot show={testAssignments.length > 0} />
+              </TabsTrigger>
             </TabsList>
             
             <TabsContent value="upcoming" className="mt-4 space-y-4">
