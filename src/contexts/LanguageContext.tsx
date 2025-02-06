@@ -45,6 +45,10 @@ const translations = {
     en: "Sign Out",
     he: "התנתק",
   },
+  cancel: {
+    en: "Cancel",
+    he: "ביטול",
+  },
   upcoming: {
     en: "Upcoming",
     he: "קרוב",
