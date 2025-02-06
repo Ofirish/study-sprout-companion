@@ -1,9 +1,4 @@
 
-/**
- * AssignmentForm.tsx
- * Purpose: Form component for creating new assignments.
- * Handles user input and submission of new assignments.
- */
 import { useState, useEffect } from "react";
 import { Assignment, Subject } from "@/types/assignment";
 import { Button } from "@/components/ui/button";
@@ -15,7 +10,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/AuthProvider";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
-import { formTranslations } from "@/translations/form";
+import { CustomSubjectForm } from "./CustomSubjectForm";
+import { SubjectSelector } from "./SubjectSelector";
 
 interface AssignmentFormProps {
   onSubmit: (assignment: Omit<Assignment, "id" | "status">) => void;
@@ -26,15 +22,12 @@ export const AssignmentForm = ({ onSubmit }: AssignmentFormProps) => {
   const { toast } = useToast();
   const { t, language } = useLanguage();
   
-  // Form state
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [subject, setSubject] = useState<Subject>("Other");
   const [dueDate, setDueDate] = useState("");
   const [type, setType] = useState<"homework" | "test">("homework");
-  const [showCustomSubject, setShowCustomSubject] = useState(true); // Changed to true by default when subject is "Other"
-  const [customSubjectEn, setCustomSubjectEn] = useState("");
-  const [customSubjectHe, setCustomSubjectHe] = useState("");
+  const [showCustomSubject, setShowCustomSubject] = useState(true);
   const [customSubjects, setCustomSubjects] = useState<{ name_en: string; name_he: string; }[]>([]);
 
   useEffect(() => {
@@ -62,44 +55,10 @@ export const AssignmentForm = ({ onSubmit }: AssignmentFormProps) => {
     setShowCustomSubject(value === "Other");
   };
 
-  const handleAddCustomSubject = async () => {
-    if (!customSubjectEn || !customSubjectHe) {
-      toast({
-        title: "Error",
-        description: t("formCustomSubjectRequired"),
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      const { error } = await supabase
-        .from('custom_subjects')
-        .insert([{
-          name_en: customSubjectEn,
-          name_he: customSubjectHe,
-          user_id: session?.user.id
-        }]);
-
-      if (error) throw error;
-
-      setCustomSubjects([...customSubjects, { name_en: customSubjectEn, name_he: customSubjectHe }]);
-      setSubject(customSubjectEn as Subject);
-      setShowCustomSubject(false);
-      setCustomSubjectEn("");
-      setCustomSubjectHe("");
-
-      toast({
-        title: "Success",
-        description: t("formCustomSubjectAdded"),
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
+  const handleCustomSubjectAdded = (newSubject: { name_en: string; name_he: string }) => {
+    setCustomSubjects([...customSubjects, newSubject]);
+    setSubject(newSubject.name_en as Subject);
+    setShowCustomSubject(false);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -123,24 +82,17 @@ export const AssignmentForm = ({ onSubmit }: AssignmentFormProps) => {
       user_id: session?.user.id!,
     });
 
-    // Reset form
     setTitle("");
     setDescription("");
     setSubject("Other");
     setDueDate("");
     setType("homework");
     setShowCustomSubject(false);
-    setCustomSubjectEn("");
-    setCustomSubjectHe("");
 
     toast({
       title: "Success",
       description: t("formSuccess"),
     });
-  };
-
-  const getSubjectName = (subject: { name_en: string; name_he: string }) => {
-    return language === 'he' ? subject.name_he : subject.name_en;
   };
 
   return (
@@ -167,26 +119,11 @@ export const AssignmentForm = ({ onSubmit }: AssignmentFormProps) => {
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="subject">{t("formSubject")}</Label>
-            <select
-              id="subject"
-              value={subject}
-              onChange={(e) => handleSubjectChange(e.target.value)}
-              className="w-full rounded-md border border-input bg-background px-3 py-2"
-            >
-              <option value="Math">{t("Math")}</option>
-              <option value="Science">{t("Science")}</option>
-              <option value="English">{t("English")}</option>
-              <option value="History">{t("History")}</option>
-              {customSubjects.map((customSubject, index) => (
-                <option key={index} value={customSubject.name_en}>
-                  {getSubjectName(customSubject)}
-                </option>
-              ))}
-              <option value="Other">{t("Other")}</option>
-            </select>
-          </div>
+          <SubjectSelector
+            subject={subject}
+            customSubjects={customSubjects}
+            onChange={handleSubjectChange}
+          />
 
           <div className="space-y-2">
             <Label htmlFor="type">{t("formType")}</Label>
@@ -203,34 +140,10 @@ export const AssignmentForm = ({ onSubmit }: AssignmentFormProps) => {
         </div>
 
         {showCustomSubject && (
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="customSubjectEn">{t("formCustomSubjectEn")}</Label>
-              <Input
-                id="customSubjectEn"
-                value={customSubjectEn}
-                onChange={(e) => setCustomSubjectEn(e.target.value)}
-                placeholder={t("formCustomSubjectEnPlaceholder")}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="customSubjectHe">{t("formCustomSubjectHe")}</Label>
-              <Input
-                id="customSubjectHe"
-                value={customSubjectHe}
-                onChange={(e) => setCustomSubjectHe(e.target.value)}
-                placeholder={t("formCustomSubjectHePlaceholder")}
-              />
-            </div>
-            <Button
-              type="button"
-              onClick={handleAddCustomSubject}
-              variant="secondary"
-              className="w-full"
-            >
-              {t("formAddCustomSubject")}
-            </Button>
-          </div>
+          <CustomSubjectForm
+            userId={session?.user.id!}
+            onSubjectAdded={handleCustomSubjectAdded}
+          />
         )}
 
         <div className="space-y-2">
