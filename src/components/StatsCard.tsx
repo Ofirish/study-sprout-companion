@@ -37,13 +37,15 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
   const urlParams = new URLSearchParams(window.location.search);
   const currentFilter = urlParams.get('filter');
 
-  const getButtonStyle = (filter: string) => {
+  const getButtonStyle = (filterValue: string) => {
     const baseStyle = "relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto";
     const selectedStyle = "ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]";
     const unselectedStyle = "shadow hover:shadow-md";
     
-    // Update the logic to handle the "all" case correctly
-    const isSelected = currentFilter === filter || (filter === 'all' && currentFilter === null);
+    const isSelected = 
+      filterValue === currentFilter || 
+      (filterValue === 'all' && !currentFilter);
+      
     return `${baseStyle} ${isSelected ? selectedStyle : unselectedStyle}`;
   };
 
@@ -99,4 +101,3 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
     </div>
   );
 };
-
