@@ -1,3 +1,4 @@
+
 export const general = {
   error: {
     en: "Error",
@@ -114,5 +115,26 @@ export const general = {
   deleteError: {
     en: "Error deleting file",
     he: "שגיאה במחיקת הקובץ"
+  },
+  archive: {
+    en: "Archive",
+    he: "ארכיון"
+  },
+  archivedAssignments: {
+    en: "Archived Assignments",
+    he: "מטלות בארכיון"
+  },
+  noArchivedAssignments: {
+    en: "No archived assignments",
+    he: "אין מטלות בארכיון"
+  },
+  unarchive: {
+    en: "Move to Active",
+    he: "העבר לפעילים"
+  },
+  moveToArchive: {
+    en: "Move to Archive",
+    he: "העבר לארכיון"
   }
 };
+

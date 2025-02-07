@@ -1,3 +1,4 @@
+
 /**
  * AssignmentTabs.tsx
  * Purpose: Organizes assignments into different tabs.
@@ -15,9 +16,18 @@ import { useAssignments } from "@/hooks/useAssignments";
 interface AssignmentTabsProps {
   assignments: Assignment[];
   onStatusChange: (id: string, status: Assignment["status"]) => void;
+  onArchiveToggle?: (id: string) => void;
+  showArchiveToggle?: boolean;
+  isArchived?: boolean;
 }
 
-export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsProps) => {
+export const AssignmentTabs = ({ 
+  assignments, 
+  onStatusChange,
+  onArchiveToggle,
+  showArchiveToggle = false,
+  isArchived = false
+}: AssignmentTabsProps) => {
   const { t, language } = useLanguage();
   const { deleteAssignmentMutation } = useAssignments();
   const { toast } = useToast();
@@ -98,6 +108,9 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
               onStatusChange={onStatusChange}
               onUpdate={handleUpdate}
               onDelete={handleDelete}
+              onArchiveToggle={onArchiveToggle ? () => onArchiveToggle(assignment.id) : undefined}
+              showArchiveToggle={showArchiveToggle}
+              isArchived={isArchived}
             />
           ))
         )}
@@ -116,6 +129,9 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
               onStatusChange={onStatusChange}
               onUpdate={handleUpdate}
               onDelete={handleDelete}
+              onArchiveToggle={onArchiveToggle ? () => onArchiveToggle(assignment.id) : undefined}
+              showArchiveToggle={showArchiveToggle}
+              isArchived={isArchived}
             />
           ))
         )}
@@ -134,6 +150,9 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
               onStatusChange={onStatusChange}
               onUpdate={handleUpdate}
               onDelete={handleDelete}
+              onArchiveToggle={onArchiveToggle ? () => onArchiveToggle(assignment.id) : undefined}
+              showArchiveToggle={showArchiveToggle}
+              isArchived={isArchived}
             />
           ))
         )}
@@ -141,3 +160,4 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
     </Tabs>
   );
 };
+

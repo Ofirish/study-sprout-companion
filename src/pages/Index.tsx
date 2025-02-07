@@ -17,17 +17,20 @@ import { useFunMode } from "@/contexts/FunModeContext";
 import { Sparkles } from "@/components/Sparkles";
 import { DashboardActions } from "@/components/dashboard/DashboardActions";
 import { DashboardFilters } from "@/components/dashboard/DashboardFilters";
+import { Button } from "@/components/ui/button";
+import { Archive } from "lucide-react";
+import { Link } from "react-router-dom";
 
 type ViewMode = "all" | "student" | "parent";
 
 const Index = () => {
   const [showForm, setShowForm] = useState(false);
   const [statusFilter, setStatusFilter] = useState<"all" | "completed" | "in_progress" | "not_started">("all");
-  const [hideCompleted, setHideCompleted] = useState(false); // Changed to false by default
+  const [hideCompleted, setHideCompleted] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>("all");
   const [hasStudents, setHasStudents] = useState(false);
   const { session } = useAuth();
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const { funMode, toggleFunMode } = useFunMode();
   
   useEffect(() => {
@@ -76,7 +79,14 @@ const Index = () => {
     updateAssignmentMutation.mutate({ id, status });
   };
 
+  const handleArchive = (id: string) => {
+    updateAssignmentMutation.mutate({ id, archived: true });
+  };
+
   const filteredAssignments = assignments.filter(assignment => {
+    // Filter out archived assignments from the main view
+    if (assignment.archived) return false;
+
     if (hideCompleted && assignment.status === "Completed") {
       return false;
     }
@@ -115,7 +125,7 @@ const Index = () => {
           <DashboardHeader />
 
           <StatsCard 
-            assignments={assignments} 
+            assignments={assignments.filter(a => !a.archived)} 
             onFilterChange={setStatusFilter}
             viewMode={viewMode}
           />
@@ -142,22 +152,32 @@ const Index = () => {
             <AssignmentTabs
               assignments={filteredAssignments}
               onStatusChange={handleStatusChange}
+              onArchiveToggle={handleArchive}
+              showArchiveToggle={true}
             />
           </div>
         </div>
 
         <div className="mt-8 border-t pt-4">
-          <DashboardFilters
-            statusFilter={statusFilter}
-            setStatusFilter={setStatusFilter}
-            viewMode={viewMode}
-            setViewMode={setViewMode}
-            hideCompleted={hideCompleted}
-            setHideCompleted={setHideCompleted}
-            hasStudents={hasStudents}
-            funMode={funMode}
-            showOnlyBottomControls={true}
-          />
+          <div className="flex justify-between items-center">
+            <DashboardFilters
+              statusFilter={statusFilter}
+              setStatusFilter={setStatusFilter}
+              viewMode={viewMode}
+              setViewMode={setViewMode}
+              hideCompleted={hideCompleted}
+              setHideCompleted={setHideCompleted}
+              hasStudents={hasStudents}
+              funMode={funMode}
+              showOnlyBottomControls={true}
+            />
+            <Link to="/archive">
+              <Button variant="outline" size="sm" className="gap-2">
+                <Archive className="h-4 w-4" />
+                {t("archive")}
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
@@ -165,3 +185,4 @@ const Index = () => {
 };
 
 export default Index;
+

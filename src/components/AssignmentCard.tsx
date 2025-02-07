@@ -5,7 +5,7 @@
  */
 import { Assignment } from "@/types/assignment";
 import { Card } from "@/components/ui/card";
-import { User, Trash2 } from "lucide-react";
+import { User, Trash2, Archive, ArchiveRestore } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
@@ -26,9 +26,12 @@ interface Profile {
 
 interface AssignmentCardProps {
   assignment: Assignment;
-  onStatusChange: (id: string, status: Assignment["status"]) => void;
+  onStatusChange?: (id: string, status: Assignment["status"]) => void;
   onUpdate?: (id: string, updates: Partial<Assignment>) => void;
   onDelete?: (id: string) => void;
+  onArchiveToggle?: () => void;
+  showArchiveToggle?: boolean;
+  isArchived?: boolean;
 }
 
 export const AssignmentCard = ({
@@ -36,6 +39,9 @@ export const AssignmentCard = ({
   onStatusChange,
   onUpdate,
   onDelete,
+  onArchiveToggle,
+  showArchiveToggle = false,
+  isArchived = false,
 }: AssignmentCardProps) => {
   const { t, language } = useLanguage();
   const { session } = useAuth();
@@ -117,6 +123,29 @@ export const AssignmentCard = ({
     )
   );
 
+  const ArchiveButton = () => (
+    showArchiveToggle && (
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={onArchiveToggle}
+        className="gap-2"
+      >
+        {isArchived ? (
+          <>
+            <ArchiveRestore className="h-4 w-4" />
+            {t("unarchive")}
+          </>
+        ) : (
+          <>
+            <Archive className="h-4 w-4" />
+            {t("moveToArchive")}
+          </>
+        )}
+      </Button>
+    )
+  );
+
   return (
     <>
       <Card className="p-3 sm:p-4 hover:shadow-lg transition-shadow">
@@ -149,18 +178,22 @@ export const AssignmentCard = ({
                 <>
                   <AssignmentDueDate dueDate={assignment.due_date} />
                   <DeleteButton />
+                  <ArchiveButton />
                 </>
               ) : (
                 <>
                   <DeleteButton />
+                  <ArchiveButton />
                   <AssignmentDueDate dueDate={assignment.due_date} />
                 </>
               )}
             </div>
-            <AssignmentStatus
-              status={assignment.status}
-              onStatusChange={(status) => onStatusChange(assignment.id, status)}
-            />
+            {onStatusChange && (
+              <AssignmentStatus
+                status={assignment.status}
+                onStatusChange={(status) => onStatusChange(assignment.id, status)}
+              />
+            )}
           </div>
         </div>
       </Card>
@@ -174,3 +207,4 @@ export const AssignmentCard = ({
     </>
   );
 };
+
