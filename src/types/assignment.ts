@@ -15,5 +15,6 @@ export interface Assignment {
   created_at?: string;
   updated_at?: string;
   archived: boolean;
+  isStudentAssignment?: boolean;
 }
 
