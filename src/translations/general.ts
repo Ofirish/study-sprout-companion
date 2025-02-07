@@ -1,4 +1,3 @@
-
 export const general = {
   error: {
     en: "Error",
@@ -61,8 +60,8 @@ export const general = {
     he: "הצג הכל"
   },
   viewParent: {
-    en: "Parent View",
-    he: "תצוגת הורה"
+    en: "My View",
+    he: "התצוגה שלי"
   },
   viewStudent: {
     en: "Student View",
@@ -136,5 +135,4 @@ export const general = {
     en: "Move to Archive",
     he: "העבר לארכיון"
   }
-};
-
+} as const;
