@@ -16,11 +16,12 @@ export const translations = {
   ...subjectTranslations,
 } as const;
 
-// Type definitions
 export type Language = "en" | "he";
 export type TranslationKey = keyof typeof translations;
 
-// Add a type guard to ensure translation exists
 export const hasTranslation = (key: string): key is TranslationKey => {
   return key in translations;
 };
+
+// Helper type to get all possible translation keys
+export type AllTranslationKeys = keyof typeof translations;

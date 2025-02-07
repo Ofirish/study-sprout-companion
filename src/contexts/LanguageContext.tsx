@@ -1,16 +1,12 @@
-/**
- * LanguageContext.tsx
- * Purpose: Manages the application's language state and translations.
- * Provides language switching functionality and translation utilities.
- */
-import React, { createContext, useContext, useState } from "react";
-import { translations, Language, TranslationKey, hasTranslation } from "@/translations";
+import { createContext, useContext, useState } from "react";
+import { translations } from "@/translations";
+import type { Language, TranslationKey } from "@/translations";
 
-type LanguageContextType = {
+interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: TranslationKey) => string;
-};
+}
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
@@ -18,11 +14,12 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
   const [language, setLanguage] = useState<Language>("en");
 
   const t = (key: TranslationKey): string => {
-    if (!hasTranslation(key)) {
-      console.warn(`Translation key "${key}" not found`);
+    const translation = translations[key];
+    if (!translation) {
+      console.warn(`Translation missing for key: ${key}`);
       return key;
     }
-    return translations[key][language] || key;
+    return translation[language];
   };
 
   return (
@@ -34,7 +31,7 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
 
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useLanguage must be used within a LanguageProvider");
   }
   return context;
