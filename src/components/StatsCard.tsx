@@ -38,7 +38,7 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
   const urlParams = new URLSearchParams(window.location.search);
   const currentFilter = urlParams.get('filter') || 'all';
 
-  const getButtonStyle = (filterValue: string) => {
+  const getButtonStyle = (filterValue: "all" | "completed" | "in_progress" | "not_started") => {
     return cn(
       "relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto",
       currentFilter === filterValue && "ring-2 ring-primary ring-offset-2 bg-gray-50"
@@ -50,7 +50,7 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
       <Button
         variant="ghost"
         onClick={() => onFilterChange("all")}
-        className={getButtonStyle('all')}
+        className={getButtonStyle("all")}
       >
         <div className="text-xl sm:text-2xl font-bold text-blue-500 flex items-center gap-2">
           <ListFilter className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -62,7 +62,7 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
       <Button
         variant="ghost"
         onClick={() => onFilterChange("completed")}
-        className={getButtonStyle('completed')}
+        className={getButtonStyle("completed")}
       >
         <div className="text-xl sm:text-2xl font-bold text-green-500 flex items-center gap-2">
           <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -74,7 +74,7 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
       <Button
         variant="ghost"
         onClick={() => onFilterChange("in_progress")}
-        className={getButtonStyle('in_progress')}
+        className={getButtonStyle("in_progress")}
       >
         <div className="text-xl sm:text-2xl font-bold text-yellow-500 flex items-center gap-2">
           <Clock className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -86,7 +86,7 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
       <Button
         variant="ghost"
         onClick={() => onFilterChange("not_started")}
-        className={getButtonStyle('not_started')}
+        className={getButtonStyle("not_started")}
       >
         <div className="text-xl sm:text-2xl font-bold text-red-500 flex items-center gap-2">
           <XCircle className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -97,3 +97,4 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
     </div>
   );
 };
+
