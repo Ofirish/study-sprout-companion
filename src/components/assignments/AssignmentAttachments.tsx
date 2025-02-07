@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Upload, File, Trash2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
@@ -115,7 +115,7 @@ export const AssignmentAttachments = ({ assignmentId, canEdit = false }: Assignm
   };
 
   // Fetch attachments on component mount
-  useEffect(() => {
+  useState(() => {
     fetchAttachments();
   }, [assignmentId]);
 

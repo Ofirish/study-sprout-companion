@@ -1,4 +1,3 @@
-
 /**
  * useAssignments.ts
  * Purpose: Custom hook for managing assignments data.
@@ -17,37 +16,13 @@ export const useAssignments = () => {
   const { data: assignments = [], isLoading } = useQuery({
     queryKey: ["assignments"],
     queryFn: async () => {
-      // First get the current user's direct assignments
-      const { data: userAssignments, error: userError } = await supabase
+      const { data, error } = await supabase
         .from("assignments")
         .select("*")
         .order("created_at", { ascending: false });
 
-      if (userError) throw userError;
-
-      // Then get student IDs connected to the parent
-      const { data: relationships, error: relError } = await supabase
-        .from("parent_student_relationships")
-        .select("student_id");
-
-      if (relError) throw relError;
-
-      // If there are connected students, get their assignments
-      let studentAssignments: any[] = [];
-      if (relationships && relationships.length > 0) {
-        const studentIds = relationships.map(rel => rel.student_id);
-        const { data: studentsData, error: studentsError } = await supabase
-          .from("assignments")
-          .select("*")
-          .in("user_id", studentIds)
-          .order("created_at", { ascending: false });
-
-        if (studentsError) throw studentsError;
-        studentAssignments = studentsData || [];
-      }
-
-      // Combine and return all assignments
-      return [...(userAssignments || []), ...studentAssignments] as Assignment[];
+      if (error) throw error;
+      return data as Assignment[];
     },
   });
 
@@ -58,7 +33,7 @@ export const useAssignments = () => {
         .from("assignments")
         .insert([{ ...newAssignment, status: "Not Started" }])
         .select()
-        .maybeSingle();
+        .single();
 
       if (error) throw error;
       return data;
@@ -93,7 +68,7 @@ export const useAssignments = () => {
         .update({ status })
         .eq("id", id)
         .select()
-        .maybeSingle();
+        .single();
 
       if (error) throw error;
       return data;
