@@ -8,18 +8,30 @@ import { Assignment } from "@/types/assignment";
 import { CheckCircle, Clock, XCircle, ListFilter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/components/AuthProvider";
 
 interface StatsCardProps {
   assignments: Assignment[];
   onFilterChange: (filter: "all" | "completed" | "in_progress" | "not_started") => void;
+  viewMode: "all" | "student" | "parent";
 }
 
-export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
+export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardProps) => {
   const { t, language } = useLanguage();
-  const total = assignments.length;
-  const completed = assignments.filter((a) => a.status === "Completed").length;
-  const inProgress = assignments.filter((a) => a.status === "In Progress").length;
-  const notStarted = assignments.filter((a) => a.status === "Not Started").length;
+  const { session } = useAuth();
+
+  // Filter assignments based on viewMode
+  const filteredAssignments = assignments.filter(assignment => {
+    if (viewMode === "all") return true;
+    if (viewMode === "parent" && assignment.user_id === session?.user.id) return true;
+    if (viewMode === "student" && assignment.user_id !== session?.user.id) return true;
+    return false;
+  });
+
+  const total = filteredAssignments.length;
+  const completed = filteredAssignments.filter((a) => a.status === "Completed").length;
+  const inProgress = filteredAssignments.filter((a) => a.status === "In Progress").length;
+  const notStarted = filteredAssignments.filter((a) => a.status === "Not Started").length;
 
   // Get the current filter from the URL search params
   const urlParams = new URLSearchParams(window.location.search);
