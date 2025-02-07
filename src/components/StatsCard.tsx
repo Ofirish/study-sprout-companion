@@ -9,6 +9,7 @@ import { CheckCircle, Clock, XCircle, ListFilter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/components/AuthProvider";
+import { cn } from "@/lib/utils";
 
 interface StatsCardProps {
   assignments: Assignment[];
@@ -35,18 +36,16 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
 
   // Get the current filter from the URL search params
   const urlParams = new URLSearchParams(window.location.search);
-  const currentFilter = urlParams.get('filter');
+  const currentFilter = urlParams.get('filter') || 'all';
 
   const getButtonStyle = (filterValue: string) => {
-    const baseStyle = "relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto";
-    const selectedStyle = "ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]";
-    const unselectedStyle = "shadow hover:shadow-md";
+    const baseClasses = "relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto";
+    const selectedClasses = "ring-2 ring-primary ring-offset-2 bg-gray-50";
     
-    const isSelected = 
-      filterValue === currentFilter || 
-      (filterValue === 'all' && !currentFilter);
-      
-    return `${baseStyle} ${isSelected ? selectedStyle : unselectedStyle}`;
+    return cn(
+      baseClasses,
+      currentFilter === filterValue && selectedClasses
+    );
   };
 
   return (
