@@ -27,6 +27,7 @@ import { AssignmentAttachments } from "./assignments/AssignmentAttachments";
 import { DeleteButton } from "./assignments/DeleteButton";
 import { ArchiveButton } from "./assignments/ArchiveButton";
 import { StudentInfo } from "./assignments/StudentInfo";
+import { useState } from "react";
 
 interface AssignmentCardProps {
   assignment: Assignment;
