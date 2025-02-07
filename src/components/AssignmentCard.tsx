@@ -2,12 +2,20 @@
 /**
  * AssignmentCard.tsx
  * Purpose: Displays an individual assignment with its details and actions
+ * 
+ * References:
+ * - Used by: src/components/AssignmentTabs.tsx
+ * - Uses:
+ *   - src/components/assignments/DeleteButton.tsx
+ *   - src/components/assignments/ArchiveButton.tsx
+ *   - src/components/assignments/StudentInfo.tsx
+ *   - src/components/assignments/AssignmentHeader.tsx
+ *   - src/components/assignments/AssignmentStatus.tsx
+ *   - src/components/assignments/AssignmentDueDate.tsx
+ *   - src/components/assignments/AssignmentAttachments.tsx
  */
 import { Assignment } from "@/types/assignment";
 import { Card } from "@/components/ui/card";
-import { User, Trash2, Archive, ArchiveRestore } from "lucide-react";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 import { EditAssignmentDialog } from "./EditAssignmentDialog";
 import { useToast } from "@/hooks/use-toast";
@@ -16,13 +24,9 @@ import { AssignmentHeader } from "./assignments/AssignmentHeader";
 import { AssignmentStatus } from "./assignments/AssignmentStatus";
 import { AssignmentDueDate } from "./assignments/AssignmentDueDate";
 import { AssignmentAttachments } from "./assignments/AssignmentAttachments";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-
-interface Profile {
-  first_name: string;
-  last_name: string;
-}
+import { DeleteButton } from "./assignments/DeleteButton";
+import { ArchiveButton } from "./assignments/ArchiveButton";
+import { StudentInfo } from "./assignments/StudentInfo";
 
 interface AssignmentCardProps {
   assignment: Assignment;
@@ -46,26 +50,7 @@ export const AssignmentCard = ({
   const { t, language } = useLanguage();
   const { session } = useAuth();
   const { toast } = useToast();
-  const [studentProfile, setStudentProfile] = useState<Profile | null>(null);
   const [showEditDialog, setShowEditDialog] = useState(false);
-
-  useEffect(() => {
-    const fetchStudentProfile = async () => {
-      if (!session || assignment.user_id === session.user.id) return;
-
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("first_name, last_name")
-        .eq("id", assignment.user_id)
-        .single();
-
-      if (!error && data) {
-        setStudentProfile(data);
-      }
-    };
-
-    fetchStudentProfile();
-  }, [assignment.user_id, session]);
 
   const handleEdit = async (updates: Partial<Assignment>) => {
     if (!session || assignment.user_id !== session.user.id) {
@@ -90,62 +75,6 @@ export const AssignmentCard = ({
 
   const canEdit = session?.user.id === assignment.user_id;
 
-  const DeleteButton = () => (
-    canEdit && (
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="p-1 hover:bg-destructive/10"
-          >
-            <Trash2 className="h-4 w-4 text-destructive" />
-          </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Assignment</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete this assignment? This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              className="bg-destructive hover:bg-destructive/90"
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    )
-  );
-
-  const ArchiveButton = () => (
-    showArchiveToggle && (
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={onArchiveToggle}
-        className="gap-2"
-      >
-        {isArchived ? (
-          <>
-            <ArchiveRestore className="h-4 w-4" />
-            {t("unarchive")}
-          </>
-        ) : (
-          <>
-            <Archive className="h-4 w-4" />
-            {t("moveToArchive")}
-          </>
-        )}
-      </Button>
-    )
-  );
-
   return (
     <>
       <Card className="p-3 sm:p-4 hover:shadow-lg transition-shadow">
@@ -160,12 +89,10 @@ export const AssignmentCard = ({
             {assignment.description}
           </p>
           
-          {studentProfile && (
-            <div className="mt-2 flex items-center gap-1 text-xs text-gray-500">
-              <User className="h-3 w-3" />
-              <span>{studentProfile.first_name} {studentProfile.last_name}</span>
-            </div>
-          )}
+          <StudentInfo 
+            userId={assignment.user_id}
+            currentUserId={session?.user.id}
+          />
           
           <AssignmentAttachments
             assignmentId={assignment.id}
@@ -177,13 +104,21 @@ export const AssignmentCard = ({
               {language === "he" ? (
                 <>
                   <AssignmentDueDate dueDate={assignment.due_date} />
-                  <DeleteButton />
-                  <ArchiveButton />
+                  {canEdit && <DeleteButton onDelete={handleDelete} />}
+                  <ArchiveButton
+                    onArchiveToggle={onArchiveToggle}
+                    showArchiveToggle={showArchiveToggle}
+                    isArchived={isArchived}
+                  />
                 </>
               ) : (
                 <>
-                  <DeleteButton />
-                  <ArchiveButton />
+                  {canEdit && <DeleteButton onDelete={handleDelete} />}
+                  <ArchiveButton
+                    onArchiveToggle={onArchiveToggle}
+                    showArchiveToggle={showArchiveToggle}
+                    isArchived={isArchived}
+                  />
                   <AssignmentDueDate dueDate={assignment.due_date} />
                 </>
               )}
@@ -207,4 +142,3 @@ export const AssignmentCard = ({
     </>
   );
 };
-
