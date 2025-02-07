@@ -34,11 +34,12 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
   const inProgress = filteredAssignments.filter((a) => a.status === "In Progress").length;
   const notStarted = filteredAssignments.filter((a) => a.status === "Not Started").length;
 
-  // Get the current filter from the URL search params
-  const urlParams = new URLSearchParams(window.location.search);
-  const currentFilter = urlParams.get('filter') || 'all';
-
+  // Get the current filter from the Index component's state via statusFilter prop
   const getButtonStyle = (filterValue: "all" | "completed" | "in_progress" | "not_started") => {
+    // Use window.location.search to get the current filter
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentFilter = urlParams.get('filter') || 'all';
+    
     return cn(
       "relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto",
       currentFilter === filterValue && "ring-2 ring-primary ring-offset-2 bg-gray-50"
@@ -97,4 +98,3 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
     </div>
   );
 };
-
