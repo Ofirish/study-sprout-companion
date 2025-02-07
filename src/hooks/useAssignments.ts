@@ -18,7 +18,7 @@ export const useAssignments = () => {
     queryKey: ["assignments"],
     queryFn: async () => {
       try {
-        // First get the current user's direct assignments
+        // First get the current user's assignments
         const { data: userAssignments, error: userError } = await supabase
           .from("assignments")
           .select("*")
@@ -47,8 +47,14 @@ export const useAssignments = () => {
           studentAssignments = studentsData || [];
         }
 
-        // Combine and return all assignments
-        return [...(userAssignments || []), ...studentAssignments] as Assignment[];
+        // Return all assignments with a flag indicating if they are student assignments
+        return [...(userAssignments || []).map(a => ({
+          ...a,
+          isStudentAssignment: false
+        })), ...studentAssignments.map(a => ({
+          ...a,
+          isStudentAssignment: true
+        }))] as Assignment[];
       } catch (error: any) {
         console.error("Error fetching assignments:", error);
         toast({
