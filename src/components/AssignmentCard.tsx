@@ -84,6 +84,39 @@ export const AssignmentCard = ({
 
   const canEdit = session?.user.id === assignment.user_id;
 
+  const DeleteButton = () => (
+    canEdit && (
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="p-1 hover:bg-destructive/10"
+          >
+            <Trash2 className="h-4 w-4 text-destructive" />
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Assignment</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this assignment? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    )
+  );
+
   return (
     <>
       <Card className="p-3 sm:p-4 hover:shadow-lg transition-shadow">
@@ -111,43 +144,23 @@ export const AssignmentCard = ({
           />
           
           <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-            <AssignmentDueDate dueDate={assignment.due_date} />
             <div className="flex items-center gap-2">
-              {canEdit && (
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="p-1 hover:bg-destructive/10"
-                    >
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Delete Assignment</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Are you sure you want to delete this assignment? This action cannot be undone.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={handleDelete}
-                        className="bg-destructive hover:bg-destructive/90"
-                      >
-                        Delete
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+              {language === "he" ? (
+                <>
+                  <AssignmentDueDate dueDate={assignment.due_date} />
+                  <DeleteButton />
+                </>
+              ) : (
+                <>
+                  <DeleteButton />
+                  <AssignmentDueDate dueDate={assignment.due_date} />
+                </>
               )}
-              <AssignmentStatus
-                status={assignment.status}
-                onStatusChange={(status) => onStatusChange(assignment.id, status)}
-              />
             </div>
+            <AssignmentStatus
+              status={assignment.status}
+              onStatusChange={(status) => onStatusChange(assignment.id, status)}
+            />
           </div>
         </div>
       </Card>
@@ -161,4 +174,3 @@ export const AssignmentCard = ({
     </>
   );
 };
-
