@@ -1,4 +1,3 @@
-
 /**
  * Index.tsx
  * Main dashboard page displaying assignments and filters
@@ -98,9 +97,10 @@ const Index = () => {
 
     if (!passesStatusFilter) return false;
 
+    // Updated viewMode filtering logic using isStudentAssignment flag
     if (viewMode === "all") return true;
-    if (viewMode === "parent" && assignment.user_id === session?.user.id) return true;
-    if (viewMode === "student" && assignment.user_id !== session?.user.id) return true;
+    if (viewMode === "parent") return !assignment.isStudentAssignment;
+    if (viewMode === "student") return assignment.isStudentAssignment;
     
     return false;
   });
@@ -185,4 +185,3 @@ const Index = () => {
 };
 
 export default Index;
-
