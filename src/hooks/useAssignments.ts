@@ -106,7 +106,8 @@ export const useAssignments = () => {
       status: Assignment["status"];
     }) => {
       try {
-        const { data, error } = await supabase
+        // First try to update in user's assignments
+        let { data, error } = await supabase
           .from("assignments")
           .update({ status })
           .eq("id", id)
@@ -114,7 +115,30 @@ export const useAssignments = () => {
           .maybeSingle();
 
         if (error) throw error;
-        if (!data) throw new Error("Assignment not found");
+        if (!data) {
+          // If not found in user's assignments, check student assignments
+          const { data: relationships } = await supabase
+            .from("parent_student_relationships")
+            .select("student_id");
+
+          if (relationships && relationships.length > 0) {
+            const studentIds = relationships.map(rel => rel.student_id);
+            const { data: studentAssignment, error: studentError } = await supabase
+              .from("assignments")
+              .update({ status })
+              .eq("id", id)
+              .in("user_id", studentIds)
+              .select()
+              .maybeSingle();
+
+            if (studentError) throw studentError;
+            if (!studentAssignment) throw new Error("Assignment not found");
+            
+            data = studentAssignment;
+          } else {
+            throw new Error("Assignment not found");
+          }
+        }
         
         return data;
       } catch (error: any) {
@@ -142,12 +166,31 @@ export const useAssignments = () => {
   const deleteAssignmentMutation = useMutation({
     mutationFn: async (id: string) => {
       try {
+        // First try to delete from user's assignments
         const { error } = await supabase
           .from("assignments")
           .delete()
           .eq("id", id);
 
-        if (error) throw error;
+        if (error) {
+          // If not found or error, check student assignments
+          const { data: relationships } = await supabase
+            .from("parent_student_relationships")
+            .select("student_id");
+
+          if (relationships && relationships.length > 0) {
+            const studentIds = relationships.map(rel => rel.student_id);
+            const { error: studentError } = await supabase
+              .from("assignments")
+              .delete()
+              .eq("id", id)
+              .in("user_id", studentIds);
+
+            if (studentError) throw studentError;
+          } else {
+            throw error;
+          }
+        }
       } catch (error: any) {
         console.error("Error deleting assignment:", error);
         throw new Error(error.message || "Failed to delete assignment");
