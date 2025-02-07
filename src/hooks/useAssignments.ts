@@ -68,3 +68,96 @@ export const useAssignments = () => {
         const { data, error } = await supabase
           .from("assignments")
           .insert([{ ...newAssignment, status: "Not Started", archived: false }])
+          .select()
+          .single();
+
+        if (error) throw error;
+        return data;
+      } catch (error: any) {
+        console.error("Error adding assignment:", error);
+        toast({
+          title: "Error",
+          description: "Failed to add assignment",
+          variant: "destructive",
+        });
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["assignments"] });
+      toast({
+        title: "Success",
+        description: "Assignment added successfully",
+      });
+    },
+  });
+
+  // Update assignment
+  const updateAssignmentMutation = useMutation({
+    mutationFn: async (updates: Partial<Assignment> & { id: string }) => {
+      try {
+        const { data, error } = await supabase
+          .from("assignments")
+          .update(updates)
+          .eq("id", updates.id)
+          .select()
+          .single();
+
+        if (error) throw error;
+        return data;
+      } catch (error: any) {
+        console.error("Error updating assignment:", error);
+        toast({
+          title: "Error",
+          description: "Failed to update assignment",
+          variant: "destructive",
+        });
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["assignments"] });
+      toast({
+        title: "Success",
+        description: "Assignment updated successfully",
+      });
+    },
+  });
+
+  // Delete assignment
+  const deleteAssignmentMutation = useMutation({
+    mutationFn: async (id: string) => {
+      try {
+        const { error } = await supabase
+          .from("assignments")
+          .delete()
+          .eq("id", id);
+
+        if (error) throw error;
+      } catch (error: any) {
+        console.error("Error deleting assignment:", error);
+        toast({
+          title: "Error",
+          description: "Failed to delete assignment",
+          variant: "destructive",
+        });
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["assignments"] });
+      toast({
+        title: "Success",
+        description: "Assignment deleted successfully",
+      });
+    },
+  });
+
+  return {
+    assignments,
+    isLoading,
+    addAssignmentMutation,
+    updateAssignmentMutation,
+    deleteAssignmentMutation,
+  };
+};
