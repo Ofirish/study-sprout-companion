@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Assignment, Subject } from "@/types/assignment";
 import { Button } from "@/components/ui/button";
@@ -42,6 +43,7 @@ export const AssignmentForm = ({ onSubmit }: AssignmentFormProps) => {
       due_date: new Date(dueDate).toISOString(),
       type,
       user_id: session?.user.id!,
+      archived: false
     });
 
     setTitle("");
