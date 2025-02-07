@@ -1,3 +1,4 @@
+
 /**
  * AssignmentCard.tsx
  * Purpose: Displays an individual assignment with its details and actions
@@ -112,10 +113,6 @@ export const AssignmentCard = ({
           <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
             <AssignmentDueDate dueDate={assignment.due_date} />
             <div className="flex items-center gap-2">
-              <AssignmentStatus
-                status={assignment.status}
-                onStatusChange={(status) => onStatusChange(assignment.id, status)}
-              />
               {canEdit && (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
@@ -146,6 +143,10 @@ export const AssignmentCard = ({
                   </AlertDialogContent>
                 </AlertDialog>
               )}
+              <AssignmentStatus
+                status={assignment.status}
+                onStatusChange={(status) => onStatusChange(assignment.id, status)}
+              />
             </div>
           </div>
         </div>
@@ -160,3 +161,4 @@ export const AssignmentCard = ({
     </>
   );
 };
+
