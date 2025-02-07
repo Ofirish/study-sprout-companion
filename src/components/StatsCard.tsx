@@ -39,12 +39,9 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
   const currentFilter = urlParams.get('filter') || 'all';
 
   const getButtonStyle = (filterValue: string) => {
-    const baseClasses = "relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto";
-    const selectedClasses = "ring-2 ring-primary ring-offset-2 bg-gray-50";
-    
     return cn(
-      baseClasses,
-      currentFilter === filterValue && selectedClasses
+      "relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto",
+      currentFilter === filterValue && "ring-2 ring-primary ring-offset-2 bg-gray-50"
     );
   };
 
