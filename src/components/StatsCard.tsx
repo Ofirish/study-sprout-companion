@@ -35,14 +35,16 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
 
   // Get the current filter from the URL search params
   const urlParams = new URLSearchParams(window.location.search);
-  const currentFilter = urlParams.get('filter') || 'all';
+  const currentFilter = urlParams.get('filter');
 
   const getButtonStyle = (filter: string) => {
     const baseStyle = "relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto";
     const selectedStyle = "ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]";
     const unselectedStyle = "shadow hover:shadow-md";
     
-    return `${baseStyle} ${currentFilter === filter ? selectedStyle : unselectedStyle}`;
+    // Only apply selected style if currentFilter matches exactly or both are null/empty for "all"
+    const isSelected = filter === 'all' ? !currentFilter || currentFilter === 'all' : currentFilter === filter;
+    return `${baseStyle} ${isSelected ? selectedStyle : unselectedStyle}`;
   };
 
   return (
