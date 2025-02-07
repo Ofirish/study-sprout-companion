@@ -98,15 +98,17 @@ const Index = () => {
 
     if (!passesStatusFilter) return false;
 
-    // Updated viewMode filtering logic
+    // Updated viewMode filtering logic with strict checking for student/parent assignments
     switch (viewMode) {
       case "all":
         return true;
       case "parent":
-        // For "My View", strictly show only parent assignments (where isStudentAssignment is false)
-        return assignment.isStudentAssignment === false;
+        // For "My View", strictly show only assignments where:
+        // 1. isStudentAssignment is explicitly false
+        // 2. The assignment belongs to the current user
+        return !assignment.isStudentAssignment && assignment.user_id === session?.user.id;
       case "student":
-        // For student view, strictly show only student assignments (where isStudentAssignment is true)
+        // For student view, strictly show only student assignments
         return assignment.isStudentAssignment === true;
       default:
         return false;
