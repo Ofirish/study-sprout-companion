@@ -8,6 +8,8 @@ import { AssignmentCard } from "@/components/AssignmentCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Circle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "./ui/use-toast";
 
 interface AssignmentTabsProps {
   assignments: Assignment[];
@@ -21,6 +23,7 @@ const TabDot = ({ show }: { show: boolean }) => {
 
 export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsProps) => {
   const { t, language } = useLanguage();
+  const { toast } = useToast();
   
   const upcomingAssignments = assignments.filter(
     (a) => new Date(a.due_date) >= new Date()
@@ -37,6 +40,27 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
   const hasUpcoming = upcomingAssignments.length > 0;
   const hasHomework = homeworkAssignments.length > 0;
   const hasTests = testAssignments.length > 0;
+
+  const handleUpdate = async (id: string, updates: Partial<Assignment>) => {
+    const { error } = await supabase
+      .from("assignments")
+      .update(updates)
+      .eq("id", id);
+
+    if (error) {
+      toast({
+        title: t("error"),
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: t("success"),
+      description: t("assignmentUpdated"),
+    });
+  };
 
   return (
     <Tabs defaultValue="upcoming" className="mt-4" dir={language === "he" ? "rtl" : "ltr"}>
@@ -66,6 +90,7 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
               key={assignment.id}
               assignment={assignment}
               onStatusChange={onStatusChange}
+              onUpdate={handleUpdate}
             />
           ))
         )}
@@ -82,6 +107,7 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
               key={assignment.id}
               assignment={assignment}
               onStatusChange={onStatusChange}
+              onUpdate={handleUpdate}
             />
           ))
         )}
@@ -98,6 +124,7 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
               key={assignment.id}
               assignment={assignment}
               onStatusChange={onStatusChange}
+              onUpdate={handleUpdate}
             />
           ))
         )}
