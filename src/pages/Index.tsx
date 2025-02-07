@@ -98,13 +98,15 @@ const Index = () => {
 
     if (!passesStatusFilter) return false;
 
-    // Updated viewMode filtering logic
+    // Updated viewMode filtering logic to handle null/undefined cases
     switch (viewMode) {
       case "all":
         return true;
       case "parent":
-        return assignment.isStudentAssignment === false;
+        // Show assignments where isStudentAssignment is explicitly false OR null/undefined
+        return !assignment.isStudentAssignment;
       case "student":
+        // Only show assignments where isStudentAssignment is explicitly true
         return assignment.isStudentAssignment === true;
       default:
         return false;
