@@ -35,9 +35,9 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
   const notStarted = filteredAssignments.filter((a) => a.status === "Not Started").length;
 
   const getButtonStyle = (filterValue: "all" | "completed" | "in_progress" | "not_started") => {
-    // Get the current filter from the URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const currentFilter = urlParams.get('filter');
+    // Get the current filter from the Index component's state
+    const searchParams = new URLSearchParams(window.location.search);
+    const currentFilter = searchParams.get('filter') || 'all';
     
     return cn(
       "relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto",
