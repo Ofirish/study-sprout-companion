@@ -23,7 +23,7 @@ type ViewMode = "all" | "student" | "parent";
 const Index = () => {
   const [showForm, setShowForm] = useState(false);
   const [statusFilter, setStatusFilter] = useState<"all" | "completed" | "in_progress" | "not_started">("all");
-  const [hideCompleted, setHideCompleted] = useState(true); // Changed to true by default
+  const [hideCompleted, setHideCompleted] = useState(false); // Changed to false by default
   const [viewMode, setViewMode] = useState<ViewMode>("all");
   const [hasStudents, setHasStudents] = useState(false);
   const { session } = useAuth();
