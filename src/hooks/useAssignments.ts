@@ -69,9 +69,11 @@ export const useAssignments = () => {
           .from("assignments")
           .insert([{ ...newAssignment, status: "Not Started" }])
           .select()
-          .single();
+          .maybeSingle();
 
         if (error) throw error;
+        if (!data) throw new Error("Failed to create assignment");
+        
         return data;
       } catch (error: any) {
         console.error("Error adding assignment:", error);
@@ -104,27 +106,16 @@ export const useAssignments = () => {
       status: Assignment["status"];
     }) => {
       try {
-        // First check if the assignment exists
-        const { data: existingAssignment, error: checkError } = await supabase
-          .from("assignments")
-          .select()
-          .eq("id", id)
-          .maybeSingle();
-
-        if (checkError) throw checkError;
-        if (!existingAssignment) {
-          throw new Error("Assignment not found");
-        }
-
-        // If assignment exists, proceed with update
         const { data, error } = await supabase
           .from("assignments")
           .update({ status })
           .eq("id", id)
           .select()
-          .single();
+          .maybeSingle();
 
         if (error) throw error;
+        if (!data) throw new Error("Assignment not found");
+        
         return data;
       } catch (error: any) {
         console.error("Error updating assignment:", error);
