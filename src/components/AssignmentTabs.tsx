@@ -1,4 +1,3 @@
-
 /**
  * AssignmentTabs.tsx
  * Purpose: Organizes assignments into different tabs.
@@ -21,7 +20,8 @@ interface AssignmentTabsProps {
 export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsProps) => {
   const { t, language } = useLanguage();
   const { deleteAssignmentMutation } = useAssignments();
-  
+  const { toast } = useToast();
+
   const upcomingAssignments = assignments.filter(
     (a) => new Date(a.due_date) >= new Date()
   );

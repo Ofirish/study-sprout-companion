@@ -1,4 +1,7 @@
-
+/**
+ * AssignmentCard.tsx
+ * Purpose: Displays an individual assignment with its details and actions
+ */
 import { Assignment } from "@/types/assignment";
 import { Card } from "@/components/ui/card";
 import { User, Trash2 } from "lucide-react";
@@ -14,6 +17,11 @@ import { AssignmentDueDate } from "./assignments/AssignmentDueDate";
 import { AssignmentAttachments } from "./assignments/AssignmentAttachments";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+
+interface Profile {
+  first_name: string;
+  last_name: string;
+}
 
 interface AssignmentCardProps {
   assignment: Assignment;
