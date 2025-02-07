@@ -7,7 +7,7 @@
 import { Assignment } from "@/types/assignment";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 export const useAssignments = () => {
   const { toast } = useToast();
@@ -138,10 +138,42 @@ export const useAssignments = () => {
     },
   });
 
+  // Delete assignment
+  const deleteAssignmentMutation = useMutation({
+    mutationFn: async (id: string) => {
+      try {
+        const { error } = await supabase
+          .from("assignments")
+          .delete()
+          .eq("id", id);
+
+        if (error) throw error;
+      } catch (error: any) {
+        console.error("Error deleting assignment:", error);
+        throw new Error(error.message || "Failed to delete assignment");
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["assignments"] });
+      toast({
+        title: "Success",
+        description: "Assignment deleted successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   return {
     assignments,
     isLoading,
     addAssignmentMutation,
     updateAssignmentMutation,
+    deleteAssignmentMutation,
   };
 };

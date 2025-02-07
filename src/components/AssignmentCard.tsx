@@ -1,32 +1,32 @@
+
 import { Assignment } from "@/types/assignment";
 import { Card } from "@/components/ui/card";
-import { User } from "lucide-react";
+import { User, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 import { EditAssignmentDialog } from "./EditAssignmentDialog";
-import { useToast } from "./ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AssignmentHeader } from "./assignments/AssignmentHeader";
 import { AssignmentStatus } from "./assignments/AssignmentStatus";
 import { AssignmentDueDate } from "./assignments/AssignmentDueDate";
 import { AssignmentAttachments } from "./assignments/AssignmentAttachments";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 
 interface AssignmentCardProps {
   assignment: Assignment;
   onStatusChange: (id: string, status: Assignment["status"]) => void;
   onUpdate?: (id: string, updates: Partial<Assignment>) => void;
-}
-
-interface Profile {
-  first_name: string;
-  last_name: string;
+  onDelete?: (id: string) => void;
 }
 
 export const AssignmentCard = ({
   assignment,
   onStatusChange,
   onUpdate,
+  onDelete,
 }: AssignmentCardProps) => {
   const { t, language } = useLanguage();
   const { session } = useAuth();
@@ -67,6 +67,12 @@ export const AssignmentCard = ({
     }
   };
 
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(assignment.id);
+    }
+  };
+
   const canEdit = session?.user.id === assignment.user_id;
 
   return (
@@ -97,10 +103,42 @@ export const AssignmentCard = ({
           
           <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
             <AssignmentDueDate dueDate={assignment.due_date} />
-            <AssignmentStatus
-              status={assignment.status}
-              onStatusChange={(status) => onStatusChange(assignment.id, status)}
-            />
+            <div className="flex items-center gap-2">
+              <AssignmentStatus
+                status={assignment.status}
+                onStatusChange={(status) => onStatusChange(assignment.id, status)}
+              />
+              {canEdit && (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="p-1 hover:bg-destructive/10"
+                    >
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete Assignment</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to delete this assignment? This action cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={handleDelete}
+                        className="bg-destructive hover:bg-destructive/90"
+                      >
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
+            </div>
           </div>
         </div>
       </Card>

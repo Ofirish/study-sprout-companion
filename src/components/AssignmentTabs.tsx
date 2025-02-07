@@ -1,3 +1,4 @@
+
 /**
  * AssignmentTabs.tsx
  * Purpose: Organizes assignments into different tabs.
@@ -9,21 +10,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Circle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "./ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
+import { useAssignments } from "@/hooks/useAssignments";
 
 interface AssignmentTabsProps {
   assignments: Assignment[];
   onStatusChange: (id: string, status: Assignment["status"]) => void;
 }
 
-const TabDot = ({ show }: { show: boolean }) => {
-  if (!show) return null;
-  return <Circle className="w-2 h-2 ml-2 fill-[#ea384c] text-[#ea384c] shrink-0" />;
-};
-
 export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsProps) => {
   const { t, language } = useLanguage();
-  const { toast } = useToast();
+  const { deleteAssignmentMutation } = useAssignments();
   
   const upcomingAssignments = assignments.filter(
     (a) => new Date(a.due_date) >= new Date()
@@ -62,6 +59,15 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
     });
   };
 
+  const handleDelete = (id: string) => {
+    deleteAssignmentMutation.mutate(id);
+  };
+
+  const TabDot = ({ show }: { show: boolean }) => {
+    if (!show) return null;
+    return <Circle className="w-2 h-2 ml-2 fill-[#ea384c] text-[#ea384c] shrink-0" />;
+  };
+
   return (
     <Tabs defaultValue="upcoming" className="mt-4" dir={language === "he" ? "rtl" : "ltr"}>
       <TabsList className="grid w-full grid-cols-3">
@@ -91,6 +97,7 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
               assignment={assignment}
               onStatusChange={onStatusChange}
               onUpdate={handleUpdate}
+              onDelete={handleDelete}
             />
           ))
         )}
@@ -108,6 +115,7 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
               assignment={assignment}
               onStatusChange={onStatusChange}
               onUpdate={handleUpdate}
+              onDelete={handleDelete}
             />
           ))
         )}
@@ -125,6 +133,7 @@ export const AssignmentTabs = ({ assignments, onStatusChange }: AssignmentTabsPr
               assignment={assignment}
               onStatusChange={onStatusChange}
               onUpdate={handleUpdate}
+              onDelete={handleDelete}
             />
           ))
         )}
