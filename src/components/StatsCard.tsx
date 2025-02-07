@@ -42,8 +42,8 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
     const selectedStyle = "ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]";
     const unselectedStyle = "shadow hover:shadow-md";
     
-    // Only apply selected style if currentFilter matches exactly or both are null/empty for "all"
-    const isSelected = filter === 'all' ? !currentFilter || currentFilter === 'all' : currentFilter === filter;
+    // Update the logic to handle the "all" case correctly
+    const isSelected = currentFilter === filter || (filter === 'all' && currentFilter === null);
     return `${baseStyle} ${isSelected ? selectedStyle : unselectedStyle}`;
   };
 
