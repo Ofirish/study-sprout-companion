@@ -1,3 +1,4 @@
+
 /**
  * useAssignments.ts
  * Purpose: Custom hook for managing assignments data.
@@ -33,7 +34,7 @@ export const useAssignments = () => {
         .from("assignments")
         .insert([{ ...newAssignment, status: "Not Started" }])
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       return data;
@@ -68,7 +69,7 @@ export const useAssignments = () => {
         .update({ status })
         .eq("id", id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       return data;
