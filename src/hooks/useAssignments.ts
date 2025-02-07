@@ -17,51 +17,68 @@ export const useAssignments = () => {
   const { data: assignments = [], isLoading } = useQuery({
     queryKey: ["assignments"],
     queryFn: async () => {
-      // First get the current user's direct assignments
-      const { data: userAssignments, error: userError } = await supabase
-        .from("assignments")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (userError) throw userError;
-
-      // Then get student IDs connected to the parent
-      const { data: relationships, error: relError } = await supabase
-        .from("parent_student_relationships")
-        .select("student_id");
-
-      if (relError) throw relError;
-
-      // If there are connected students, get their assignments
-      let studentAssignments: any[] = [];
-      if (relationships && relationships.length > 0) {
-        const studentIds = relationships.map(rel => rel.student_id);
-        const { data: studentsData, error: studentsError } = await supabase
+      try {
+        // First get the current user's direct assignments
+        const { data: userAssignments, error: userError } = await supabase
           .from("assignments")
           .select("*")
-          .in("user_id", studentIds)
           .order("created_at", { ascending: false });
 
-        if (studentsError) throw studentsError;
-        studentAssignments = studentsData || [];
-      }
+        if (userError) throw userError;
 
-      // Combine and return all assignments
-      return [...(userAssignments || []), ...studentAssignments] as Assignment[];
+        // Then get student IDs connected to the parent
+        const { data: relationships, error: relError } = await supabase
+          .from("parent_student_relationships")
+          .select("student_id");
+
+        if (relError) throw relError;
+
+        // If there are connected students, get their assignments
+        let studentAssignments: any[] = [];
+        if (relationships && relationships.length > 0) {
+          const studentIds = relationships.map(rel => rel.student_id);
+          const { data: studentsData, error: studentsError } = await supabase
+            .from("assignments")
+            .select("*")
+            .in("user_id", studentIds)
+            .order("created_at", { ascending: false });
+
+          if (studentsError) throw studentsError;
+          studentAssignments = studentsData || [];
+        }
+
+        // Combine and return all assignments
+        return [...(userAssignments || []), ...studentAssignments] as Assignment[];
+      } catch (error: any) {
+        console.error("Error fetching assignments:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch assignments",
+          variant: "destructive",
+        });
+        return [];
+      }
     },
   });
 
   // Add new assignment
   const addAssignmentMutation = useMutation({
     mutationFn: async (newAssignment: Omit<Assignment, "id" | "status">) => {
-      const { data, error } = await supabase
-        .from("assignments")
-        .insert([{ ...newAssignment, status: "Not Started" }])
-        .select()
-        .maybeSingle();
+      try {
+        const { data, error } = await supabase
+          .from("assignments")
+          .insert([{ ...newAssignment, status: "Not Started" }])
+          .select()
+          .maybeSingle();
 
-      if (error) throw error;
-      return data;
+        if (error) throw error;
+        if (!data) throw new Error("Failed to create assignment");
+        
+        return data;
+      } catch (error: any) {
+        console.error("Error adding assignment:", error);
+        throw new Error(error.message || "Failed to add assignment");
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["assignments"] });
@@ -88,18 +105,29 @@ export const useAssignments = () => {
       id: string;
       status: Assignment["status"];
     }) => {
-      const { data, error } = await supabase
-        .from("assignments")
-        .update({ status })
-        .eq("id", id)
-        .select()
-        .maybeSingle();
+      try {
+        const { data, error } = await supabase
+          .from("assignments")
+          .update({ status })
+          .eq("id", id)
+          .select()
+          .maybeSingle();
 
-      if (error) throw error;
-      return data;
+        if (error) throw error;
+        if (!data) throw new Error("Assignment not found");
+        
+        return data;
+      } catch (error: any) {
+        console.error("Error updating assignment:", error);
+        throw new Error(error.message || "Failed to update assignment");
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["assignments"] });
+      toast({
+        title: "Success",
+        description: "Assignment updated successfully!",
+      });
     },
     onError: (error: Error) => {
       toast({
