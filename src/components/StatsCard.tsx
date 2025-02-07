@@ -37,14 +37,20 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
   const urlParams = new URLSearchParams(window.location.search);
   const currentFilter = urlParams.get('filter') || 'all';
 
+  const getButtonStyle = (filter: string) => {
+    const baseStyle = "relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto";
+    const selectedStyle = "ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]";
+    const unselectedStyle = "shadow hover:shadow-md";
+    
+    return `${baseStyle} ${currentFilter === filter ? selectedStyle : unselectedStyle}`;
+  };
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 sm:mt-8" dir={language === "he" ? "rtl" : "ltr"}>
       <Button
         variant="ghost"
         onClick={() => onFilterChange("all")}
-        className={`relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto ${
-          currentFilter === 'all' ? 'ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]' : 'shadow hover:shadow-md'
-        }`}
+        className={getButtonStyle('all')}
       >
         <div className="text-xl sm:text-2xl font-bold text-blue-500 flex items-center gap-2">
           <ListFilter className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -56,9 +62,7 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
       <Button
         variant="ghost"
         onClick={() => onFilterChange("completed")}
-        className={`relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto ${
-          currentFilter === 'completed' ? 'ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]' : 'shadow hover:shadow-md'
-        }`}
+        className={getButtonStyle('completed')}
       >
         <div className="text-xl sm:text-2xl font-bold text-green-500 flex items-center gap-2">
           <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -70,9 +74,7 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
       <Button
         variant="ghost"
         onClick={() => onFilterChange("in_progress")}
-        className={`relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto ${
-          currentFilter === 'in_progress' ? 'ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]' : 'shadow hover:shadow-md'
-        }`}
+        className={getButtonStyle('in_progress')}
       >
         <div className="text-xl sm:text-2xl font-bold text-yellow-500 flex items-center gap-2">
           <Clock className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -84,9 +86,7 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
       <Button
         variant="ghost"
         onClick={() => onFilterChange("not_started")}
-        className={`relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto ${
-          currentFilter === 'not_started' ? 'ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]' : 'shadow hover:shadow-md'
-        }`}
+        className={getButtonStyle('not_started')}
       >
         <div className="text-xl sm:text-2xl font-bold text-red-500 flex items-center gap-2">
           <XCircle className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -97,3 +97,4 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
     </div>
   );
 };
+
