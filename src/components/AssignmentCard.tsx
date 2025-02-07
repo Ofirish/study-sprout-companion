@@ -10,6 +10,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { AssignmentHeader } from "./assignments/AssignmentHeader";
 import { AssignmentStatus } from "./assignments/AssignmentStatus";
 import { AssignmentDueDate } from "./assignments/AssignmentDueDate";
+import { AssignmentAttachments } from "./assignments/AssignmentAttachments";
 
 interface AssignmentCardProps {
   assignment: Assignment;
@@ -88,6 +89,11 @@ export const AssignmentCard = ({
               <span>{studentProfile.first_name} {studentProfile.last_name}</span>
             </div>
           )}
+          
+          <AssignmentAttachments
+            assignmentId={assignment.id}
+            canEdit={canEdit}
+          />
           
           <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
             <AssignmentDueDate dueDate={assignment.due_date} />
