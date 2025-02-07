@@ -35,13 +35,18 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
   const notStarted = filteredAssignments.filter((a) => a.status === "Not Started").length;
 
   const getButtonStyle = (filterValue: "all" | "completed" | "in_progress" | "not_started") => {
-    // Get the current filter from the Index component's state
+    // Get the current filter from the URL
     const searchParams = new URLSearchParams(window.location.search);
     const currentFilter = searchParams.get('filter') || 'all';
     
     return cn(
       "relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto",
-      currentFilter === filterValue && "ring-2 ring-primary ring-offset-2 bg-gray-50"
+      currentFilter === filterValue && [
+        "ring-2 ring-primary ring-offset-2",
+        "bg-primary/5",
+        "shadow-sm",
+        "transform scale-[1.02]"
+      ]
     );
   };
 
