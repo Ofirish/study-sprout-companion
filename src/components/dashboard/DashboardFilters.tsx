@@ -52,49 +52,20 @@ export const DashboardFilters = ({
     }
   };
 
-  const filters = (
-    <div className="flex items-center space-x-2 rtl:space-x-reverse">
-      <Switch
-        id="hide-completed"
-        checked={hideCompleted}
-        onCheckedChange={setHideCompleted}
-      />
-      <Label htmlFor="hide-completed" className="text-sm">
-        {t("hideCompleted")}
-      </Label>
-    </div>
-  );
-
-  const userMenu = hasStudents && (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2">
-          <Users className="h-4 w-4" />
-          <span>
-            {viewMode === "all" && t("viewAll")}
-            {viewMode === "parent" && t("viewParent")}
-            {viewMode === "student" && t("viewStudent")}
-          </span>
-          <ChevronDown className="h-4 w-4 opacity-50" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48 bg-popover">
-        <DropdownMenuItem onClick={() => setViewMode("all")}>
-          {t("viewAll")}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setViewMode("parent")}>
-          {t("viewParent")}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setViewMode("student")}>
-          {t("viewStudent")}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-
   if (showOnlyBottomControls) {
     return (
-      <div className="flex justify-end">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center space-x-2 rtl:space-x-reverse">
+          <Switch
+            id="hide-completed-bottom"
+            checked={hideCompleted}
+            onCheckedChange={setHideCompleted}
+          />
+          <Label htmlFor="hide-completed-bottom" className="text-sm">
+            {t("showCompleted")}
+          </Label>
+        </div>
+
         <Button 
           variant="outline" 
           onClick={handleSignOut} 
@@ -111,8 +82,43 @@ export const DashboardFilters = ({
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
-        {filters}
-        {userMenu}
+        <div className="flex items-center space-x-2 rtl:space-x-reverse">
+          <Switch
+            id="hide-completed"
+            checked={hideCompleted}
+            onCheckedChange={setHideCompleted}
+          />
+          <Label htmlFor="hide-completed" className="text-sm">
+            {t("showCompleted")}
+          </Label>
+        </div>
+
+        {hasStudents && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="gap-2">
+                <Users className="h-4 w-4" />
+                <span>
+                  {viewMode === "all" && t("viewAll")}
+                  {viewMode === "parent" && t("viewParent")}
+                  {viewMode === "student" && t("viewStudent")}
+                </span>
+                <ChevronDown className="h-4 w-4 opacity-50" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48 bg-popover">
+              <DropdownMenuItem onClick={() => setViewMode("all")}>
+                {t("viewAll")}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setViewMode("parent")}>
+                {t("viewParent")}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setViewMode("student")}>
+                {t("viewStudent")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
     </div>
   );

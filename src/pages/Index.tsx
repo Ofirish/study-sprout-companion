@@ -17,20 +17,17 @@ import { useFunMode } from "@/contexts/FunModeContext";
 import { Sparkles } from "@/components/Sparkles";
 import { DashboardActions } from "@/components/dashboard/DashboardActions";
 import { DashboardFilters } from "@/components/dashboard/DashboardFilters";
-import { Button } from "@/components/ui/button";
-import { Archive } from "lucide-react";
-import { Link } from "react-router-dom";
 
 type ViewMode = "all" | "student" | "parent";
 
 const Index = () => {
   const [showForm, setShowForm] = useState(false);
   const [statusFilter, setStatusFilter] = useState<"all" | "completed" | "in_progress" | "not_started">("all");
-  const [hideCompleted, setHideCompleted] = useState(false);
+  const [hideCompleted, setHideCompleted] = useState(true); // Changed to true by default
   const [viewMode, setViewMode] = useState<ViewMode>("all");
   const [hasStudents, setHasStudents] = useState(false);
   const { session } = useAuth();
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
   const { funMode, toggleFunMode } = useFunMode();
   
   useEffect(() => {
@@ -79,14 +76,7 @@ const Index = () => {
     updateAssignmentMutation.mutate({ id, status });
   };
 
-  const handleArchive = (id: string) => {
-    updateAssignmentMutation.mutate({ id, archived: true });
-  };
-
   const filteredAssignments = assignments.filter(assignment => {
-    // Filter out archived assignments from the main view
-    if (assignment.archived) return false;
-
     if (hideCompleted && assignment.status === "Completed") {
       return false;
     }
@@ -98,21 +88,11 @@ const Index = () => {
 
     if (!passesStatusFilter) return false;
 
-    // Updated viewMode filtering logic with strict checking for student/parent assignments
-    switch (viewMode) {
-      case "all":
-        return true;
-      case "parent":
-        // For "My View", strictly show only assignments where:
-        // 1. isStudentAssignment is explicitly false
-        // 2. The assignment belongs to the current user
-        return !assignment.isStudentAssignment && assignment.user_id === session?.user.id;
-      case "student":
-        // For student view, strictly show only student assignments
-        return assignment.isStudentAssignment === true;
-      default:
-        return false;
-    }
+    if (viewMode === "all") return true;
+    if (viewMode === "parent" && assignment.user_id === session?.user.id) return true;
+    if (viewMode === "student" && assignment.user_id !== session?.user.id) return true;
+    
+    return false;
   });
 
   if (isLoading) {
@@ -135,9 +115,8 @@ const Index = () => {
           <DashboardHeader />
 
           <StatsCard 
-            assignments={assignments.filter(a => !a.archived)} 
+            assignments={assignments} 
             onFilterChange={setStatusFilter}
-            viewMode={viewMode}
           />
 
           <div className="mt-8">
@@ -162,32 +141,22 @@ const Index = () => {
             <AssignmentTabs
               assignments={filteredAssignments}
               onStatusChange={handleStatusChange}
-              onArchiveToggle={handleArchive}
-              showArchiveToggle={true}
             />
           </div>
         </div>
 
         <div className="mt-8 border-t pt-4">
-          <div className="flex justify-between items-center">
-            <DashboardFilters
-              statusFilter={statusFilter}
-              setStatusFilter={setStatusFilter}
-              viewMode={viewMode}
-              setViewMode={setViewMode}
-              hideCompleted={hideCompleted}
-              setHideCompleted={setHideCompleted}
-              hasStudents={hasStudents}
-              funMode={funMode}
-              showOnlyBottomControls={true}
-            />
-            <Link to="/archive">
-              <Button variant="outline" size="sm" className="gap-2">
-                <Archive className="h-4 w-4" />
-                {t("archive")}
-              </Button>
-            </Link>
-          </div>
+          <DashboardFilters
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
+            viewMode={viewMode}
+            setViewMode={setViewMode}
+            hideCompleted={hideCompleted}
+            setHideCompleted={setHideCompleted}
+            hasStudents={hasStudents}
+            funMode={funMode}
+            showOnlyBottomControls={true}
+          />
         </div>
       </div>
     </div>

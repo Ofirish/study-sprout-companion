@@ -1,57 +1,55 @@
-
-/**
- * AssignmentCard.tsx
- * Purpose: Displays an individual assignment with its details and actions
- * 
- * References:
- * - Used by: src/components/AssignmentTabs.tsx
- * - Uses:
- *   - src/components/assignments/DeleteButton.tsx
- *   - src/components/assignments/ArchiveButton.tsx
- *   - src/components/assignments/StudentInfo.tsx
- *   - src/components/assignments/AssignmentHeader.tsx
- *   - src/components/assignments/AssignmentStatus.tsx
- *   - src/components/assignments/AssignmentDueDate.tsx
- *   - src/components/assignments/AssignmentAttachments.tsx
- */
 import { Assignment } from "@/types/assignment";
 import { Card } from "@/components/ui/card";
+import { User } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 import { EditAssignmentDialog } from "./EditAssignmentDialog";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "./ui/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { AssignmentHeader } from "./assignments/AssignmentHeader";
 import { AssignmentStatus } from "./assignments/AssignmentStatus";
 import { AssignmentDueDate } from "./assignments/AssignmentDueDate";
-import { AssignmentAttachments } from "./assignments/AssignmentAttachments";
-import { DeleteButton } from "./assignments/DeleteButton";
-import { ArchiveButton } from "./assignments/ArchiveButton";
-import { StudentInfo } from "./assignments/StudentInfo";
-import { useState } from "react";
 
 interface AssignmentCardProps {
   assignment: Assignment;
-  onStatusChange?: (id: string, status: Assignment["status"]) => void;
+  onStatusChange: (id: string, status: Assignment["status"]) => void;
   onUpdate?: (id: string, updates: Partial<Assignment>) => void;
-  onDelete?: (id: string) => void;
-  onArchiveToggle?: () => void;
-  showArchiveToggle?: boolean;
-  isArchived?: boolean;
+}
+
+interface Profile {
+  first_name: string;
+  last_name: string;
 }
 
 export const AssignmentCard = ({
   assignment,
   onStatusChange,
   onUpdate,
-  onDelete,
-  onArchiveToggle,
-  showArchiveToggle = false,
-  isArchived = false,
 }: AssignmentCardProps) => {
   const { t, language } = useLanguage();
   const { session } = useAuth();
   const { toast } = useToast();
+  const [studentProfile, setStudentProfile] = useState<Profile | null>(null);
   const [showEditDialog, setShowEditDialog] = useState(false);
+
+  useEffect(() => {
+    const fetchStudentProfile = async () => {
+      if (!session || assignment.user_id === session.user.id) return;
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("first_name, last_name")
+        .eq("id", assignment.user_id)
+        .single();
+
+      if (!error && data) {
+        setStudentProfile(data);
+      }
+    };
+
+    fetchStudentProfile();
+  }, [assignment.user_id, session]);
 
   const handleEdit = async (updates: Partial<Assignment>) => {
     if (!session || assignment.user_id !== session.user.id) {
@@ -65,12 +63,6 @@ export const AssignmentCard = ({
 
     if (onUpdate) {
       onUpdate(assignment.id, updates);
-    }
-  };
-
-  const handleDelete = () => {
-    if (onDelete) {
-      onDelete(assignment.id);
     }
   };
 
@@ -90,46 +82,19 @@ export const AssignmentCard = ({
             {assignment.description}
           </p>
           
-          <StudentInfo 
-            userId={assignment.user_id}
-            currentUserId={session?.user.id}
-          />
-          
-          <AssignmentAttachments
-            assignmentId={assignment.id}
-            canEdit={canEdit}
-          />
+          {studentProfile && (
+            <div className="mt-2 flex items-center gap-1 text-xs text-gray-500">
+              <User className="h-3 w-3" />
+              <span>{studentProfile.first_name} {studentProfile.last_name}</span>
+            </div>
+          )}
           
           <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-            <div className="flex items-center gap-2">
-              {language === "he" ? (
-                <>
-                  <AssignmentDueDate dueDate={assignment.due_date} />
-                  {canEdit && <DeleteButton onDelete={handleDelete} />}
-                  <ArchiveButton
-                    onArchiveToggle={onArchiveToggle}
-                    showArchiveToggle={showArchiveToggle}
-                    isArchived={isArchived}
-                  />
-                </>
-              ) : (
-                <>
-                  {canEdit && <DeleteButton onDelete={handleDelete} />}
-                  <ArchiveButton
-                    onArchiveToggle={onArchiveToggle}
-                    showArchiveToggle={showArchiveToggle}
-                    isArchived={isArchived}
-                  />
-                  <AssignmentDueDate dueDate={assignment.due_date} />
-                </>
-              )}
-            </div>
-            {onStatusChange && (
-              <AssignmentStatus
-                status={assignment.status}
-                onStatusChange={(status) => onStatusChange(assignment.id, status)}
-              />
-            )}
+            <AssignmentDueDate dueDate={assignment.due_date} />
+            <AssignmentStatus
+              status={assignment.status}
+              onStatusChange={(status) => onStatusChange(assignment.id, status)}
+            />
           </div>
         </div>
       </Card>

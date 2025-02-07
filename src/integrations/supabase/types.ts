@@ -9,50 +9,8 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      assignment_attachments: {
-        Row: {
-          assignment_id: string | null
-          content_type: string | null
-          created_at: string | null
-          file_name: string
-          file_path: string
-          id: string
-          size: number | null
-          updated_at: string | null
-        }
-        Insert: {
-          assignment_id?: string | null
-          content_type?: string | null
-          created_at?: string | null
-          file_name: string
-          file_path: string
-          id?: string
-          size?: number | null
-          updated_at?: string | null
-        }
-        Update: {
-          assignment_id?: string | null
-          content_type?: string | null
-          created_at?: string | null
-          file_name?: string
-          file_path?: string
-          id?: string
-          size?: number | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "assignment_attachments_assignment_id_fkey"
-            columns: ["assignment_id"]
-            isOneToOne: false
-            referencedRelation: "assignments"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       assignments: {
         Row: {
-          archived: boolean | null
           created_at: string | null
           description: string | null
           due_date: string
@@ -65,7 +23,6 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          archived?: boolean | null
           created_at?: string | null
           description?: string | null
           due_date: string
@@ -78,7 +35,6 @@ export type Database = {
           user_id: string
         }
         Update: {
-          archived?: boolean | null
           created_at?: string | null
           description?: string | null
           due_date?: string

@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,7 +10,6 @@ import { LanguageToggle } from "@/components/LanguageToggle";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Settings from "./pages/Settings";
-import Archive from "./pages/Archive";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,7 +28,6 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/settings" element={<Settings />} />
-                <Route path="/archive" element={<Archive />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </AuthProvider>

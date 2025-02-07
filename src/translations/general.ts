@@ -1,138 +1,94 @@
 export const general = {
   error: {
     en: "Error",
-    he: "שגיאה"
+    he: "שגיאה",
   },
   success: {
     en: "Success",
-    he: "הצלחה"
+    he: "הצלחה",
   },
   notAuthorized: {
-    en: "Not authorized",
-    he: "אין הרשאה"
+    en: "You are not authorized to edit this assignment",
+    he: "אין לך הרשאה לערוך משימה זו",
   },
   assignmentUpdated: {
     en: "Assignment updated successfully",
-    he: "המטלה עודכנה בהצלחה"
-  },
-  dashboard: {
-    en: "Dashboard",
-    he: "לוח בקרה"
-  },
-  settings: {
-    en: "Settings",
-    he: "הגדרות"
+    he: "המשימה עודכנה בהצלחה",
   },
   editAssignment: {
     en: "Edit Assignment",
-    he: "ערוך מטלה"
+    he: "ערוך משימה",
   },
   save: {
     en: "Save",
-    he: "שמור"
+    he: "שמור",
   },
-  studentRelationships: {
-    en: "Student Relationships",
-    he: "קשרי תלמידים"
+  dashboard: {
+    en: "Dashboard",
+    he: "לוח בקרה",
   },
-  studentEmail: {
-    en: "Student Email",
-    he: "אימייל תלמיד"
-  },
-  addStudent: {
-    en: "Add Student",
-    he: "הוסף תלמיד"
-  },
-  connectedStudents: {
-    en: "Connected Students",
-    he: "תלמידים מחוברים"
-  },
-  noStudentsYet: {
-    en: "No students connected yet",
-    he: "אין תלמידים מחוברים עדיין"
-  },
-  showCompleted: {
-    en: "Show Completed",
-    he: "הצג משימות שהושלמו"
-  },
-  viewAll: {
-    en: "View All",
-    he: "הצג הכל"
-  },
-  viewParent: {
-    en: "My View",
-    he: "התצוגה שלי"
-  },
-  viewStudent: {
-    en: "Student View",
-    he: "תצוגת תלמיד"
-  },
-  firstName: {
-    en: "First Name",
-    he: "שם פרטי"
-  },
-  lastName: {
-    en: "Last Name",
-    he: "שם משפחה"
-  },
-  role: {
-    en: "Role",
-    he: "תפקיד"
-  },
-  saveChanges: {
-    en: "Save Changes",
-    he: "שמור שינויים"
+  settings: {
+    en: "Settings",
+    he: "הגדרות",
   },
   home: {
     en: "Home",
-    he: "דף הבית"
+    he: "בית",
   },
   profileSettings: {
     en: "Profile Settings",
-    he: "הגדרות פרופיל"
+    he: "הגדרות פרופיל",
   },
-  addAttachment: {
-    en: "Add Attachment",
-    he: "הוסף קובץ מצורף"
+  firstName: {
+    en: "First Name",
+    he: "שם פרטי",
   },
-  uploading: {
-    en: "Uploading...",
-    he: "מעלה..."
+  lastName: {
+    en: "Last Name",
+    he: "שם משפחה",
   },
-  fileUploaded: {
-    en: "File uploaded successfully",
-    he: "הקובץ הועלה בהצלחה"
+  role: {
+    en: "Role",
+    he: "תפקיד",
   },
-  uploadError: {
-    en: "Error uploading file",
-    he: "שגיאה בהעלאת הקובץ"
+  saveChanges: {
+    en: "Save Changes",
+    he: "שמור שינויים",
   },
-  fileDeleted: {
-    en: "File deleted successfully",
-    he: "הקובץ נמחק בהצלחה"
+  studentEmail: {
+    en: "Student Email",
+    he: "אימייל תלמיד",
   },
-  deleteError: {
-    en: "Error deleting file",
-    he: "שגיאה במחיקת הקובץ"
+  addStudent: {
+    en: "Add Student",
+    he: "הוסף תלמיד",
   },
-  archive: {
-    en: "Archive",
-    he: "ארכיון"
+  studentRelationships: {
+    en: "Student Relationships",
+    he: "קשרי תלמידים",
   },
-  archivedAssignments: {
-    en: "Archived Assignments",
-    he: "מטלות בארכיון"
+  connectedStudents: {
+    en: "Connected Students",
+    he: "תלמידים מחוברים",
   },
-  noArchivedAssignments: {
-    en: "No archived assignments",
-    he: "אין מטלות בארכיון"
+  noStudentsYet: {
+    en: "No students connected yet",
+    he: "אין תלמידים מחוברים עדיין",
   },
-  unarchive: {
-    en: "Move to Active",
-    he: "העבר לפעילים"
+  viewAll: {
+    en: "View All",
+    he: "הצג הכל",
   },
-  moveToArchive: {
-    en: "Move to Archive",
-    he: "העבר לארכיון"
-  }
+  viewParent: {
+    en: "Parent View",
+    he: "תצוגת הורה",
+  },
+  viewStudent: {
+    en: "Student View",
+    he: "תצוגת תלמיד",
+  },
+  showCompleted: {
+    en: "Show Completed",
+    he: "הצג משימות שהושלמו",
+  },
 } as const;
