@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Users, ChevronDown, LogOut } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -23,6 +22,7 @@ interface DashboardFiltersProps {
   hasStudents: boolean;
   funMode: boolean;
   showOnlyBottomControls?: boolean;
+  onViewModeChange: (mode: "all" | "student" | "parent") => void;
 }
 
 export const DashboardFilters = ({
@@ -35,6 +35,7 @@ export const DashboardFilters = ({
   hasStudents,
   funMode,
   showOnlyBottomControls = false,
+  onViewModeChange,
 }: DashboardFiltersProps) => {
   const { t } = useLanguage();
   const { signOut } = useAuth();
@@ -50,6 +51,11 @@ export const DashboardFilters = ({
         variant: "destructive",
       });
     }
+  };
+
+  const handleViewModeChange = (mode: "all" | "student" | "parent") => {
+    setViewMode(mode);
+    onViewModeChange(mode);
   };
 
   const filters = (
@@ -79,13 +85,13 @@ export const DashboardFilters = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48 bg-popover">
-        <DropdownMenuItem onClick={() => setViewMode("all")}>
+        <DropdownMenuItem onClick={() => handleViewModeChange("all")}>
           {t("viewAll")}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setViewMode("parent")}>
+        <DropdownMenuItem onClick={() => handleViewModeChange("parent")}>
           {t("viewParent")}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setViewMode("student")}>
+        <DropdownMenuItem onClick={() => handleViewModeChange("student")}></DropdownMenuItem>
           {t("viewStudent")}
         </DropdownMenuItem>
       </DropdownMenuContent>
