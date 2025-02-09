@@ -16,8 +16,8 @@ export const general = {
     he: "המטלה עודכנה בהצלחה"
   },
   dashboard: {
-    en: "Dashboard",
-    he: "לוח בקרה"
+    en: "All Your Homework Are Belong to Us",
+    he: "כל השיעורים שלך שייכים לנו"
   },
   settings: {
     en: "Settings",
