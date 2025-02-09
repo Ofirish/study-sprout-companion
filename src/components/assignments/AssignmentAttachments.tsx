@@ -117,6 +117,12 @@ export const AssignmentAttachments = ({ assignmentId, canEdit = false }: Assignm
     }
   };
 
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent form submission
+    e.stopPropagation(); // Stop event propagation
+    document.getElementById('file-upload')?.click();
+  };
+
   // Fetch attachments on component mount and when assignmentId changes
   useEffect(() => {
     fetchAttachments();
@@ -130,7 +136,7 @@ export const AssignmentAttachments = ({ assignmentId, canEdit = false }: Assignm
             variant="outline"
             className="w-full"
             disabled={isUploading}
-            onClick={() => document.getElementById('file-upload')?.click()}
+            onClick={handleButtonClick}
           >
             <Upload className="w-4 h-4 mr-2" />
             {isUploading ? t("uploading") : t("addAttachment")}
@@ -140,6 +146,7 @@ export const AssignmentAttachments = ({ assignmentId, canEdit = false }: Assignm
             type="file"
             className="hidden"
             onChange={handleFileUpload}
+            onClick={(e) => e.stopPropagation()} // Prevent click from bubbling up
           />
         </div>
       )}
@@ -166,7 +173,11 @@ export const AssignmentAttachments = ({ assignmentId, canEdit = false }: Assignm
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => handleDelete(attachment.id, attachment.file_path)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleDelete(attachment.id, attachment.file_path);
+                  }}
                 >
                   <Trash2 className="w-4 h-4 text-red-500" />
                 </Button>
