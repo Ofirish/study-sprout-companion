@@ -1,4 +1,3 @@
-
 import { Subject } from "@/types/assignment";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -38,7 +37,14 @@ export const FormFields = ({
     if (subject === "Other" && customSubject) {
       onSubjectChange(customSubject);
     }
-  }, [customSubject, subject, onSubjectChange]);
+  }, [customSubject, onSubjectChange]);
+
+  // Set initial custom subject if it's not one of the default subjects
+  useEffect(() => {
+    if (subject !== "Math" && subject !== "Science" && subject !== "English" && subject !== "History" && subject !== "Other") {
+      setCustomSubject(subject);
+    }
+  }, []);
 
   return (
     <>
@@ -67,12 +73,18 @@ export const FormFields = ({
           <Label htmlFor="subject">{t("formSubject")}</Label>
           <select
             id="subject"
-            value={subject}
+            value={subject === customSubject ? "Other" : subject}
             onChange={(e) => {
               const value = e.target.value as Subject;
-              onSubjectChange(value);
               if (value !== "Other") {
+                onSubjectChange(value);
                 setCustomSubject("");
+              } else {
+                // When "Other" is selected, keep the current custom subject if it exists
+                if (!customSubject) {
+                  setCustomSubject("");
+                  onSubjectChange("Other");
+                }
               }
             }}
             className="w-full rounded-md border border-input bg-background px-3 py-2"
@@ -99,12 +111,20 @@ export const FormFields = ({
         </div>
       </div>
 
-      {subject === "Other" && (
+      {(subject === "Other" || subject === customSubject) && (
         <div className="space-y-2">
           <Label>{t("formCustomSubject")}</Label>
           <Input
             value={customSubject}
-            onChange={(e) => setCustomSubject(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              setCustomSubject(value);
+              if (value) {
+                onSubjectChange(value);
+              } else {
+                onSubjectChange("Other");
+              }
+            }}
             placeholder={t("formCustomSubject")}
             required
           />
