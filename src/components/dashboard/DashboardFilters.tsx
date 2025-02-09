@@ -60,6 +60,11 @@ export const DashboardFilters = ({
   const handleViewModeChange = (mode: "all" | "student" | "parent") => {
     setViewMode(mode);
     onViewModeChange(mode);
+
+    // Update the URL search params to reflect the current filter
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('filter', mode);
+    window.history.pushState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
   };
 
   const filters = (

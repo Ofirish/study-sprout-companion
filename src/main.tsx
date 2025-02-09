@@ -2,4 +2,7 @@ import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 
-createRoot(document.getElementById("root")!).render(<App />);
+const urlParams = new URLSearchParams(window.location.search);
+const initialFilter = urlParams.get('filter') || '';
+
+createRoot(document.getElementById("root")!).render(<App initialFilter={initialFilter} />);
