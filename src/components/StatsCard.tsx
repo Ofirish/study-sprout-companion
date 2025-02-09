@@ -1,3 +1,4 @@
+
 /**
  * StatsCard.tsx
  * Purpose: Displays assignment statistics and filtering options.
@@ -7,7 +8,6 @@ import { Assignment } from "@/types/assignment";
 import { CheckCircle, Clock, XCircle, ListFilter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useEffect } from "react";
 
 interface StatsCardProps {
   assignments: Assignment[];
@@ -24,20 +24,6 @@ export const StatsCard = ({ assignments, onFilterChange }: StatsCardProps) => {
   // Get the current filter from the URL search params
   const urlParams = new URLSearchParams(window.location.search);
   const currentFilter = urlParams.get('filter') || 'all';
-
-  useEffect(() => {
-    // Update the component when the URL search params change
-    const handleUrlChange = () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const currentFilter = urlParams.get('filter') || 'all';
-      onFilterChange(currentFilter as "all" | "completed" | "in_progress" | "not_started");
-    };
-
-    window.addEventListener('popstate', handleUrlChange);
-    return () => {
-      window.removeEventListener('popstate', handleUrlChange);
-    };
-  }, [onFilterChange]);
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 sm:mt-8" dir={language === "he" ? "rtl" : "ltr"}>

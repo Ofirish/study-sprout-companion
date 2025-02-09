@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Users, ChevronDown, LogOut } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -22,7 +23,6 @@ interface DashboardFiltersProps {
   hasStudents: boolean;
   funMode: boolean;
   showOnlyBottomControls?: boolean;
-  onViewModeChange: (mode: "all" | "student" | "parent") => void;
 }
 
 export const DashboardFilters = ({
@@ -35,36 +35,21 @@ export const DashboardFilters = ({
   hasStudents,
   funMode,
   showOnlyBottomControls = false,
-  onViewModeChange,
 }: DashboardFiltersProps) => {
   const { t } = useLanguage();
-  const { signOut, refreshToken } = useAuth();
+  const { signOut } = useAuth();
   const { toast } = useToast();
 
   const handleSignOut = async () => {
     try {
       await signOut();
     } catch (error: any) {
-      if (error.message.includes("refresh_token_not_found")) {
-        await refreshToken();
-      } else {
-        toast({
-          title: "Error",
-          description: error.message || "An unexpected error occurred",
-          variant: "destructive",
-        });
-      }
+      toast({
+        title: "Error",
+        description: error.message || "An unexpected error occurred",
+        variant: "destructive",
+      });
     }
-  };
-
-  const handleViewModeChange = (mode: "all" | "student" | "parent") => {
-    setViewMode(mode);
-    onViewModeChange(mode);
-
-    // Update the URL search params to reflect the current filter
-    const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set('filter', mode);
-    window.history.pushState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
   };
 
   const filters = (
@@ -94,13 +79,13 @@ export const DashboardFilters = ({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48 bg-popover">
-        <DropdownMenuItem onClick={() => handleViewModeChange("all")}>
+        <DropdownMenuItem onClick={() => setViewMode("all")}>
           {t("viewAll")}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleViewModeChange("parent")}>
+        <DropdownMenuItem onClick={() => setViewMode("parent")}>
           {t("viewParent")}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleViewModeChange("student")}>
+        <DropdownMenuItem onClick={() => setViewMode("student")}>
           {t("viewStudent")}
         </DropdownMenuItem>
       </DropdownMenuContent>

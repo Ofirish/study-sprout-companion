@@ -1,3 +1,4 @@
+
 /**
  * Index.tsx
  * Main dashboard page displaying assignments and filters
@@ -133,7 +134,6 @@ const Index = () => {
               setHideCompleted={setHideCompleted}
               hasStudents={hasStudents}
               funMode={funMode}
-              onViewModeChange={setViewMode}
             />
 
             {showForm && <AssignmentForm onSubmit={handleAddAssignment} />}
@@ -156,7 +156,6 @@ const Index = () => {
             hasStudents={hasStudents}
             funMode={funMode}
             showOnlyBottomControls={true}
-            onViewModeChange={setViewMode}
           />
         </div>
       </div>
