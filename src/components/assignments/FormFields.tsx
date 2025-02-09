@@ -2,6 +2,7 @@ import { Subject } from "@/types/assignment";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useState, useEffect } from "react";
 
 interface FormFieldsProps {
   title: string;
@@ -29,6 +30,14 @@ export const FormFields = ({
   onTypeChange,
 }: FormFieldsProps) => {
   const { t, language } = useLanguage();
+  const [customSubject, setCustomSubject] = useState("");
+
+  // Update subject when custom subject changes
+  useEffect(() => {
+    if (subject === "Other" && customSubject) {
+      onSubjectChange(customSubject as Subject);
+    }
+  }, [customSubject, subject, onSubjectChange]);
 
   return (
     <>
@@ -58,7 +67,13 @@ export const FormFields = ({
           <select
             id="subject"
             value={subject}
-            onChange={(e) => onSubjectChange(e.target.value as Subject)}
+            onChange={(e) => {
+              const value = e.target.value as Subject;
+              onSubjectChange(value);
+              if (value !== "Other") {
+                setCustomSubject("");
+              }
+            }}
             className="w-full rounded-md border border-input bg-background px-3 py-2"
           >
             <option value="Math">{t("Math")}</option>
@@ -82,6 +97,19 @@ export const FormFields = ({
           </select>
         </div>
       </div>
+
+      {subject === "Other" && (
+        <div className="space-y-2">
+          <Label htmlFor="customSubject">{t("formCustomSubject")}</Label>
+          <Input
+            id="customSubject"
+            value={customSubject}
+            onChange={(e) => setCustomSubject(e.target.value)}
+            placeholder={t("formCustomSubject")}
+            required
+          />
+        </div>
+      )}
 
       <div className="space-y-2">
         <Label htmlFor="dueDate">{t("formDueDate")}</Label>
