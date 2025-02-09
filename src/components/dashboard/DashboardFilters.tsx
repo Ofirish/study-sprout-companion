@@ -91,7 +91,7 @@ export const DashboardFilters = ({
         <DropdownMenuItem onClick={() => handleViewModeChange("parent")}>
           {t("viewParent")}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleViewModeChange("student")}></DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleViewModeChange("student")}>
           {t("viewStudent")}
         </DropdownMenuItem>
       </DropdownMenuContent>
