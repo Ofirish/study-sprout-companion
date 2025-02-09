@@ -1,64 +1,56 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { Session } from "@supabase/supabase-js";
-import { useNavigate } from "react-router-dom";
+import { createContext, useContext, useState, useEffect } from "react";
+import { supabase } from "@/utils/supabaseClient";
+import { useToast } from "@/components/ui/use-toast";
 
-type AuthContextType = {
-  session: Session | null;
-  isLoading: boolean;
-  signOut: () => Promise<void>;
-};
+const AuthContext = createContext(null);
 
-const AuthContext = createContext<AuthContextType>({ 
-  session: null, 
-  isLoading: true,
-  signOut: async () => {},
-});
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const { toast } = useToast();
 
-export const useAuth = () => useContext(AuthContext);
+  useEffect(() => {
+    const session = supabase.auth.session();
+    setUser(session?.user ?? null);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [session, setSession] = useState<Session | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    return () => {
+      authListener?.unsubscribe();
+    };
+  }, []);
 
   const signOut = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      navigate("/auth");
-    } catch (error: any) {
-      console.error("Error signing out:", error.message);
-      throw error;
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
     }
   };
 
-  useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setIsLoading(false);
-      if (!session) {
-        navigate("/auth");
-      }
-    });
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      if (!session) {
-        navigate("/auth");
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
+  const refreshToken = async () => {
+    const { error } = await supabase.auth.refreshSession();
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to refresh token. Please sign in again.",
+        variant: "destructive",
+      });
+      await signOut();
+    }
+  };
 
   return (
-    <AuthContext.Provider value={{ session, isLoading, signOut }}>
+    <AuthContext.Provider value={{ user, signOut, refreshToken }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
+export const useAuth = () => useContext(AuthContext);

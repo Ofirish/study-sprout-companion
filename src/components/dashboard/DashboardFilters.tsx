@@ -38,18 +38,22 @@ export const DashboardFilters = ({
   onViewModeChange,
 }: DashboardFiltersProps) => {
   const { t } = useLanguage();
-  const { signOut } = useAuth();
+  const { signOut, refreshToken } = useAuth();
   const { toast } = useToast();
 
   const handleSignOut = async () => {
     try {
       await signOut();
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "An unexpected error occurred",
-        variant: "destructive",
-      });
+      if (error.message.includes("refresh_token_not_found")) {
+        await refreshToken();
+      } else {
+        toast({
+          title: "Error",
+          description: error.message || "An unexpected error occurred",
+          variant: "destructive",
+        });
+      }
     }
   };
 
