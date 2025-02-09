@@ -1,3 +1,4 @@
+
 import { Subject } from "@/types/assignment";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -17,14 +18,17 @@ const subjectColors = {
 export const SubjectBadge = ({ subject }: SubjectBadgeProps) => {
   const { t } = useLanguage();
   
+  // Check if the subject is one of the predefined ones
+  const isDefaultSubject = subject in subjectColors;
+  
   return (
     <span
       className={cn(
         "px-2 py-1 rounded-full text-sm font-medium",
-        subjectColors[subject]
+        isDefaultSubject ? subjectColors[subject as keyof typeof subjectColors] : "bg-gray-100 text-gray-800"
       )}
     >
-      {t(subject)}
+      {isDefaultSubject ? t(subject) : subject}
     </span>
   );
 };

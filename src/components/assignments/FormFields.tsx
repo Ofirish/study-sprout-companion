@@ -1,3 +1,4 @@
+
 import { Subject } from "@/types/assignment";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,7 +36,7 @@ export const FormFields = ({
   // Update subject when custom subject changes
   useEffect(() => {
     if (subject === "Other" && customSubject) {
-      onSubjectChange(customSubject as Subject);
+      onSubjectChange(customSubject);
     }
   }, [customSubject, subject, onSubjectChange]);
 
@@ -100,9 +101,8 @@ export const FormFields = ({
 
       {subject === "Other" && (
         <div className="space-y-2">
-          <Label htmlFor="customSubject">{t("formCustomSubject")}</Label>
+          <Label>{t("formCustomSubject")}</Label>
           <Input
-            id="customSubject"
             value={customSubject}
             onChange={(e) => setCustomSubject(e.target.value)}
             placeholder={t("formCustomSubject")}

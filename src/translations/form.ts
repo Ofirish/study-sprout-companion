@@ -1,3 +1,4 @@
+
 /**
  * form.ts
  * Purpose: Contains translations for form fields and messages
@@ -42,5 +43,9 @@ export const formTranslations = {
   formSuccess: {
     en: "Assignment added successfully!",
     he: "המטלה נוספה בהצלחה!",
+  },
+  formCustomSubject: {
+    en: "Custom Subject",
+    he: "מקצוע מותאם אישית",
   },
 } as const;
