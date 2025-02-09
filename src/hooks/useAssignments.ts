@@ -47,8 +47,20 @@ export const useAssignments = () => {
           studentAssignments = studentsData || [];
         }
 
-        // Combine and return all assignments
-        return [...(userAssignments || []), ...studentAssignments] as Assignment[];
+        // Combine assignments and remove duplicates based on id
+        const allAssignments = [...(userAssignments || []), ...studentAssignments];
+        const uniqueAssignments = allAssignments.reduce((acc: Assignment[], current) => {
+          const exists = acc.find(item => item.id === current.id);
+          if (!exists) {
+            acc.push(current);
+          }
+          return acc;
+        }, []);
+
+        // Sort by created_at in descending order
+        return uniqueAssignments.sort((a, b) => {
+          return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
+        }) as Assignment[];
       } catch (error: any) {
         console.error("Error fetching assignments:", error);
         toast({

@@ -52,6 +52,7 @@ export type Database = {
       }
       assignments: {
         Row: {
+          archived: boolean | null
           created_at: string | null
           description: string | null
           due_date: string
@@ -64,6 +65,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          archived?: boolean | null
           created_at?: string | null
           description?: string | null
           due_date: string
@@ -76,6 +78,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          archived?: boolean | null
           created_at?: string | null
           description?: string | null
           due_date?: string
