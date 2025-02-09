@@ -2,6 +2,7 @@
 import { Subject } from "@/types/assignment";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { hasTranslation } from "@/translations";
 
 interface SubjectBadgeProps {
   subject: Subject;
@@ -28,7 +29,7 @@ export const SubjectBadge = ({ subject }: SubjectBadgeProps) => {
         isDefaultSubject ? subjectColors[subject as keyof typeof subjectColors] : "bg-gray-100 text-gray-800"
       )}
     >
-      {isDefaultSubject ? t(subject) : subject}
+      {isDefaultSubject && hasTranslation(subject) ? t(subject) : subject}
     </span>
   );
 };
