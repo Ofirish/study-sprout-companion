@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Upload, File, Trash2 } from "lucide-react";
@@ -70,6 +71,8 @@ export const AssignmentAttachments = ({ assignmentId, canEdit = false }: Assignm
   };
 
   const fetchAttachments = async () => {
+    if (!assignmentId) return;
+    
     const { data, error } = await supabase
       .from('assignment_attachments')
       .select('*')
@@ -114,7 +117,7 @@ export const AssignmentAttachments = ({ assignmentId, canEdit = false }: Assignm
     }
   };
 
-  // Fetch attachments on component mount
+  // Fetch attachments on component mount and when assignmentId changes
   useEffect(() => {
     fetchAttachments();
   }, [assignmentId]);
