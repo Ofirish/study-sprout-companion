@@ -17,18 +17,23 @@ import { useFunMode } from "@/contexts/FunModeContext";
 import { Sparkles } from "@/components/Sparkles";
 import { DashboardActions } from "@/components/dashboard/DashboardActions";
 import { DashboardFilters } from "@/components/dashboard/DashboardFilters";
+import { AssignmentAttachments } from "@/components/assignments/AssignmentAttachments";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 type ViewMode = "all" | "student" | "parent";
 
 const Index = () => {
   const [showForm, setShowForm] = useState(false);
+  const [showAttachmentDialog, setShowAttachmentDialog] = useState(false);
+  const [newAssignmentId, setNewAssignmentId] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<"all" | "completed" | "in_progress" | "not_started">("all");
-  const [hideCompleted, setHideCompleted] = useState(true); // Changed to true by default
+  const [hideCompleted, setHideCompleted] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>("all");
   const [hasStudents, setHasStudents] = useState(false);
   const { session } = useAuth();
   const { language } = useLanguage();
   const { funMode, toggleFunMode } = useFunMode();
+  const { t } = useLanguage();
   
   useEffect(() => {
     const checkForStudents = async () => {
@@ -65,11 +70,19 @@ const Index = () => {
     updateAssignmentMutation 
   } = useAssignments();
 
-  const handleAddAssignment = (
+  const handleAddAssignment = async (
     newAssignment: Omit<Assignment, "id" | "status">
   ) => {
-    addAssignmentMutation.mutate(newAssignment);
-    setShowForm(false);
+    try {
+      const result = await addAssignmentMutation.mutateAsync(newAssignment);
+      if (result?.id) {
+        setNewAssignmentId(result.id);
+        setShowAttachmentDialog(true);
+      }
+      setShowForm(false);
+    } catch (error) {
+      console.error("Error adding assignment:", error);
+    }
   };
 
   const handleStatusChange = (id: string, status: Assignment["status"]) => {
@@ -160,8 +173,29 @@ const Index = () => {
           />
         </div>
       </div>
+
+      <Dialog open={showAttachmentDialog} onOpenChange={setShowAttachmentDialog}>
+        <DialogContent>
+          <div className="p-4">
+            <h2 className="text-lg font-semibold mb-4">{t("addAttachments")}</h2>
+            {newAssignmentId && (
+              <AssignmentAttachments
+                assignmentId={newAssignmentId}
+                canEdit={true}
+              />
+            )}
+            <Button
+              className="w-full mt-4"
+              onClick={() => setShowAttachmentDialog(false)}
+            >
+              {t("done")}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
 
 export default Index;
+

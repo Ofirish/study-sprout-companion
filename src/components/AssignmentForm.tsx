@@ -8,7 +8,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/AuthProvider";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { FormFields } from "./assignments/FormFields";
-import { AssignmentAttachments } from "./assignments/AssignmentAttachments";
 
 interface AssignmentFormProps {
   onSubmit: (assignment: Omit<Assignment, "id" | "status">) => void;
@@ -18,7 +17,6 @@ export const AssignmentForm = ({ onSubmit }: AssignmentFormProps) => {
   const { session } = useAuth();
   const { toast } = useToast();
   const { t, language } = useLanguage();
-  const [tempId] = useState(() => crypto.randomUUID());
   
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -75,8 +73,6 @@ export const AssignmentForm = ({ onSubmit }: AssignmentFormProps) => {
           onTypeChange={setType}
         />
 
-        <AssignmentAttachments assignmentId={tempId} canEdit={true} />
-
         <Button type="submit" className="w-full">
           <PlusCircle className="mr-2 h-4 w-4" />
           {t("formSubmit")}
@@ -85,3 +81,4 @@ export const AssignmentForm = ({ onSubmit }: AssignmentFormProps) => {
     </Card>
   );
 };
+
