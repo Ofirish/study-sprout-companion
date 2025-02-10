@@ -155,5 +155,10 @@ export const general = {
   subjectDeleted: {
     en: "Subject deleted successfully",
     he: "המקצוע נמחק בהצלחה"
+  },
+  attachments: {
+    en: "Attachments",
+    he: "קבצים מצורפים"
   }
 } as const;
+
