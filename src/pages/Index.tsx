@@ -117,6 +117,7 @@ const Index = () => {
           <StatsCard 
             assignments={assignments} 
             onFilterChange={setStatusFilter}
+            viewMode={viewMode}
           />
 
           <div className="mt-8">
