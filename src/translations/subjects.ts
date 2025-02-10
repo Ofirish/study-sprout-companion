@@ -1,3 +1,4 @@
+
 /**
  * subjects.ts
  * Purpose: Contains translations for subject names
@@ -18,9 +19,5 @@ export const subjectTranslations = {
   History: {
     en: "History",
     he: "היסטוריה",
-  },
-  Other: {
-    en: "Other",
-    he: "אחר",
   },
 } as const;

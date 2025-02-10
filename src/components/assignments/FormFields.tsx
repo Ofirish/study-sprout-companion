@@ -38,7 +38,6 @@ export const FormFields = ({
   onTypeChange,
 }: FormFieldsProps) => {
   const { t, language } = useLanguage();
-  const [customSubject, setCustomSubject] = useState("");
   const [customSubjects, setCustomSubjects] = useState<CustomSubject[]>([]);
 
   useEffect(() => {
@@ -56,30 +55,8 @@ export const FormFields = ({
     }
   };
 
-  useEffect(() => {
-    if (subject === "Other" && customSubject) {
-      onSubjectChange(customSubject);
-    }
-  }, [customSubject, onSubjectChange]);
-
-  useEffect(() => {
-    if (subject !== "Math" && subject !== "Science" && subject !== "English" && subject !== "History" && subject !== "Other") {
-      setCustomSubject(subject);
-    }
-  }, []);
-
   const isDefaultSubject = (subj: string) => {
-    return ["Math", "Science", "English", "History", "Other"].includes(subj);
-  };
-
-  const getSubjectDisplay = (subj: string) => {
-    const customSubject = customSubjects.find(
-      cs => cs.name_en === subj || cs.name_he === subj
-    );
-    if (customSubject) {
-      return language === "he" ? customSubject.name_he : customSubject.name_en;
-    }
-    return subj;
+    return ["Math", "Science", "English", "History"].includes(subj);
   };
 
   return (
@@ -109,16 +86,10 @@ export const FormFields = ({
           <Label htmlFor="subject">{t("formSubject")}</Label>
           <select
             id="subject"
-            value={isDefaultSubject(subject) ? subject : "Other"}
+            value={isDefaultSubject(subject) ? subject : "Math"}
             onChange={(e) => {
               const value = e.target.value;
-              if (value !== "Other") {
-                onSubjectChange(value as Subject);
-                setCustomSubject("");
-              } else {
-                setCustomSubject("");
-                onSubjectChange("Other");
-              }
+              onSubjectChange(value as Subject);
             }}
             className="w-full rounded-md border border-input bg-background px-3 py-2"
           >
@@ -131,7 +102,6 @@ export const FormFields = ({
                 {language === "he" ? cs.name_he : cs.name_en}
               </option>
             ))}
-            <option value="Other">{t("Other")}</option>
           </select>
         </div>
 
@@ -149,26 +119,6 @@ export const FormFields = ({
         </div>
       </div>
 
-      {subject === "Other" && (
-        <div className="space-y-2">
-          <Label>{t("formCustomSubject")}</Label>
-          <Input
-            value={customSubject}
-            onChange={(e) => {
-              const value = e.target.value;
-              setCustomSubject(value);
-              if (value) {
-                onSubjectChange(value);
-              } else {
-                onSubjectChange("Other");
-              }
-            }}
-            placeholder={t("formCustomSubject")}
-            required
-          />
-        </div>
-      )}
-
       <div className="space-y-2">
         <Label htmlFor="dueDate">{t("formDueDate")}</Label>
         <Input
@@ -181,3 +131,4 @@ export const FormFields = ({
     </>
   );
 };
+
