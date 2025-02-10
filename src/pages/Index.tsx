@@ -132,6 +132,7 @@ const Index = () => {
             assignments={assignments} 
             onFilterChange={setStatusFilter}
             viewMode={viewMode}
+            statusFilter={statusFilter}
           />
 
           <div className="mt-8">

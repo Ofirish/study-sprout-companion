@@ -14,9 +14,10 @@ interface StatsCardProps {
   assignments: Assignment[];
   onFilterChange: (filter: "all" | "completed" | "in_progress" | "not_started") => void;
   viewMode: "all" | "student" | "parent";
+  statusFilter: "all" | "completed" | "in_progress" | "not_started";
 }
 
-export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardProps) => {
+export const StatsCard = ({ assignments, onFilterChange, viewMode, statusFilter }: StatsCardProps) => {
   const { t, language } = useLanguage();
   const { session } = useAuth();
 
@@ -39,7 +40,7 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
         variant="ghost"
         onClick={() => onFilterChange("all")}
         className={`relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto ${
-          viewMode === 'all' ? 'ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]' : 'shadow hover:shadow-md'
+          statusFilter === 'all' ? 'ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]' : 'shadow hover:shadow-md'
         }`}
       >
         <div className="text-xl sm:text-2xl font-bold text-blue-500 flex items-center gap-2">
@@ -53,7 +54,7 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
         variant="ghost"
         onClick={() => onFilterChange("completed")}
         className={`relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto ${
-          viewMode === 'completed' ? 'ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]' : 'shadow hover:shadow-md'
+          statusFilter === 'completed' ? 'ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]' : 'shadow hover:shadow-md'
         }`}
       >
         <div className="text-xl sm:text-2xl font-bold text-green-500 flex items-center gap-2">
@@ -67,7 +68,7 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
         variant="ghost"
         onClick={() => onFilterChange("in_progress")}
         className={`relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto ${
-          viewMode === 'in_progress' ? 'ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]' : 'shadow hover:shadow-md'
+          statusFilter === 'in_progress' ? 'ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]' : 'shadow hover:shadow-md'
         }`}
       >
         <div className="text-xl sm:text-2xl font-bold text-yellow-500 flex items-center gap-2">
@@ -81,7 +82,7 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode }: StatsCardPr
         variant="ghost"
         onClick={() => onFilterChange("not_started")}
         className={`relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto ${
-          viewMode === 'not_started' ? 'ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]' : 'shadow hover:shadow-md'
+          statusFilter === 'not_started' ? 'ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]' : 'shadow hover:shadow-md'
         }`}
       >
         <div className="text-xl sm:text-2xl font-bold text-red-500 flex items-center gap-2">
