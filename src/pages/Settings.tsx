@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
@@ -7,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { StudentRelationships } from "@/components/student/StudentRelationships";
 import { ProfileForm } from "@/components/settings/ProfileForm";
+import { SubjectManagement } from "@/components/settings/SubjectManagement";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Home } from "lucide-react";
@@ -111,6 +113,7 @@ const Settings = () => {
 
       {role === "parent" && (
         <>
+          <SubjectManagement />
           <Separator className="my-6" />
           <StudentRelationships />
         </>

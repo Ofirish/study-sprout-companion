@@ -1,3 +1,4 @@
+
 export const general = {
   error: {
     en: "Error",
@@ -114,5 +115,45 @@ export const general = {
   deleteError: {
     en: "Error deleting file",
     he: "שגיאה במחיקת הקובץ"
+  },
+  manageSubjects: {
+    en: "Manage Subjects",
+    he: "ניהול מקצועות"
+  },
+  subjectNameEn: {
+    en: "Subject Name (English)",
+    he: "שם המקצוע (אנגלית)"
+  },
+  subjectNameHe: {
+    en: "Subject Name (Hebrew)",
+    he: "שם המקצוע (עברית)"
+  },
+  addSubject: {
+    en: "Add Subject",
+    he: "הוסף מקצוע"
+  },
+  edit: {
+    en: "Edit",
+    he: "ערוך"
+  },
+  delete: {
+    en: "Delete",
+    he: "מחק"
+  },
+  subjectsRequiredFields: {
+    en: "Both English and Hebrew names are required",
+    he: "נדרש למלא את שם המקצוע באנגלית ובעברית"
+  },
+  subjectAdded: {
+    en: "Subject added successfully",
+    he: "המקצוע נוסף בהצלחה"
+  },
+  subjectUpdated: {
+    en: "Subject updated successfully",
+    he: "המקצוע עודכן בהצלחה"
+  },
+  subjectDeleted: {
+    en: "Subject deleted successfully",
+    he: "המקצוע נמחק בהצלחה"
   }
-};
+} as const;

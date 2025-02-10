@@ -1,8 +1,10 @@
+
 import { Subject } from "@/types/assignment";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface FormFieldsProps {
   title: string;
@@ -15,6 +17,12 @@ interface FormFieldsProps {
   onSubjectChange: (value: Subject) => void;
   onDueDateChange: (value: string) => void;
   onTypeChange: (value: "homework" | "test") => void;
+}
+
+interface CustomSubject {
+  id: string;
+  name_en: string;
+  name_he: string;
 }
 
 export const FormFields = ({
@@ -31,20 +39,48 @@ export const FormFields = ({
 }: FormFieldsProps) => {
   const { t, language } = useLanguage();
   const [customSubject, setCustomSubject] = useState("");
+  const [customSubjects, setCustomSubjects] = useState<CustomSubject[]>([]);
 
-  // Update subject when custom subject changes
+  useEffect(() => {
+    fetchCustomSubjects();
+  }, []);
+
+  const fetchCustomSubjects = async () => {
+    const { data } = await supabase
+      .from("custom_subjects")
+      .select("*")
+      .order("created_at", { ascending: true });
+
+    if (data) {
+      setCustomSubjects(data);
+    }
+  };
+
   useEffect(() => {
     if (subject === "Other" && customSubject) {
       onSubjectChange(customSubject);
     }
   }, [customSubject, onSubjectChange]);
 
-  // Set initial custom subject if it's not one of the default subjects
   useEffect(() => {
     if (subject !== "Math" && subject !== "Science" && subject !== "English" && subject !== "History" && subject !== "Other") {
       setCustomSubject(subject);
     }
   }, []);
+
+  const isDefaultSubject = (subj: string) => {
+    return ["Math", "Science", "English", "History", "Other"].includes(subj);
+  };
+
+  const getSubjectDisplay = (subj: string) => {
+    const customSubject = customSubjects.find(
+      cs => cs.name_en === subj || cs.name_he === subj
+    );
+    if (customSubject) {
+      return language === "he" ? customSubject.name_he : customSubject.name_en;
+    }
+    return subj;
+  };
 
   return (
     <>
@@ -73,18 +109,15 @@ export const FormFields = ({
           <Label htmlFor="subject">{t("formSubject")}</Label>
           <select
             id="subject"
-            value={subject === customSubject ? "Other" : subject}
+            value={isDefaultSubject(subject) ? subject : "Other"}
             onChange={(e) => {
-              const value = e.target.value as Subject;
+              const value = e.target.value;
               if (value !== "Other") {
-                onSubjectChange(value);
+                onSubjectChange(value as Subject);
                 setCustomSubject("");
               } else {
-                // When "Other" is selected, keep the current custom subject if it exists
-                if (!customSubject) {
-                  setCustomSubject("");
-                  onSubjectChange("Other");
-                }
+                setCustomSubject("");
+                onSubjectChange("Other");
               }
             }}
             className="w-full rounded-md border border-input bg-background px-3 py-2"
@@ -93,6 +126,11 @@ export const FormFields = ({
             <option value="Science">{t("Science")}</option>
             <option value="English">{t("English")}</option>
             <option value="History">{t("History")}</option>
+            {customSubjects.map((cs) => (
+              <option key={cs.id} value={language === "he" ? cs.name_he : cs.name_en}>
+                {language === "he" ? cs.name_he : cs.name_en}
+              </option>
+            ))}
             <option value="Other">{t("Other")}</option>
           </select>
         </div>
@@ -111,7 +149,7 @@ export const FormFields = ({
         </div>
       </div>
 
-      {(subject === "Other" || subject === customSubject) && (
+      {subject === "Other" && (
         <div className="space-y-2">
           <Label>{t("formCustomSubject")}</Label>
           <Input
