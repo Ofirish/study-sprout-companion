@@ -19,6 +19,7 @@ import { DashboardActions } from "@/components/dashboard/DashboardActions";
 import { DashboardFilters } from "@/components/dashboard/DashboardFilters";
 import { AssignmentAttachments } from "@/components/assignments/AssignmentAttachments";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 type ViewMode = "all" | "student" | "parent";
 
@@ -177,7 +178,7 @@ const Index = () => {
       <Dialog open={showAttachmentDialog} onOpenChange={setShowAttachmentDialog}>
         <DialogContent>
           <div className="p-4">
-            <h2 className="text-lg font-semibold mb-4">{t("addAttachments")}</h2>
+            <h2 className="text-lg font-semibold mb-4">{t("attachments")}</h2>
             {newAssignmentId && (
               <AssignmentAttachments
                 assignmentId={newAssignmentId}
@@ -198,4 +199,3 @@ const Index = () => {
 };
 
 export default Index;
-
