@@ -9,9 +9,16 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+
+interface Student {
+  id: string;
+  first_name: string;
+  last_name: string;
+}
 
 interface DashboardFiltersProps {
   statusFilter: "all" | "completed" | "in_progress" | "not_started";
@@ -23,6 +30,9 @@ interface DashboardFiltersProps {
   hasStudents: boolean;
   funMode: boolean;
   showOnlyBottomControls?: boolean;
+  selectedStudentId?: string;
+  setSelectedStudentId?: (id: string | undefined) => void;
+  students?: Student[];
 }
 
 export const DashboardFilters = ({
@@ -35,6 +45,9 @@ export const DashboardFilters = ({
   hasStudents,
   funMode,
   showOnlyBottomControls = false,
+  selectedStudentId,
+  setSelectedStudentId,
+  students = [],
 }: DashboardFiltersProps) => {
   const { t } = useLanguage();
   const { signOut } = useAuth();
@@ -52,7 +65,7 @@ export const DashboardFilters = ({
     }
   };
 
-  const filters = (
+  const filters = !showOnlyBottomControls && (
     <div className="flex items-center space-x-2 rtl:space-x-reverse">
       <Switch
         id="hide-completed"
@@ -72,7 +85,11 @@ export const DashboardFilters = ({
           <Users className="h-4 w-4" />
           <span>
             {viewMode === "all" && t("viewAll")}
-            {viewMode === "parent" && t("viewParent")}
+            {viewMode === "parent" && (
+              selectedStudentId 
+                ? `${students.find(s => s.id === selectedStudentId)?.first_name} ${students.find(s => s.id === selectedStudentId)?.last_name}`
+                : t("viewParent")
+            )}
             {viewMode === "student" && t("viewStudent")}
           </span>
           <ChevronDown className="h-4 w-4 opacity-50" />
@@ -82,9 +99,23 @@ export const DashboardFilters = ({
         <DropdownMenuItem onClick={() => setViewMode("all")}>
           {t("viewAll")}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setViewMode("parent")}>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => {
+          setViewMode("parent");
+          setSelectedStudentId?.(undefined);
+        }}>
           {t("viewParent")}
         </DropdownMenuItem>
+        {viewMode === "parent" && students.map(student => (
+          <DropdownMenuItem
+            key={student.id}
+            onClick={() => setSelectedStudentId?.(student.id)}
+            className="pl-6"
+          >
+            {student.first_name} {student.last_name}
+          </DropdownMenuItem>
+        ))}
+        <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => setViewMode("student")}>
           {t("viewStudent")}
         </DropdownMenuItem>
