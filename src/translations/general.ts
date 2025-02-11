@@ -61,8 +61,8 @@ export const general = {
     he: "הצג הכל"
   },
   viewParent: {
-    en: "Parent View",
-    he: "תצוגת הורה"
+    en: "My View",
+    he: "התצוגה שלי"
   },
   viewStudent: {
     en: "Student View",
