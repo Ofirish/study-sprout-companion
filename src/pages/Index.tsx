@@ -23,12 +23,6 @@ import { Button } from "@/components/ui/button";
 
 type ViewMode = "all" | "student" | "parent";
 
-interface Student {
-  id: string;
-  first_name: string;
-  last_name: string;
-}
-
 const Index = () => {
   const [showForm, setShowForm] = useState(false);
   const [showAttachmentDialog, setShowAttachmentDialog] = useState(false);
@@ -37,8 +31,6 @@ const Index = () => {
   const [hideCompleted, setHideCompleted] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>("all");
   const [hasStudents, setHasStudents] = useState(false);
-  const [students, setStudents] = useState<Student[]>([]);
-  const [selectedStudentId, setSelectedStudentId] = useState<string>();
   const { session } = useAuth();
   const { language } = useLanguage();
   const { funMode, toggleFunMode } = useFunMode();
@@ -50,24 +42,10 @@ const Index = () => {
       
       const { data } = await supabase
         .from("parent_student_relationships")
-        .select(`
-          student_id,
-          student:profiles!parent_student_relationships_student_id_fkey (
-            id,
-            first_name,
-            last_name
-          )
-        `)
+        .select("*")
         .eq("parent_id", session.user.id);
       
-      const studentsData = data?.map(rel => ({
-        id: rel.student.id,
-        first_name: rel.student.first_name,
-        last_name: rel.student.last_name,
-      })) || [];
-      
-      setStudents(studentsData);
-      setHasStudents(studentsData.length > 0);
+      setHasStudents(data && data.length > 0);
     };
     
     checkForStudents();
@@ -113,12 +91,10 @@ const Index = () => {
   };
 
   const filteredAssignments = assignments.filter(assignment => {
-    // Filter by completion status
     if (hideCompleted && assignment.status === "Completed") {
       return false;
     }
     
-    // Filter by status
     const passesStatusFilter = statusFilter === "all" || 
       (statusFilter === "completed" && assignment.status === "Completed") ||
       (statusFilter === "in_progress" && assignment.status === "In Progress") ||
@@ -126,17 +102,9 @@ const Index = () => {
 
     if (!passesStatusFilter) return false;
 
-    // Filter by view mode and student
     if (viewMode === "all") return true;
-    if (viewMode === "parent") {
-      if (selectedStudentId) {
-        return assignment.user_id === selectedStudentId;
-      }
-      return assignment.user_id === session?.user.id;
-    }
-    if (viewMode === "student") {
-      return assignment.user_id !== session?.user.id;
-    }
+    if (viewMode === "parent" && assignment.user_id === session?.user.id) return true;
+    if (viewMode === "student" && assignment.user_id !== session?.user.id) return true;
     
     return false;
   });
@@ -182,9 +150,6 @@ const Index = () => {
               setHideCompleted={setHideCompleted}
               hasStudents={hasStudents}
               funMode={funMode}
-              students={students}
-              selectedStudentId={selectedStudentId}
-              setSelectedStudentId={setSelectedStudentId}
             />
 
             {showForm && <AssignmentForm onSubmit={handleAddAssignment} />}
