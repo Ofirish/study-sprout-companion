@@ -159,6 +159,26 @@ export const general = {
   attachments: {
     en: "Attachments",
     he: "קבצים מצורפים"
+  },
+  forgotPassword: {
+    en: "Forgot Password?",
+    he: "שכחת סיסמה?"
+  },
+  resetPassword: {
+    en: "Reset Password",
+    he: "איפוס סיסמה"
+  },
+  backToLogin: {
+    en: "Back to Login",
+    he: "חזרה להתחברות"
+  },
+  resetPasswordInstructions: {
+    en: "Enter your email and we'll send you instructions to reset your password",
+    he: "הכנס את כתובת המייל שלך ונשלח לך הוראות לאיפוס הסיסמה"
+  },
+  resetPasswordSuccess: {
+    en: "Password reset instructions sent to your email",
+    he: "הוראות לאיפוס הסיסמה נשלחו למייל שלך"
   }
 } as const;
 
