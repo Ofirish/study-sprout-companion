@@ -95,7 +95,6 @@ export const DashboardFilters = ({
   if (showOnlyBottomControls) {
     return (
       <div className="flex justify-between items-center">
-        {filters}
         <Button 
           variant="outline" 
           onClick={handleSignOut} 
