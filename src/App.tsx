@@ -8,7 +8,6 @@ import { AuthProvider } from "@/components/AuthProvider";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { FunModeProvider } from "@/contexts/FunModeContext";
 import { ColorThemeProvider } from "@/contexts/ColorThemeContext";
-import { LanguageToggle } from "@/components/LanguageToggle";
 import { FloatingNav } from "@/components/FloatingNav";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -30,7 +29,6 @@ const App = () => {
               <ColorThemeProvider>
                 <LanguageProvider>
                   <div className="relative">
-                    <LanguageToggle />
                     <Routes>
                       <Route path="/" element={<Index />} />
                       <Route path="/auth" element={<Auth />} />

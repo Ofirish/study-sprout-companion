@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Palette, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
@@ -26,33 +26,30 @@ export function ColorizeButton({ onOpenChange }: ColorizeButtonProps) {
   };
 
   return (
-    <Sheet>
+    <Sheet open={isOpen} onOpenChange={handleOpenChange}>
       <SheetTrigger asChild>
         <Button
           variant="outline"
           size="icon"
           className="h-12 w-12 rounded-full shadow-lg"
-          onClick={() => handleOpenChange(true)}
         >
           <Palette className="h-6 w-6" />
         </Button>
       </SheetTrigger>
-      {isOpen && (
-        <SheetContent side={isMobile ? "bottom" : "right"} className={isMobile ? "h-[80vh]" : ""}>
-          <SheetHeader className="flex flex-row items-center justify-between">
-            <SheetTitle>Re-Colorize</SheetTitle>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => handleOpenChange(false)}
-              className="h-8 w-8"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </SheetHeader>
-          <ColorPicker />
-        </SheetContent>
-      )}
+      <SheetContent side={isMobile ? "bottom" : "right"} className={isMobile ? "h-[80vh]" : ""}>
+        <SheetHeader className="flex flex-row items-center justify-between">
+          <SheetTitle>Re-Colorize</SheetTitle>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => handleOpenChange(false)}
+            className="h-8 w-8"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </SheetHeader>
+        <ColorPicker />
+      </SheetContent>
     </Sheet>
   );
 }
