@@ -91,15 +91,31 @@ export const Lists = () => {
   const handleDeleteList = async (id: string) => {
     if (!session?.user.id) return;
 
-    const { error } = await supabase
+    // First, delete all assignments associated with this list
+    const { error: assignmentsError } = await supabase
+      .from("assignments")
+      .delete()
+      .eq("list_id", id);
+
+    if (assignmentsError) {
+      toast({
+        title: t("error"),
+        description: "Failed to delete associated assignments",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Then delete the list itself
+    const { error: listError } = await supabase
       .from("lists")
       .delete()
       .eq("id", id);
 
-    if (error) {
+    if (listError) {
       toast({
         title: t("error"),
-        description: error.message,
+        description: listError.message,
         variant: "destructive",
       });
       return;
@@ -107,7 +123,7 @@ export const Lists = () => {
 
     toast({
       title: t("success"),
-      description: "List deleted successfully",
+      description: "List and its assignments deleted successfully",
     });
 
     fetchLists();
