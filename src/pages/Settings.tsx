@@ -11,7 +11,6 @@ import { UserRelationships } from "@/components/settings/UserRelationships";
 import { ProfileForm } from "@/components/settings/ProfileForm";
 import { SubjectManagement } from "@/components/settings/SubjectManagement";
 import { CustomTranslations } from "@/components/settings/CustomTranslations";
-import { Lists } from "@/components/settings/CustomPages";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Home } from "lucide-react";
@@ -113,9 +112,6 @@ const Settings = () => {
           onSubmit={handleUpdateProfile}
         />
       </Card>
-
-      <Lists />
-      <Separator className="my-6" />
 
       <CustomTranslations />
       <Separator className="my-6" />

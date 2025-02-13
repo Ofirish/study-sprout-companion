@@ -1,3 +1,4 @@
+
 export const general = {
   error: {
     en: "Error",
@@ -178,37 +179,6 @@ export const general = {
   resetPasswordSuccess: {
     en: "Password reset instructions sent to your email",
     he: "הוראות לאיפוס הסיסמה נשלחו למייל שלך"
-  },
-  customPages: {
-    en: "Custom Pages",
-    he: "דפים מותאמים אישית"
-  },
-  addPage: {
-    en: "Add Page",
-    he: "הוסף דף"
-  },
-  pageName: {
-    en: "Page Name",
-    he: "שם הדף"
-  },
-  lists: {
-    en: "Lists",
-    he: "רשימות"
-  },
-  listName: {
-    en: "List Name",
-    he: "שם הרשימה"
-  },
-  description: {
-    en: "Description",
-    he: "תיאור"
-  },
-  listDescription: {
-    en: "List Description",
-    he: "תיאור הרשימה"
-  },
-  addList: {
-    en: "Add List",
-    he: "הוסף רשימה"
   }
 } as const;
+

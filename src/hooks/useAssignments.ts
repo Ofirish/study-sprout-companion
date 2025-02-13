@@ -1,3 +1,4 @@
+
 /**
  * useAssignments.ts
  * Purpose: Custom hook for managing assignments data.
@@ -8,27 +9,20 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-export const useAssignments = (listId?: string) => {
+export const useAssignments = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   // Fetch assignments
   const { data: assignments = [], isLoading } = useQuery({
-    queryKey: ["assignments", listId],
+    queryKey: ["assignments"],
     queryFn: async () => {
       try {
-        let query = supabase
+        // First get the current user's direct assignments
+        const { data: userAssignments, error: userError } = await supabase
           .from("assignments")
           .select("*")
           .order("created_at", { ascending: false });
-
-        if (listId) {
-          query = query.eq("list_id", listId);
-        } else {
-          query = query.is("list_id", null);
-        }
-
-        const { data: userAssignments, error: userError } = await query;
 
         if (userError) throw userError;
 

@@ -57,7 +57,6 @@ export type Database = {
           description: string | null
           due_date: string
           id: string
-          list_id: string | null
           status: string
           subject: string
           title: string
@@ -71,7 +70,6 @@ export type Database = {
           description?: string | null
           due_date: string
           id?: string
-          list_id?: string | null
           status?: string
           subject: string
           title: string
@@ -85,7 +83,6 @@ export type Database = {
           description?: string | null
           due_date?: string
           id?: string
-          list_id?: string | null
           status?: string
           subject?: string
           title?: string
@@ -93,15 +90,7 @@ export type Database = {
           updated_at?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "assignments_list_id_fkey"
-            columns: ["list_id"]
-            isOneToOne: false
-            referencedRelation: "lists"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       custom_subjects: {
         Row: {
@@ -153,33 +142,6 @@ export type Database = {
           id?: string
           page?: string | null
           translation_key?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      lists: {
-        Row: {
-          created_at: string
-          description: string | null
-          id: string
-          name: string
-          slug: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          name: string
-          slug: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          id?: string
-          name?: string
-          slug?: string
           user_id?: string
         }
         Relationships: []
