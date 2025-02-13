@@ -1,3 +1,4 @@
+
 /**
  * Index.tsx
  * Main dashboard page displaying assignments and filters
@@ -124,14 +125,14 @@ const Index = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">Loading...</div>
       </div>
     );
   }
 
-  const containerClasses = `min-h-screen py-8 transition-all duration-500 ${
-    funMode ? 'fun-mode' : 'bg-gray-50'
+  const containerClasses = `min-h-screen py-8 transition-all duration-500 bg-background ${
+    funMode ? 'fun-mode' : ''
   }`;
 
   return (
