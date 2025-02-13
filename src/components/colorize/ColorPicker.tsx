@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useColorTheme } from '@/contexts/ColorThemeContext';
+import { Trash2 } from 'lucide-react';
 
 const COLORIZABLE_ELEMENTS = [
   // Page Elements
@@ -69,6 +70,7 @@ export function ColorPicker() {
       ...prev,
       [selectedElement]: newColor
     }));
+    updateElementColor(selectedElement, newColor);
   };
 
   const handleApplyColors = () => {
@@ -88,6 +90,11 @@ export function ColorPicker() {
     }));
     await saveTheme(themeName, colors);
     setThemeName('');
+  };
+
+  const handleDeleteTheme = async (themeId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    await deleteTheme(themeId);
   };
 
   const handleReset = () => {
@@ -133,15 +140,6 @@ export function ColorPicker() {
         </div>
       </div>
 
-      <Button 
-        onClick={handleApplyColors} 
-        className="w-full"
-        style={{ backgroundColor: "var(--fixed-primary)", color: "white" }}
-        disabled={Object.keys(previewColors).length === 0}
-      >
-        Apply Changes
-      </Button>
-
       <div className="space-y-2">
         <Label>Theme</Label>
         <Select onValueChange={(themeId) => {
@@ -158,21 +156,17 @@ export function ColorPicker() {
               <SelectItem 
                 key={theme.id} 
                 value={theme.id}
-                className="flex justify-between items-center"
+                className="flex justify-between items-center group"
               >
                 <span>{theme.theme_name}</span>
                 {!theme.is_preset && (
                   <Button
                     variant="ghost"
-                    size="sm"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      deleteTheme(theme.id);
-                    }}
-                    className="ml-2 p-1 h-6 hover:bg-destructive hover:text-destructive-foreground"
+                    size="icon"
+                    onClick={(e) => handleDeleteTheme(theme.id, e)}
+                    className="ml-2 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 hover:bg-destructive hover:text-destructive-foreground"
                   >
-                    Delete
+                    <Trash2 className="h-4 w-4" />
                   </Button>
                 )}
               </SelectItem>
