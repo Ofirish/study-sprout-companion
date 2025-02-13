@@ -8,12 +8,16 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { FlyingName } from "./FlyingName";
 
-export const DashboardHeader = () => {
+interface DashboardHeaderProps {
+  showFlyingName: boolean;
+  setShowFlyingName: (show: boolean) => void;
+}
+
+export const DashboardHeader = ({ showFlyingName, setShowFlyingName }: DashboardHeaderProps) => {
   const { t } = useLanguage();
   const { session } = useAuth();
   const [userName, setUserName] = useState("");
   const [clickCount, setClickCount] = useState(0);
-  const [showFlyingName, setShowFlyingName] = useState(false);
 
   useEffect(() => {
     const fetchUserProfile = async () => {

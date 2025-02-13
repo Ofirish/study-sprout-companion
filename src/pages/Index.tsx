@@ -30,6 +30,7 @@ const Index = () => {
   const [hideCompleted, setHideCompleted] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>("all");
   const [hasStudents, setHasStudents] = useState(false);
+  const [showFlyingName, setShowFlyingName] = useState(false);
   const { session } = useAuth();
   const { language } = useLanguage();
   const { funMode, toggleFunMode } = useFunMode();
@@ -66,6 +67,7 @@ const Index = () => {
   useEffect(() => {
     const handleStopAllEffects = () => {
       setShowForm(false);
+      setShowFlyingName(false);
       if (funMode) {
         toggleFunMode();
       }
@@ -137,7 +139,10 @@ const Index = () => {
       {funMode && <Sparkles />}
       <div className="container max-w-4xl flex flex-col min-h-screen">
         <div className="flex-grow">
-          <DashboardHeader />
+          <DashboardHeader 
+            showFlyingName={showFlyingName}
+            setShowFlyingName={setShowFlyingName}
+          />
 
           <StatsCard 
             assignments={assignments} 
