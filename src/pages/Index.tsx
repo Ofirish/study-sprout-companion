@@ -5,21 +5,15 @@
  */
 import { useState, useEffect } from "react";
 import { Assignment } from "@/types/assignment";
-import { AssignmentForm } from "@/components/AssignmentForm";
-import { StatsCard } from "@/components/StatsCard";
 import { useAuth } from "@/components/AuthProvider";
-import { DashboardHeader } from "@/components/DashboardHeader";
-import { AssignmentTabs } from "@/components/AssignmentTabs";
 import { useAssignments } from "@/hooks/useAssignments";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useFunMode } from "@/contexts/FunModeContext";
+import { DashboardLoading } from "@/components/dashboard/DashboardLoading";
+import { DashboardContent } from "@/components/dashboard/DashboardContent";
+import { AttachmentDialog } from "@/components/dashboard/AttachmentDialog";
 import { Sparkles } from "@/components/Sparkles";
-import { DashboardActions } from "@/components/dashboard/DashboardActions";
-import { DashboardFilters } from "@/components/dashboard/DashboardFilters";
-import { AssignmentAttachments } from "@/components/assignments/AssignmentAttachments";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 
 type ViewMode = "all" | "student" | "parent";
 
@@ -35,8 +29,7 @@ const Index = () => {
   const { session } = useAuth();
   const { language } = useLanguage();
   const { funMode, toggleFunMode } = useFunMode();
-  const { t } = useLanguage();
-  
+
   useEffect(() => {
     const checkForStudents = async () => {
       if (!session) return;
@@ -124,11 +117,7 @@ const Index = () => {
   });
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">Loading...</div>
-      </div>
-    );
+    return <DashboardLoading />;
   }
 
   const containerClasses = `min-h-screen py-8 transition-all duration-500 bg-background ${
@@ -138,80 +127,31 @@ const Index = () => {
   return (
     <div className={containerClasses} dir={language === "he" ? "rtl" : "ltr"}>
       {funMode && <Sparkles />}
-      <div className="container max-w-4xl flex flex-col min-h-screen">
-        <div className="flex-grow">
-          <DashboardHeader 
-            showFlyingName={showFlyingName}
-            setShowFlyingName={setShowFlyingName}
-          />
+      <DashboardContent
+        assignments={assignments}
+        showFlyingName={showFlyingName}
+        setShowFlyingName={setShowFlyingName}
+        showForm={showForm}
+        setShowForm={setShowForm}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+        hideCompleted={hideCompleted}
+        setHideCompleted={setHideCompleted}
+        hasStudents={hasStudents}
+        funMode={funMode}
+        filteredAssignments={filteredAssignments}
+        handleAddAssignment={handleAddAssignment}
+        handleStatusChange={handleStatusChange}
+        language={language}
+      />
 
-          <StatsCard 
-            assignments={assignments} 
-            onFilterChange={setStatusFilter}
-            viewMode={viewMode}
-            statusFilter={statusFilter}
-          />
-
-          <div className="mt-8">
-            <DashboardActions 
-              showForm={showForm}
-              setShowForm={setShowForm}
-            />
-
-            <DashboardFilters
-              statusFilter={statusFilter}
-              setStatusFilter={setStatusFilter}
-              viewMode={viewMode}
-              setViewMode={setViewMode}
-              hideCompleted={hideCompleted}
-              setHideCompleted={setHideCompleted}
-              hasStudents={hasStudents}
-              funMode={funMode}
-            />
-
-            {showForm && <AssignmentForm onSubmit={handleAddAssignment} />}
-
-            <AssignmentTabs
-              assignments={filteredAssignments}
-              onStatusChange={handleStatusChange}
-            />
-          </div>
-        </div>
-
-        <div className="mt-8 border-t pt-4">
-          <DashboardFilters
-            statusFilter={statusFilter}
-            setStatusFilter={setStatusFilter}
-            viewMode={viewMode}
-            setViewMode={setViewMode}
-            hideCompleted={hideCompleted}
-            setHideCompleted={setHideCompleted}
-            hasStudents={hasStudents}
-            funMode={funMode}
-            showOnlyBottomControls={true}
-          />
-        </div>
-      </div>
-
-      <Dialog open={showAttachmentDialog} onOpenChange={setShowAttachmentDialog}>
-        <DialogContent>
-          <div className="p-4">
-            <h2 className="text-lg font-semibold mb-4">{t("attachments")}</h2>
-            {newAssignmentId && (
-              <AssignmentAttachments
-                assignmentId={newAssignmentId}
-                canEdit={true}
-              />
-            )}
-            <Button
-              className="w-full mt-4"
-              onClick={() => setShowAttachmentDialog(false)}
-            >
-              {t("done")}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <AttachmentDialog
+        open={showAttachmentDialog}
+        onOpenChange={setShowAttachmentDialog}
+        assignmentId={newAssignmentId}
+      />
     </div>
   );
 };
