@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface CustomTranslation {
   id: string;
@@ -16,6 +18,7 @@ interface CustomTranslation {
   translation_key: string;
   en: string;
   he: string;
+  page?: string;
   created_at?: string;
 }
 
@@ -85,18 +88,28 @@ export const CustomTranslations = () => {
   const { language } = useLanguage();
   const [customTranslations, setCustomTranslations] = useState<CustomTranslation[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedPage, setSelectedPage] = useState<string>("global");
+  const [availablePages, setAvailablePages] = useState<string[]>(["global", "dashboard", "settings", "assignments"]);
 
   useEffect(() => {
     fetchCustomTranslations();
-  }, [session]);
+  }, [session, selectedPage]);
 
   const fetchCustomTranslations = async () => {
     if (!session?.user.id) return;
 
-    const { data, error } = await supabase
+    const query = supabase
       .from("custom_translations")
       .select("*")
       .eq("user_id", session.user.id);
+
+    if (selectedPage !== "global") {
+      query.eq("page", selectedPage);
+    } else {
+      query.is("page", null);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       toast({
@@ -125,6 +138,7 @@ export const CustomTranslations = () => {
       translation_key: key,
       en,
       he,
+      page: selectedPage === "global" ? null : selectedPage,
     };
 
     const { error } = existingTranslation
@@ -199,6 +213,11 @@ export const CustomTranslations = () => {
     const [en, setEn] = useState(customTranslation?.en || defaultEn);
     const [he, setHe] = useState(customTranslation?.he || defaultHe);
 
+    useEffect(() => {
+      setEn(customTranslation?.en || defaultEn);
+      setHe(customTranslation?.he || defaultHe);
+    }, [customTranslation, defaultEn, defaultHe]);
+
     return (
       <div className="space-y-4 p-4 bg-muted/50 rounded-lg">
         <div className="flex justify-between items-center">
@@ -226,8 +245,8 @@ export const CustomTranslations = () => {
             <Input
               value={he}
               onChange={(e) => setHe(e.target.value)}
-              placeholder={defaultHe}
               dir="rtl"
+              placeholder={defaultHe}
             />
           </div>
         </div>
@@ -247,14 +266,32 @@ export const CustomTranslations = () => {
 
   return (
     <Card className="p-6">
-      <h2 className="text-xl font-semibold mb-4">
-        {language === "en" ? "Custom Labels" : "תוויות מותאמות אישית"}
-      </h2>
-      <p className="text-sm text-muted-foreground mb-6">
-        {language === "en"
-          ? "Customize the labels and text shown throughout your dashboard"
-          : "התאם אישית את התוויות והטקסט המוצגים בלוח הבקרה שלך"}
-      </p>
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h2 className="text-xl font-semibold">
+            {language === "en" ? "Custom Labels" : "תוויות מותאמות אישית"}
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {language === "en"
+              ? "Customize the labels and text shown throughout your dashboard"
+              : "התאם אישית את התוויות והטקסט המוצגים בלוח הבקרה שלך"}
+          </p>
+        </div>
+        <div className="w-[200px]">
+          <Select value={selectedPage} onValueChange={setSelectedPage}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select page" />
+            </SelectTrigger>
+            <SelectContent>
+              {availablePages.map((page) => (
+                <SelectItem key={page} value={page}>
+                  {page.charAt(0).toUpperCase() + page.slice(1)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
 
       <Accordion type="single" collapsible className="w-full space-y-4">
         {translationGroups.map((group) => (

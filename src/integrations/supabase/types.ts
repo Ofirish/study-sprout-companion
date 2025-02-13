@@ -122,6 +122,7 @@ export type Database = {
           en: string
           he: string
           id: string
+          page: string | null
           translation_key: string
           user_id: string
         }
@@ -130,6 +131,7 @@ export type Database = {
           en: string
           he: string
           id?: string
+          page?: string | null
           translation_key: string
           user_id: string
         }
@@ -138,6 +140,7 @@ export type Database = {
           en?: string
           he?: string
           id?: string
+          page?: string | null
           translation_key?: string
           user_id?: string
         }

@@ -4,6 +4,7 @@ import { translations } from "@/translations";
 import type { Language, TranslationKey } from "@/translations";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
+import { useLocation } from "react-router-dom";
 
 interface CustomTranslation {
   id: string;
@@ -11,6 +12,7 @@ interface CustomTranslation {
   translation_key: string;
   en: string;
   he: string;
+  page?: string;
   created_at?: string;
 }
 
@@ -26,6 +28,8 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
   const [language, setLanguage] = useState<Language>("en");
   const [customTranslations, setCustomTranslations] = useState<CustomTranslation[]>([]);
   const { session } = useAuth();
+  const location = useLocation();
+  const currentPage = location.pathname.split("/")[1] || "dashboard";
 
   useEffect(() => {
     if (session?.user.id) {
@@ -45,14 +49,23 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
   }, [session]);
 
   const t = (key: TranslationKey): string => {
-    const customTranslation = customTranslations.find(
-      (t) => t.translation_key === key
+    // First, look for page-specific translation
+    const pageTranslation = customTranslations.find(
+      (t) => t.translation_key === key && t.page === currentPage
     );
-
-    if (customTranslation) {
-      return customTranslation[language];
+    if (pageTranslation) {
+      return pageTranslation[language];
     }
 
+    // Then, look for global translation
+    const globalTranslation = customTranslations.find(
+      (t) => t.translation_key === key && !t.page
+    );
+    if (globalTranslation) {
+      return globalTranslation[language];
+    }
+
+    // Finally, fall back to default translations
     const translation = translations[key];
     if (!translation) {
       console.warn(`Translation missing for key: ${key}`);
