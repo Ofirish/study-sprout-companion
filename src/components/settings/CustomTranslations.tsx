@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,6 +10,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Plus } from "lucide-react";
 
 interface CustomTranslation {
   id: string;
@@ -90,6 +91,8 @@ export const CustomTranslations = () => {
   const [loading, setLoading] = useState(true);
   const [selectedPage, setSelectedPage] = useState<string>("global");
   const [availablePages, setAvailablePages] = useState<string[]>(["global", "dashboard", "settings", "assignments"]);
+  const [newPageName, setNewPageName] = useState("");
+  const [isAddingPage, setIsAddingPage] = useState(false);
 
   useEffect(() => {
     fetchCustomTranslations();
@@ -124,6 +127,38 @@ export const CustomTranslations = () => {
       setCustomTranslations(data as CustomTranslation[]);
     }
     setLoading(false);
+  };
+
+  const handleAddPage = () => {
+    if (!newPageName.trim()) {
+      toast({
+        title: "Error",
+        description: "Page name cannot be empty",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const normalizedPageName = newPageName.toLowerCase().trim().replace(/\s+/g, "-");
+    
+    if (availablePages.includes(normalizedPageName)) {
+      toast({
+        title: "Error",
+        description: "This page already exists",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setAvailablePages(prev => [...prev, normalizedPageName]);
+    setSelectedPage(normalizedPageName);
+    setNewPageName("");
+    setIsAddingPage(false);
+
+    toast({
+      title: "Success",
+      description: "New page added successfully",
+    });
   };
 
   const handleSaveTranslation = async (key: string, en: string, he: string) => {
@@ -277,19 +312,52 @@ export const CustomTranslations = () => {
               : "התאם אישית את התוויות והטקסט המוצגים בלוח הבקרה שלך"}
           </p>
         </div>
-        <div className="w-[200px]">
-          <Select value={selectedPage} onValueChange={setSelectedPage}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select page" />
-            </SelectTrigger>
-            <SelectContent>
-              {availablePages.map((page) => (
-                <SelectItem key={page} value={page}>
-                  {page.charAt(0).toUpperCase() + page.slice(1)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="flex items-center gap-2">
+          <Dialog open={isAddingPage} onOpenChange={setIsAddingPage}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Plus className="h-4 w-4" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add New Page</DialogTitle>
+              </DialogHeader>
+              <div className="py-4">
+                <Label htmlFor="pageName">Page Name</Label>
+                <Input
+                  id="pageName"
+                  value={newPageName}
+                  onChange={(e) => setNewPageName(e.target.value)}
+                  placeholder="Enter page name"
+                  className="mt-2"
+                />
+                <p className="text-sm text-muted-foreground mt-2">
+                  This will be converted to a URL-friendly format (e.g., "My New Page" → "my-new-page")
+                </p>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setIsAddingPage(false)}>
+                  Cancel
+                </Button>
+                <Button onClick={handleAddPage}>Add Page</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+          <div className="w-[200px]">
+            <Select value={selectedPage} onValueChange={setSelectedPage}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select page" />
+              </SelectTrigger>
+              <SelectContent>
+                {availablePages.map((page) => (
+                  <SelectItem key={page} value={page}>
+                    {page.charAt(0).toUpperCase() + page.slice(1)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
