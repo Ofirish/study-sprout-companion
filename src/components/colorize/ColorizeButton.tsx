@@ -20,40 +20,39 @@ export function ColorizeButton({ onOpenChange }: ColorizeButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
 
-  useEffect(() => {
-    onOpenChange?.(isOpen);
-  }, [isOpen, onOpenChange]);
-
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
     onOpenChange?.(open);
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={handleOpenChange}>
+    <Sheet>
       <SheetTrigger asChild>
         <Button
           variant="outline"
           size="icon"
           className="h-12 w-12 rounded-full shadow-lg"
+          onClick={() => handleOpenChange(true)}
         >
           <Palette className="h-6 w-6" />
         </Button>
       </SheetTrigger>
-      <SheetContent side={isMobile ? "bottom" : "right"} className={isMobile ? "h-[80vh]" : ""}>
-        <SheetHeader className="flex flex-row items-center justify-between">
-          <SheetTitle>Re-Colorize</SheetTitle>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => handleOpenChange(false)}
-            className="h-8 w-8"
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        </SheetHeader>
-        <ColorPicker />
-      </SheetContent>
+      {isOpen && (
+        <SheetContent side={isMobile ? "bottom" : "right"} className={isMobile ? "h-[80vh]" : ""}>
+          <SheetHeader className="flex flex-row items-center justify-between">
+            <SheetTitle>Re-Colorize</SheetTitle>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => handleOpenChange(false)}
+              className="h-8 w-8"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </SheetHeader>
+          <ColorPicker />
+        </SheetContent>
+      )}
     </Sheet>
   );
 }
