@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { HomeIcon, Menu, Settings, X, PlusCircle, LogOut, HelpCircle } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -14,21 +14,20 @@ export const FloatingNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
   const { signOut } = useAuth();
+  const timeoutRef = useRef<NodeJS.Timeout>();
 
   const closeMenu = useCallback(() => {
     setIsOpen(false);
   }, []);
 
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
-    
     if (isOpen) {
-      timer = setTimeout(closeMenu, 4000);
+      timeoutRef.current = setTimeout(closeMenu, 4000);
     }
 
     return () => {
-      if (timer) {
-        clearTimeout(timer);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
     };
   }, [isOpen, closeMenu]);
@@ -40,13 +39,13 @@ export const FloatingNav = () => {
       <div 
         className="fixed bottom-4 right-4 flex flex-col items-end gap-2"
         onMouseEnter={() => {
-          if (isOpen) {
-            clearTimeout();
+          if (isOpen && timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
           }
         }}
         onMouseLeave={() => {
           if (isOpen) {
-            setTimeout(closeMenu, 4000);
+            timeoutRef.current = setTimeout(closeMenu, 4000);
           }
         }}
       >
