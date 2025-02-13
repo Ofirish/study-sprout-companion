@@ -1,11 +1,12 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
-import { HomeIcon, Menu, Settings, X, PlusCircle, LogOut, HelpCircle } from "lucide-react";
+import { HomeIcon, Menu, Settings, X, PlusCircle, LogOut, HelpCircle, Languages } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/AuthProvider";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { QuickAddSubjectDialog } from "./nav/QuickAddSubjectDialog";
 import { NavButton } from "./nav/NavButton";
 import { ColorizeButton } from './colorize/ColorizeButton';
@@ -15,6 +16,7 @@ export const FloatingNav = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const { signOut } = useAuth();
+  const { language, setLanguage } = useLanguage();
   const timeoutRef = useRef<NodeJS.Timeout>();
 
   const closeMenu = useCallback(() => {
@@ -61,6 +63,20 @@ export const FloatingNav = () => {
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.2 }}
                 className="absolute bottom-0"
+              >
+                <NavButton
+                  icon={<Languages className="h-6 w-6" />}
+                  label={language === "en" ? "עברית" : "English"}
+                  onClick={() => setLanguage(language === "en" ? "he" : "en")}
+                />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: -68 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+                className="absolute bottom-0 mb-14"
               >
                 <NavButton
                   icon={<LogOut className="h-6 w-6" />}
