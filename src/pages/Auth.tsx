@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Info, Languages } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -25,6 +25,7 @@ const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [showEnglishExplanation, setShowEnglishExplanation] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { t } = useLanguage();
@@ -34,6 +35,11 @@ const Auth = () => {
       return "Password must be at least 6 characters long";
     }
     return null;
+  };
+
+  const explanationText = {
+    en: "Welcome to our Homework Management App! This platform helps students and parents track assignments, manage deadlines, and stay organized with school work. Parents can monitor their children's progress while students can easily manage their tasks.",
+    he: "ברוכים הבאים לאפליקציית ניהול שיעורי הבית שלנו! פלטפורמה זו עוזרת לתלמידים והורים לעקוב אחר מטלות, לנהל מועדי הגשה ולהישאר מאורגנים עם עבודות בית. הורים יכולים לעקוב אחר התקדמות ילדיהם בעוד תלמידים יכולים לנהל את המשימות שלהם בקלות."
   };
 
   const handleForgotPassword = async (e: React.FormEvent) => {
@@ -206,6 +212,23 @@ const Auth = () => {
             {isSignUp
               ? "Sign up to start tracking assignments"
               : "Sign in to your account"}
+          </p>
+        </div>
+
+        <div className="bg-gray-100 p-4 rounded-lg relative">
+          <div className="absolute top-2 right-2 flex items-center gap-2">
+            <Info className="h-4 w-4 text-gray-500" />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => setShowEnglishExplanation(!showEnglishExplanation)}
+            >
+              <Languages className="h-4 w-4" />
+            </Button>
+          </div>
+          <p className="text-sm text-gray-600 mt-4" dir={showEnglishExplanation ? "ltr" : "rtl"}>
+            {showEnglishExplanation ? explanationText.en : explanationText.he}
           </p>
         </div>
 
