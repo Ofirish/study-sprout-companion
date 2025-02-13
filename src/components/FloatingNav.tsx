@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { HomeIcon, Menu, Settings, X, PlusCircle, LogOut, HelpCircle } from "lucide-react";
@@ -32,6 +32,24 @@ export const FloatingNav = () => {
   const { session, signOut } = useAuth();
   const { toast } = useToast();
   const { t } = useLanguage();
+
+  const closeMenu = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    
+    if (isOpen) {
+      timer = setTimeout(closeMenu, 4000);
+    }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [isOpen, closeMenu]);
 
   const handleQuickAddSubject = async () => {
     if (!session) {
@@ -115,7 +133,15 @@ export const FloatingNav = () => {
         </DialogContent>
       </Dialog>
 
-      <div className="fixed bottom-4 right-4 flex flex-col items-end gap-2">
+      <div 
+        className="fixed bottom-4 right-4 flex flex-col items-end gap-2"
+        onMouseEnter={() => clearTimeout()}
+        onMouseLeave={() => {
+          if (isOpen) {
+            setTimeout(closeMenu, 4000);
+          }
+        }}
+      >
         <AnimatePresence>
           {isOpen && (
             <>
