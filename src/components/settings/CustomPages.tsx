@@ -4,37 +4,40 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/components/AuthProvider";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Trash2 } from "lucide-react";
 
-interface CustomPage {
+interface List {
   id: string;
   name: string;
   slug: string;
+  description: string | null;
 }
 
-export const CustomPages = () => {
+export const Lists = () => {
   const { session } = useAuth();
   const { toast } = useToast();
   const { t } = useLanguage();
-  const [pages, setPages] = useState<CustomPage[]>([]);
-  const [newPageName, setNewPageName] = useState("");
+  const [lists, setLists] = useState<List[]>([]);
+  const [newListName, setNewListName] = useState("");
+  const [newListDescription, setNewListDescription] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (session?.user.id) {
-      fetchPages();
+      fetchLists();
     }
   }, [session]);
 
-  const fetchPages = async () => {
+  const fetchLists = async () => {
     if (!session?.user.id) return;
 
     const { data, error } = await supabase
-      .from("custom_pages")
+      .from("lists")
       .select("*")
       .eq("user_id", session.user.id);
 
@@ -47,20 +50,21 @@ export const CustomPages = () => {
       return;
     }
 
-    setPages(data || []);
+    setLists(data || []);
     setLoading(false);
   };
 
-  const handleAddPage = async (e: React.FormEvent) => {
+  const handleAddList = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!session?.user.id || !newPageName.trim()) return;
+    if (!session?.user.id || !newListName.trim()) return;
 
-    const slug = newPageName.toLowerCase().trim().replace(/\s+/g, "-");
+    const slug = newListName.toLowerCase().trim().replace(/\s+/g, "-");
 
-    const { error } = await supabase.from("custom_pages").insert([
+    const { error } = await supabase.from("lists").insert([
       {
         user_id: session.user.id,
-        name: newPageName.trim(),
+        name: newListName.trim(),
+        description: newListDescription.trim(),
         slug,
       },
     ]);
@@ -76,18 +80,19 @@ export const CustomPages = () => {
 
     toast({
       title: t("success"),
-      description: "Page added successfully",
+      description: "List added successfully",
     });
 
-    setNewPageName("");
-    fetchPages();
+    setNewListName("");
+    setNewListDescription("");
+    fetchLists();
   };
 
-  const handleDeletePage = async (id: string) => {
+  const handleDeleteList = async (id: string) => {
     if (!session?.user.id) return;
 
     const { error } = await supabase
-      .from("custom_pages")
+      .from("lists")
       .delete()
       .eq("id", id);
 
@@ -102,10 +107,10 @@ export const CustomPages = () => {
 
     toast({
       title: t("success"),
-      description: "Page deleted successfully",
+      description: "List deleted successfully",
     });
 
-    fetchPages();
+    fetchLists();
   };
 
   if (loading) {
@@ -114,37 +119,50 @@ export const CustomPages = () => {
 
   return (
     <Card className="p-6">
-      <h2 className="text-xl font-semibold mb-4">{t("customPages")}</h2>
+      <h2 className="text-xl font-semibold mb-4">{t("lists")}</h2>
       <div className="space-y-4">
-        <form onSubmit={handleAddPage} className="flex gap-4">
-          <div className="flex-1">
-            <Label htmlFor="newPageName">{t("pageName")}</Label>
+        <form onSubmit={handleAddList} className="space-y-4">
+          <div>
+            <Label htmlFor="newListName">{t("listName")}</Label>
             <Input
-              id="newPageName"
-              value={newPageName}
-              onChange={(e) => setNewPageName(e.target.value)}
-              placeholder={t("pageName")}
+              id="newListName"
+              value={newListName}
+              onChange={(e) => setNewListName(e.target.value)}
+              placeholder={t("listName")}
             />
           </div>
-          <Button type="submit" className="mt-6">
-            {t("addPage")}
+          <div>
+            <Label htmlFor="newListDescription">{t("description")}</Label>
+            <Textarea
+              id="newListDescription"
+              value={newListDescription}
+              onChange={(e) => setNewListDescription(e.target.value)}
+              placeholder={t("listDescription")}
+              rows={3}
+            />
+          </div>
+          <Button type="submit">
+            {t("addList")}
           </Button>
         </form>
 
         <div className="space-y-2">
-          {pages.map((page) => (
+          {lists.map((list) => (
             <div
-              key={page.id}
+              key={list.id}
               className="flex items-center justify-between p-3 bg-muted rounded-lg"
             >
               <div>
-                <p className="font-medium">{page.name}</p>
-                <p className="text-sm text-muted-foreground">/{page.slug}</p>
+                <p className="font-medium">{list.name}</p>
+                <p className="text-sm text-muted-foreground">/{list.slug}</p>
+                {list.description && (
+                  <p className="text-sm text-muted-foreground mt-1">{list.description}</p>
+                )}
               </div>
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => handleDeletePage(page.id)}
+                onClick={() => handleDeleteList(list.id)}
               >
                 <Trash2 className="h-4 w-4" />
               </Button>

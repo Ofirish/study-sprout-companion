@@ -1,4 +1,3 @@
-
 /**
  * Index.tsx
  * Main dashboard page displaying assignments and filters
@@ -21,9 +20,11 @@ import { AssignmentAttachments } from "@/components/assignments/AssignmentAttach
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
-type ViewMode = "all" | "student" | "parent";
+interface IndexProps {
+  listId?: string;
+}
 
-const Index = () => {
+const Index = ({ listId }: IndexProps) => {
   const [showForm, setShowForm] = useState(false);
   const [showAttachmentDialog, setShowAttachmentDialog] = useState(false);
   const [newAssignmentId, setNewAssignmentId] = useState<string | null>(null);
@@ -69,13 +70,17 @@ const Index = () => {
     isLoading, 
     addAssignmentMutation, 
     updateAssignmentMutation 
-  } = useAssignments();
+  } = useAssignments(listId);
 
   const handleAddAssignment = async (
     newAssignment: Omit<Assignment, "id" | "status">
   ) => {
     try {
-      const result = await addAssignmentMutation.mutateAsync(newAssignment);
+      const assignmentWithList = {
+        ...newAssignment,
+        list_id: listId
+      };
+      const result = await addAssignmentMutation.mutateAsync(assignmentWithList);
       if (result?.id) {
         setNewAssignmentId(result.id);
         setShowAttachmentDialog(true);

@@ -18,31 +18,32 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-interface CustomPage {
+interface List {
   id: string;
   slug: string;
   name: string;
+  description: string | null;
 }
 
 const App = () => {
-  const [customPages, setCustomPages] = useState<CustomPage[]>([]);
+  const [lists, setLists] = useState<List[]>([]);
 
   useEffect(() => {
-    const fetchCustomPages = async () => {
+    const fetchLists = async () => {
       const { data: session } = await supabase.auth.getSession();
       if (session?.session?.user.id) {
         const { data } = await supabase
-          .from("custom_pages")
+          .from("lists")
           .select("*")
           .eq("user_id", session.session.user.id);
-        setCustomPages(data || []);
+        setLists(data || []);
       }
     };
 
-    fetchCustomPages();
+    fetchLists();
 
     const { data: authListener } = supabase.auth.onAuthStateChange(() => {
-      fetchCustomPages();
+      fetchLists();
     });
 
     return () => {
@@ -50,10 +51,10 @@ const App = () => {
     };
   }, []);
 
-  const navCustomPages = customPages.map(page => ({
-    id: page.id,
-    name: page.name,
-    path: `/${page.slug}`
+  const navLists = lists.map(list => ({
+    id: list.id,
+    name: list.name,
+    path: `/${list.slug}`
   }));
 
   return (
@@ -70,23 +71,18 @@ const App = () => {
                   <Route path="/" element={<Index />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/settings" element={<Settings />} />
-                  {customPages.map((page) => (
+                  {lists.map((list) => (
                     <Route
-                      key={page.id}
-                      path={`/${page.slug}`}
+                      key={list.id}
+                      path={`/${list.slug}`}
                       element={
-                        <div className="container py-8">
-                          <h1 className="text-2xl font-bold mb-4">{page.name}</h1>
-                          <p className="text-muted-foreground">
-                            This is a custom page. Add your content here.
-                          </p>
-                        </div>
+                        <Index listId={list.id} />
                       }
                     />
                   ))}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
-                <FloatingNav customPages={navCustomPages} />
+                <FloatingNav customPages={navLists} />
               </div>
             </LanguageProvider>
           </AuthProvider>
