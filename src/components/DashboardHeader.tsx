@@ -29,7 +29,7 @@ export const DashboardHeader = () => {
         const fullName = [data.first_name, data.last_name]
           .filter(Boolean)
           .join(' ');
-        setUserName(fullName || t("guest"));
+        setUserName(fullName || "Guest");
       }
     };
 
@@ -60,7 +60,7 @@ export const DashboardHeader = () => {
           className="text-sm text-muted-foreground cursor-pointer select-none"
           onClick={handleNameClick}
         >
-          {t("welcome")}, {userName}
+          Hi, {userName}
         </div>
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold">{t("dashboard")}</h1>
