@@ -157,6 +157,38 @@ export type Database = {
         }
         Relationships: []
       }
+      element_colors: {
+        Row: {
+          color: string
+          created_at: string
+          element_selector: string
+          id: string
+          theme_id: string | null
+        }
+        Insert: {
+          color: string
+          created_at?: string
+          element_selector: string
+          id?: string
+          theme_id?: string | null
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          element_selector?: string
+          id?: string
+          theme_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "element_colors_theme_id_fkey"
+            columns: ["theme_id"]
+            isOneToOne: false
+            referencedRelation: "user_color_themes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lists: {
         Row: {
           created_at: string
@@ -247,6 +279,30 @@ export type Database = {
           last_name?: string | null
           role?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      user_color_themes: {
+        Row: {
+          created_at: string
+          id: string
+          is_preset: boolean | null
+          theme_name: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_preset?: boolean | null
+          theme_name: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_preset?: boolean | null
+          theme_name?: string
+          user_id?: string | null
         }
         Relationships: []
       }

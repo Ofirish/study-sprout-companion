@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -22,6 +21,7 @@ import { useAuth } from "@/components/AuthProvider";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { ColorizeButton } from './colorize/ColorizeButton';
 
 export const FloatingNav = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -209,6 +209,22 @@ export const FloatingNav = () => {
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>Quick Add Subject</p>
+                  </TooltipContent>
+                </Tooltip>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.2, delay: 0.3 }}
+              >
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <ColorizeButton />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Re-Colorize</p>
                   </TooltipContent>
                 </Tooltip>
               </motion.div>

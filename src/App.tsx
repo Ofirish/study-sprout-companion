@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/components/AuthProvider";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { FunModeProvider } from "@/contexts/FunModeContext";
+import { ColorThemeProvider } from "@/contexts/ColorThemeContext";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { FloatingNav } from "@/components/FloatingNav";
 import Index from "./pages/Index";
@@ -25,18 +26,20 @@ const App = () => {
             <Toaster />
             <Sonner />
             <AuthProvider>
-              <LanguageProvider>
-                <div className="relative">
-                  <LanguageToggle />
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/auth" element={<Auth />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                  <FloatingNav />
-                </div>
-              </LanguageProvider>
+              <ColorThemeProvider>
+                <LanguageProvider>
+                  <div className="relative">
+                    <LanguageToggle />
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/auth" element={<Auth />} />
+                      <Route path="/settings" element={<Settings />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                    <FloatingNav />
+                  </div>
+                </LanguageProvider>
+              </ColorThemeProvider>
             </AuthProvider>
           </FunModeProvider>
         </TooltipProvider>
