@@ -13,15 +13,18 @@ import { ColorizeButton } from './colorize/ColorizeButton';
 export const FloatingNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const { signOut } = useAuth();
   const timeoutRef = useRef<NodeJS.Timeout>();
 
   const closeMenu = useCallback(() => {
-    setIsOpen(false);
-  }, []);
+    if (!isColorPickerOpen) {
+      setIsOpen(false);
+    }
+  }, [isColorPickerOpen]);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !isColorPickerOpen) {
       timeoutRef.current = setTimeout(closeMenu, 4000);
     }
 
@@ -30,7 +33,7 @@ export const FloatingNav = () => {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [isOpen, closeMenu]);
+  }, [isOpen, closeMenu, isColorPickerOpen]);
 
   return (
     <>
@@ -39,12 +42,12 @@ export const FloatingNav = () => {
       <div 
         className="fixed bottom-4 right-4 flex flex-col items-end gap-2"
         onMouseEnter={() => {
-          if (isOpen && timeoutRef.current) {
+          if (isOpen && timeoutRef.current && !isColorPickerOpen) {
             clearTimeout(timeoutRef.current);
           }
         }}
         onMouseLeave={() => {
-          if (isOpen) {
+          if (isOpen && !isColorPickerOpen) {
             timeoutRef.current = setTimeout(closeMenu, 4000);
           }
         }}
@@ -127,7 +130,7 @@ export const FloatingNav = () => {
                 icon={<></>}
                 label="Re-Colorize"
                 delay={0.4}
-                component={<ColorizeButton />}
+                component={<ColorizeButton onOpenChange={setIsColorPickerOpen} />}
               />
             </>
           )}

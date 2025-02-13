@@ -1,6 +1,6 @@
 
-import { useState } from 'react';
-import { Palette } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Palette, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -12,12 +12,24 @@ import {
 import { ColorPicker } from './ColorPicker';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-export function ColorizeButton() {
+interface ColorizeButtonProps {
+  onOpenChange?: (isOpen: boolean) => void;
+}
+
+export function ColorizeButton({ onOpenChange }: ColorizeButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
 
+  useEffect(() => {
+    onOpenChange?.(isOpen);
+  }, [isOpen, onOpenChange]);
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+  };
+
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+    <Sheet open={isOpen} onOpenChange={handleOpenChange}>
       <SheetTrigger asChild>
         <Button
           variant="outline"
@@ -28,8 +40,16 @@ export function ColorizeButton() {
         </Button>
       </SheetTrigger>
       <SheetContent side={isMobile ? "bottom" : "right"} className={isMobile ? "h-[80vh]" : ""}>
-        <SheetHeader>
+        <SheetHeader className="flex flex-row items-center justify-between">
           <SheetTitle>Re-Colorize</SheetTitle>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => handleOpenChange(false)}
+            className="h-8 w-8"
+          >
+            <X className="h-4 w-4" />
+          </Button>
         </SheetHeader>
         <ColorPicker />
       </SheetContent>
