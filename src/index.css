@@ -5,6 +5,11 @@
 
 @layer base {
   :root {
+    /* Fixed colors for UI elements that shouldn't change */
+    --fixed-primary: #0ea5e9;
+    --fixed-primary-foreground: #ffffff;
+    
+    /* Application theme colors that can be customized */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -37,6 +42,11 @@
   }
 
   .dark {
+    /* Fixed colors remain the same in dark mode */
+    --fixed-primary: #0ea5e9;
+    --fixed-primary-foreground: #ffffff;
+    
+    /* Dark mode theme colors */
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
@@ -74,5 +84,11 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Fixed styling for color picker UI */
+  .color-picker-ui {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
   }
 }

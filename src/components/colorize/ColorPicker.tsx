@@ -13,23 +13,38 @@ import {
 import { useColorTheme } from '@/contexts/ColorThemeContext';
 
 const COLORIZABLE_ELEMENTS = [
+  // Page Elements
   { selector: 'background', name: 'Page Background' },
   { selector: 'foreground', name: 'Text Color' },
-  { selector: 'primary', name: 'Primary Color' },
-  { selector: 'primary-foreground', name: 'Primary Text' },
-  { selector: 'secondary', name: 'Secondary Color' },
-  { selector: 'secondary-foreground', name: 'Secondary Text' },
+  
+  // Primary Elements
+  { selector: 'primary', name: 'Primary Button Background' },
+  { selector: 'primary-foreground', name: 'Primary Button Text' },
+  
+  // Secondary Elements
+  { selector: 'secondary', name: 'Secondary Button Background' },
+  { selector: 'secondary-foreground', name: 'Secondary Button Text' },
+  
+  // Cards
   { selector: 'card', name: 'Card Background' },
   { selector: 'card-foreground', name: 'Card Text' },
-  { selector: 'muted', name: 'Muted Background' },
-  { selector: 'muted-foreground', name: 'Muted Text' },
-  { selector: 'accent', name: 'Accent Color' },
-  { selector: 'accent-foreground', name: 'Accent Text' },
-  { selector: 'destructive', name: 'Destructive Color' },
-  { selector: 'destructive-foreground', name: 'Destructive Text' },
-  { selector: 'border', name: 'Border Color' },
-  { selector: 'input', name: 'Input Border' },
-  { selector: 'ring', name: 'Focus Ring' },
+  
+  // Muted Elements (Tabs, Secondary Text)
+  { selector: 'muted', name: 'Tab Background' },
+  { selector: 'muted-foreground', name: 'Tab Text' },
+  
+  // Accent Elements (Selected State)
+  { selector: 'accent', name: 'Selected Tab Background' },
+  { selector: 'accent-foreground', name: 'Selected Tab Text' },
+  
+  // Destructive Elements
+  { selector: 'destructive', name: 'Delete Button Background' },
+  { selector: 'destructive-foreground', name: 'Delete Button Text' },
+  
+  // Form Elements
+  { selector: 'border', name: 'Border Colors' },
+  { selector: 'input', name: 'Input Background' },
+  { selector: 'ring', name: 'Focus Ring' }
 ];
 
 export function ColorPicker() {
@@ -82,7 +97,7 @@ export function ColorPicker() {
   };
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-4 bg-white dark:bg-gray-900">
       <div className="space-y-2">
         <Label>Select Element</Label>
         <Select value={selectedElement} onValueChange={setSelectedElement}>
@@ -120,7 +135,8 @@ export function ColorPicker() {
 
       <Button 
         onClick={handleApplyColors} 
-        className="w-full bg-primary"
+        className="w-full"
+        style={{ backgroundColor: "var(--fixed-primary)", color: "white" }}
         disabled={Object.keys(previewColors).length === 0}
       >
         Apply Changes
@@ -160,11 +176,20 @@ export function ColorPicker() {
             onChange={(e) => setThemeName(e.target.value)}
             placeholder="Theme name"
           />
-          <Button onClick={handleSaveTheme}>Save</Button>
+          <Button 
+            onClick={handleSaveTheme}
+            style={{ backgroundColor: "var(--fixed-primary)", color: "white" }}
+          >
+            Save
+          </Button>
         </div>
       </div>
 
-      <Button onClick={handleReset} variant="outline" className="w-full">
+      <Button 
+        onClick={handleReset} 
+        variant="outline" 
+        className="w-full"
+      >
         Reset to Default
       </Button>
     </div>
