@@ -116,6 +116,33 @@ export type Database = {
         }
         Relationships: []
       }
+      custom_translations: {
+        Row: {
+          created_at: string | null
+          en: string
+          he: string
+          id: string
+          translation_key: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          en: string
+          he: string
+          id?: string
+          translation_key: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          en?: string
+          he?: string
+          id?: string
+          translation_key?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       parent_student_relationships: {
         Row: {
           created_at: string | null

@@ -6,9 +6,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 
 interface CustomTranslation {
+  id: string;
+  user_id: string;
   translation_key: string;
   en: string;
   he: string;
+  created_at?: string;
 }
 
 interface LanguageContextType {
@@ -33,7 +36,7 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
           .eq("user_id", session.user.id);
 
         if (data) {
-          setCustomTranslations(data);
+          setCustomTranslations(data as CustomTranslation[]);
         }
       };
 

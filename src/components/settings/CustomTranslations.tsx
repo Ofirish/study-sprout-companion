@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,9 +12,11 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 interface CustomTranslation {
   id: string;
+  user_id: string;
   translation_key: string;
   en: string;
   he: string;
+  created_at?: string;
 }
 
 interface TranslationGroup {
@@ -106,7 +107,9 @@ export const CustomTranslations = () => {
       return;
     }
 
-    setCustomTranslations(data || []);
+    if (data) {
+      setCustomTranslations(data as CustomTranslation[]);
+    }
     setLoading(false);
   };
 
@@ -117,21 +120,21 @@ export const CustomTranslations = () => {
       (t) => t.translation_key === key
     );
 
+    const translationData = {
+      user_id: session.user.id,
+      translation_key: key,
+      en,
+      he,
+    };
+
     const { error } = existingTranslation
       ? await supabase
           .from("custom_translations")
-          .update({ en, he })
+          .update(translationData)
           .eq("id", existingTranslation.id)
       : await supabase
           .from("custom_translations")
-          .insert([
-            {
-              user_id: session.user.id,
-              translation_key: key,
-              en,
-              he,
-            },
-          ]);
+          .insert([translationData]);
 
     if (error) {
       toast({
