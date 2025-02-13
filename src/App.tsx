@@ -18,11 +18,11 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <LanguageProvider>
-        <FunModeProvider>
-          <Toaster />
-          <Sonner />
-          <AuthProvider>
+      <FunModeProvider>
+        <Toaster />
+        <Sonner />
+        <AuthProvider>
+          <LanguageProvider>
             <LanguageToggle />
             <Routes>
               <Route path="/" element={<Index />} />
@@ -30,9 +30,9 @@ const App = () => (
               <Route path="/settings" element={<Settings />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </AuthProvider>
-        </FunModeProvider>
-      </LanguageProvider>
+          </LanguageProvider>
+        </AuthProvider>
+      </FunModeProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
