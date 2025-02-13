@@ -19,6 +19,7 @@ const Help = () => {
               <li>עריכת מטלה: לחץ על המטלה כדי לערוך את הפרטים שלה</li>
               <li>סינון מטלות: השתמש בפילטרים בחלק העליון כדי לסנן לפי סטטוס או תצוגה</li>
               <li>שינוי סטטוס: לחץ על הסטטוס של המטלה כדי לשנות אותו</li>
+              <li>הוספה מהירה של מקצוע: לחץ על כפתור ה-+ בתפריט הצף והוסף מקצוע חדש באנגלית ובעברית</li>
             </ul>
 
             <h2 className="text-2xl font-semibold mt-8 mb-4">התאמה אישית</h2>
@@ -45,6 +46,7 @@ const Help = () => {
               <li>Edit Assignment: Click on an assignment to edit its details</li>
               <li>Filter Assignments: Use the filters at the top to filter by status or view</li>
               <li>Change Status: Click on an assignment's status to change it</li>
+              <li>Quick Add Subject: Click the + button in the floating menu to add a new subject in both English and Hebrew</li>
             </ul>
 
             <h2 className="text-2xl font-semibold mt-8 mb-4">Customization</h2>
