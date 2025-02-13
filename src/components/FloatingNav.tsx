@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { HomeIcon, Menu, Settings, X, PlusCircle } from "lucide-react";
+import { HomeIcon, Menu, Settings, X, PlusCircle, LogOut } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Tooltip,
@@ -28,7 +28,7 @@ export const FloatingNav = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [nameEn, setNameEn] = useState("");
   const [nameHe, setNameHe] = useState("");
-  const { session } = useAuth();
+  const { session, signOut } = useAuth();
   const { toast } = useToast();
   const { t } = useLanguage();
 
@@ -118,6 +118,30 @@ export const FloatingNav = () => {
         <AnimatePresence>
           {isOpen && (
             <>
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: -68 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+                className="absolute bottom-0"
+              >
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-12 w-12 rounded-full shadow-lg"
+                      onClick={signOut}
+                    >
+                      <LogOut className="h-6 w-6" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Sign Out</p>
+                  </TooltipContent>
+                </Tooltip>
+              </motion.div>
+
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
