@@ -26,6 +26,7 @@ export function ColorizeButton({ onOpenChange }: ColorizeButtonProps) {
 
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
+    onOpenChange?.(open);
   };
 
   return (
