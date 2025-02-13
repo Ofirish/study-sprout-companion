@@ -6,6 +6,7 @@ import { DashboardHeader } from "@/components/DashboardHeader";
 import { AssignmentTabs } from "@/components/AssignmentTabs";
 import { DashboardActions } from "@/components/dashboard/DashboardActions";
 import { DashboardFilters } from "@/components/dashboard/DashboardFilters";
+import { LastActivityTimer } from "@/components/dashboard/LastActivityTimer";
 import { Sparkles } from "@/components/Sparkles";
 
 interface DashboardContentProps {
@@ -99,6 +100,10 @@ export const DashboardContent = ({
           hasStudents={hasStudents}
           funMode={funMode}
           showOnlyBottomControls={true}
+        />
+        <LastActivityTimer 
+          assignments={assignments}
+          viewMode={viewMode}
         />
       </div>
     </div>
