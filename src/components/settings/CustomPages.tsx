@@ -40,7 +40,7 @@ export const CustomPages = () => {
 
     if (error) {
       toast({
-        title: "Error",
+        title: t("error"),
         description: error.message,
         variant: "destructive",
       });
@@ -67,7 +67,7 @@ export const CustomPages = () => {
 
     if (error) {
       toast({
-        title: "Error",
+        title: t("error"),
         description: error.message,
         variant: "destructive",
       });
@@ -75,7 +75,7 @@ export const CustomPages = () => {
     }
 
     toast({
-      title: "Success",
+      title: t("success"),
       description: "Page added successfully",
     });
 
@@ -93,7 +93,7 @@ export const CustomPages = () => {
 
     if (error) {
       toast({
-        title: "Error",
+        title: t("error"),
         description: error.message,
         variant: "destructive",
       });
@@ -101,7 +101,7 @@ export const CustomPages = () => {
     }
 
     toast({
-      title: "Success",
+      title: t("success"),
       description: "Page deleted successfully",
     });
 
@@ -118,16 +118,16 @@ export const CustomPages = () => {
       <div className="space-y-4">
         <form onSubmit={handleAddPage} className="flex gap-4">
           <div className="flex-1">
-            <Label htmlFor="newPageName">Page Name</Label>
+            <Label htmlFor="newPageName">{t("pageName")}</Label>
             <Input
               id="newPageName"
               value={newPageName}
               onChange={(e) => setNewPageName(e.target.value)}
-              placeholder="Enter page name"
+              placeholder={t("pageName")}
             />
           </div>
           <Button type="submit" className="mt-6">
-            Add Page
+            {t("addPage")}
           </Button>
         </form>
 

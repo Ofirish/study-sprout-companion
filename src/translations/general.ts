@@ -179,6 +179,17 @@ export const general = {
   resetPasswordSuccess: {
     en: "Password reset instructions sent to your email",
     he: "הוראות לאיפוס הסיסמה נשלחו למייל שלך"
+  },
+  customPages: {
+    en: "Custom Pages",
+    he: "דפים מותאמים אישית"
+  },
+  addPage: {
+    en: "Add Page",
+    he: "הוסף דף"
+  },
+  pageName: {
+    en: "Page Name",
+    he: "שם הדף"
   }
 } as const;
-
