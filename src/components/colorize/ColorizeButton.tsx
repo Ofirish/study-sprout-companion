@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Rgb } from 'lucide-react';
+import { Palette } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -10,11 +10,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ColorPicker } from './ColorPicker';
-import { useMediaQuery } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export function ColorizeButton() {
   const [isOpen, setIsOpen] = useState(false);
-  const isMobile = useMediaQuery('(max-width: 768px)');
+  const isMobile = useIsMobile();
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -24,7 +24,7 @@ export function ColorizeButton() {
           size="icon"
           className="h-12 w-12 rounded-full shadow-lg"
         >
-          <Rgb className="h-6 w-6" />
+          <Palette className="h-6 w-6" />
         </Button>
       </SheetTrigger>
       <SheetContent side={isMobile ? "bottom" : "right"} className={isMobile ? "h-[80vh]" : ""}>
