@@ -179,6 +179,9 @@ export const general = {
   resetPasswordSuccess: {
     en: "Password reset instructions sent to your email",
     he: "הוראות לאיפוס הסיסמה נשלחו למייל שלך"
+  },
+  loginRequired: {
+    en: "Please login to perform this action",
+    he: "נא להתחבר כדי לבצע פעולה זו"
   }
 } as const;
-
