@@ -1,7 +1,8 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { HomeIcon, Menu, Settings, X, PlusCircle, LogOut } from "lucide-react";
+import { HomeIcon, Menu, Settings, X, PlusCircle, LogOut, HelpCircle } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Tooltip,
@@ -165,12 +166,36 @@ export const FloatingNav = () => {
                   </TooltipContent>
                 </Tooltip>
               </motion.div>
-              
+
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.2, delay: 0.1 }}
+              >
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/help">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-12 w-12 rounded-full shadow-lg"
+                      >
+                        <HelpCircle className="h-6 w-6" />
+                      </Button>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Help</p>
+                  </TooltipContent>
+                </Tooltip>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.2, delay: 0.2 }}
               >
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -194,7 +219,7 @@ export const FloatingNav = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
-                transition={{ duration: 0.2, delay: 0.2 }}
+                transition={{ duration: 0.2, delay: 0.3 }}
               >
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -217,7 +242,7 @@ export const FloatingNav = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
-                transition={{ duration: 0.2, delay: 0.3 }}
+                transition={{ duration: 0.2, delay: 0.4 }}
               >
                 <Tooltip>
                   <TooltipTrigger asChild>
