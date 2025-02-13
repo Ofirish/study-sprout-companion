@@ -1,4 +1,3 @@
-
 export const general = {
   error: {
     en: "Error",
@@ -191,5 +190,25 @@ export const general = {
   pageName: {
     en: "Page Name",
     he: "שם הדף"
+  },
+  lists: {
+    en: "Lists",
+    he: "רשימות"
+  },
+  listName: {
+    en: "List Name",
+    he: "שם הרשימה"
+  },
+  description: {
+    en: "Description",
+    he: "תיאור"
+  },
+  listDescription: {
+    en: "List Description",
+    he: "תיאור הרשימה"
+  },
+  addList: {
+    en: "Add List",
+    he: "הוסף רשימה"
   }
 } as const;

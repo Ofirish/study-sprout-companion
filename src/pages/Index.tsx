@@ -1,3 +1,4 @@
+
 /**
  * Index.tsx
  * Main dashboard page displaying assignments and filters
@@ -19,6 +20,8 @@ import { DashboardFilters } from "@/components/dashboard/DashboardFilters";
 import { AssignmentAttachments } from "@/components/assignments/AssignmentAttachments";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+
+type ViewMode = "all" | "parent" | "student";
 
 interface IndexProps {
   listId?: string;
