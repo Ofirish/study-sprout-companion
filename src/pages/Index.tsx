@@ -1,4 +1,3 @@
-
 /**
  * Index.tsx
  * Main dashboard page displaying assignments and filters
@@ -63,6 +62,18 @@ const Index = () => {
     document.addEventListener('dblclick', handleHomeworkClick);
     return () => document.removeEventListener('dblclick', handleHomeworkClick);
   }, [toggleFunMode]);
+
+  useEffect(() => {
+    const handleStopAllEffects = () => {
+      setShowForm(false);
+      if (funMode) {
+        toggleFunMode();
+      }
+    };
+
+    window.addEventListener("stopAllEffects", handleStopAllEffects);
+    return () => window.removeEventListener("stopAllEffects", handleStopAllEffects);
+  }, [funMode, toggleFunMode]);
 
   const { 
     assignments = [], 

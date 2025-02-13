@@ -34,11 +34,21 @@ export const StatsCard = ({ assignments, onFilterChange, viewMode, statusFilter 
   const inProgress = filteredAssignments.filter((a) => a.status === "In Progress").length;
   const notStarted = filteredAssignments.filter((a) => a.status === "Not Started").length;
 
+  // Handle click on total button to stop all effects
+  const handleTotalClick = () => {
+    // First trigger the filter change
+    onFilterChange("all");
+    
+    // Then dispatch a custom event to stop all effects
+    const event = new CustomEvent("stopAllEffects");
+    window.dispatchEvent(event);
+  };
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 sm:mt-8" dir={language === "he" ? "rtl" : "ltr"}>
       <Button
         variant="ghost"
-        onClick={() => onFilterChange("all")}
+        onClick={handleTotalClick}
         className={`relative flex flex-col items-center justify-center p-4 hover:bg-gray-100 rounded-lg transition-all h-auto ${
           statusFilter === 'all' ? 'ring-2 ring-[#0EA5E9] ring-offset-2 shadow-[0_0_25px_rgba(46,204,113,0.5)]' : 'shadow hover:shadow-md'
         }`}
