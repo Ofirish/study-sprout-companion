@@ -57,27 +57,29 @@ const App = () => {
           <Sonner />
           <AuthProvider>
             <LanguageProvider>
-              <LanguageToggle />
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/settings" element={<Settings />} />
-                {customPages.map((page) => (
-                  <Route
-                    key={page.id}
-                    path={`/${page.slug}`}
-                    element={
-                      <div className="container py-8">
-                        <h1 className="text-2xl font-bold mb-4">{page.name}</h1>
-                        <p className="text-muted-foreground">
-                          This is a custom page. Add your content here.
-                        </p>
-                      </div>
-                    }
-                  />
-                ))}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+              <div className="relative">
+                <LanguageToggle />
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/settings" element={<Settings />} />
+                  {customPages.map((page) => (
+                    <Route
+                      key={page.id}
+                      path={`/${page.slug}`}
+                      element={
+                        <div className="container py-8">
+                          <h1 className="text-2xl font-bold mb-4">{page.name}</h1>
+                          <p className="text-muted-foreground">
+                            This is a custom page. Add your content here.
+                          </p>
+                        </div>
+                      }
+                    />
+                  ))}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </div>
             </LanguageProvider>
           </AuthProvider>
         </FunModeProvider>
