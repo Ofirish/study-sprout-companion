@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { StudentRelationships } from "@/components/student/StudentRelationships";
+import { UserRelationships } from "@/components/settings/UserRelationships";
 import { ProfileForm } from "@/components/settings/ProfileForm";
 import { SubjectManagement } from "@/components/settings/SubjectManagement";
 import { supabase } from "@/integrations/supabase/client";
@@ -110,6 +111,9 @@ const Settings = () => {
           onSubmit={handleUpdateProfile}
         />
       </Card>
+
+      <UserRelationships />
+      <Separator className="my-6" />
 
       {role === "parent" && (
         <>

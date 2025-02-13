@@ -182,6 +182,45 @@ export type Database = {
         }
         Relationships: []
       }
+      user_relationships: {
+        Row: {
+          created_at: string | null
+          id: string
+          related_user_id: string
+          relationship_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          related_user_id: string
+          relationship_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          related_user_id?: string
+          relationship_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_relationships_related_user_id_fkey"
+            columns: ["related_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_relationships_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
