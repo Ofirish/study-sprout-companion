@@ -5,17 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { HomeIcon, Menu, Settings } from "lucide-react";
 
-interface CustomPage {
-  id: string;
-  name: string;
-  path: string;
-}
-
-interface FloatingNavProps {
-  customPages?: CustomPage[];
-}
-
-export const FloatingNav = ({ customPages = [] }: FloatingNavProps) => {
+export const FloatingNav = () => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -37,14 +27,6 @@ export const FloatingNav = ({ customPages = [] }: FloatingNavProps) => {
               Home
             </Button>
           </Link>
-          
-          {customPages.map((page) => (
-            <Link key={page.id} to={page.path} onClick={() => setOpen(false)}>
-              <Button variant="ghost" className="w-full justify-start">
-                {page.name}
-              </Button>
-            </Link>
-          ))}
 
           <Link to="/settings" onClick={() => setOpen(false)}>
             <Button variant="ghost" className="w-full justify-start">
