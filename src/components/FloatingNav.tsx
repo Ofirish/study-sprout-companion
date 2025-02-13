@@ -37,6 +37,18 @@ export const FloatingNav = () => {
     };
   }, [isOpen, closeMenu, isColorPickerOpen]);
 
+  const handleLanguageToggle = () => {
+    setLanguage(language === "en" ? "he" : "en");
+  };
+
+  const handleSignOut = () => {
+    signOut();
+  };
+
+  const handleQuickAdd = () => {
+    setShowDialog(true);
+  };
+
   return (
     <>
       <QuickAddSubjectDialog open={showDialog} onOpenChange={setShowDialog} />
@@ -57,33 +69,17 @@ export const FloatingNav = () => {
         <AnimatePresence>
           {isOpen && (
             <>
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: -68 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
-                className="absolute bottom-0"
-              >
-                <NavButton
-                  icon={<Languages className="h-6 w-6" />}
-                  label={language === "en" ? "עברית" : "English"}
-                  onClick={() => setLanguage(language === "en" ? "he" : "en")}
-                />
-              </motion.div>
+              <NavButton
+                icon={<Languages className="h-6 w-6" />}
+                label={language === "en" ? "עברית" : "English"}
+                onClick={handleLanguageToggle}
+              />
 
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: -68 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
-                className="absolute bottom-0 mb-14"
-              >
-                <NavButton
-                  icon={<LogOut className="h-6 w-6" />}
-                  label="Sign Out"
-                  onClick={signOut}
-                />
-              </motion.div>
+              <NavButton
+                icon={<LogOut className="h-6 w-6" />}
+                label="Sign Out"
+                onClick={handleSignOut}
+              />
 
               <NavButton
                 icon={<HomeIcon className="h-6 w-6" />}
@@ -139,7 +135,7 @@ export const FloatingNav = () => {
                 icon={<PlusCircle className="h-6 w-6" />}
                 label="Quick Add Subject"
                 delay={0.3}
-                onClick={() => setShowDialog(true)}
+                onClick={handleQuickAdd}
               />
 
               <NavButton

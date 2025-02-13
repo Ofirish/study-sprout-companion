@@ -26,7 +26,7 @@ export function ColorizeButton({ onOpenChange }: ColorizeButtonProps) {
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={handleOpenChange}>
+    <Sheet defaultOpen={false} onOpenChange={handleOpenChange}>
       <SheetTrigger asChild>
         <Button
           variant="outline"
