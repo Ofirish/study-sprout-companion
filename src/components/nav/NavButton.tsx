@@ -12,12 +12,20 @@ interface NavButtonProps {
 }
 
 export const NavButton = ({ icon, label, onClick, delay = 0, component }: NavButtonProps) => {
-  const ButtonContent = (
+  const ButtonContent = onClick ? (
     <Button
       variant="outline"
       size="icon"
       className="h-12 w-12 rounded-full shadow-lg"
       onClick={onClick}
+    >
+      {icon}
+    </Button>
+  ) : (
+    <Button
+      variant="outline"
+      size="icon"
+      className="h-12 w-12 rounded-full shadow-lg"
     >
       {icon}
     </Button>
@@ -38,7 +46,7 @@ export const NavButton = ({ icon, label, onClick, delay = 0, component }: NavBut
     <MotionWrapper>
       <Tooltip>
         <TooltipTrigger asChild>
-          {component ? component : ButtonContent}
+          {component || ButtonContent}
         </TooltipTrigger>
         <TooltipContent>
           <p>{label}</p>
