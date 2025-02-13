@@ -3,17 +3,18 @@
  * Index.tsx
  * Main dashboard page displaying assignments and filters
  */
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Assignment } from "@/types/assignment";
 import { useAuth } from "@/components/AuthProvider";
-import { useAssignments } from "@/hooks/useAssignments";
-import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useFunMode } from "@/contexts/FunModeContext";
 import { DashboardLoading } from "@/components/dashboard/DashboardLoading";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
 import { AttachmentDialog } from "@/components/dashboard/AttachmentDialog";
 import { Sparkles } from "@/components/Sparkles";
+import { useFilteredAssignments } from "@/hooks/useFilteredAssignments";
+import { useDashboardEffects } from "@/hooks/useDashboardEffects";
+import { useAssignmentManager } from "@/hooks/useAssignmentManager";
 
 type ViewMode = "all" | "student" | "parent";
 
@@ -26,95 +27,41 @@ const Index = () => {
   const [viewMode, setViewMode] = useState<ViewMode>("all");
   const [hasStudents, setHasStudents] = useState(false);
   const [showFlyingName, setShowFlyingName] = useState(false);
+
   const { session } = useAuth();
   const { language } = useLanguage();
-  const { funMode, toggleFunMode } = useFunMode();
+  const { funMode } = useFunMode();
 
-  useEffect(() => {
-    const checkForStudents = async () => {
-      if (!session) return;
-      
-      const { data } = await supabase
-        .from("parent_student_relationships")
-        .select("*")
-        .eq("parent_id", session.user.id);
-      
-      setHasStudents(data && data.length > 0);
-    };
-    
-    checkForStudents();
-  }, [session]);
+  const {
+    assignments,
+    isLoading,
+    handleAddAssignment,
+    handleStatusChange,
+  } = useAssignmentManager();
 
-  useEffect(() => {
-    const handleHomeworkClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const text = target.textContent?.toLowerCase() || '';
-      if (text.includes('homework')) {
-        toggleFunMode();
-      }
-    };
+  useDashboardEffects({
+    session,
+    setShowForm,
+    setShowFlyingName,
+    setHasStudents,
+  });
 
-    document.addEventListener('dblclick', handleHomeworkClick);
-    return () => document.removeEventListener('dblclick', handleHomeworkClick);
-  }, [toggleFunMode]);
+  const filteredAssignments = useFilteredAssignments(assignments, {
+    hideCompleted,
+    statusFilter,
+    viewMode,
+  });
 
-  useEffect(() => {
-    const handleStopAllEffects = () => {
-      setShowForm(false);
-      setShowFlyingName(false);
-      if (funMode) {
-        toggleFunMode();
-      }
-    };
-
-    window.addEventListener("stopAllEffects", handleStopAllEffects);
-    return () => window.removeEventListener("stopAllEffects", handleStopAllEffects);
-  }, [funMode, toggleFunMode]);
-
-  const { 
-    assignments = [], 
-    isLoading, 
-    addAssignmentMutation, 
-    updateAssignmentMutation 
-  } = useAssignments();
-
-  const handleAddAssignment = async (
+  const handleAssignmentSubmit = async (
     newAssignment: Omit<Assignment, "id" | "status">
   ) => {
-    try {
-      const result = await addAssignmentMutation.mutateAsync(newAssignment);
-      if (result?.id) {
-        setNewAssignmentId(result.id);
-        setShowAttachmentDialog(true);
-      }
-      setShowForm(false);
-    } catch (error) {
-      console.error("Error adding assignment:", error);
+    const assignmentId = await handleAddAssignment(newAssignment);
+    if (assignmentId) {
+      setNewAssignmentId(assignmentId);
+      setShowAttachmentDialog(true);
     }
+    setShowForm(false);
   };
-
-  const handleStatusChange = (id: string, status: Assignment["status"]) => {
-    updateAssignmentMutation.mutate({ id, status });
-  };
-
-  const filteredAssignments = assignments.filter(assignment => {
-    if (hideCompleted && assignment.status === "Completed") {
-      return false;
-    }
-    
-    const passesStatusFilter = statusFilter === "all" || 
-      (statusFilter === "completed" && assignment.status === "Completed") ||
-      (statusFilter === "in_progress" && assignment.status === "In Progress") ||
-      (statusFilter === "not_started" && assignment.status === "Not Started");
-
-    if (!passesStatusFilter) return false;
-
-    if (viewMode === "all") return true;
-    if (viewMode === "parent" && assignment.user_id === session?.user.id) return true;
-    if (viewMode === "student" && assignment.user_id !== session?.user.id) return true;
-    
-    return false;
-  });
 
   if (isLoading) {
     return <DashboardLoading />;
@@ -142,7 +89,7 @@ const Index = () => {
         hasStudents={hasStudents}
         funMode={funMode}
         filteredAssignments={filteredAssignments}
-        handleAddAssignment={handleAddAssignment}
+        handleAddAssignment={handleAssignmentSubmit}
         handleStatusChange={handleStatusChange}
         language={language}
       />
