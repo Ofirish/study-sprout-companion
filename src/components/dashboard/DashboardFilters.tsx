@@ -1,9 +1,7 @@
 
 import { Button } from "@/components/ui/button";
-import { Users, ChevronDown, LogOut } from "lucide-react";
+import { Users, ChevronDown } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useAuth } from "@/components/AuthProvider";
-import { useToast } from "@/components/ui/use-toast";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,20 +35,6 @@ export const DashboardFilters = ({
   showOnlyBottomControls = false,
 }: DashboardFiltersProps) => {
   const { t } = useLanguage();
-  const { signOut } = useAuth();
-  const { toast } = useToast();
-
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "An unexpected error occurred",
-        variant: "destructive",
-      });
-    }
-  };
 
   const filters = (
     <div className="flex items-center space-x-2 rtl:space-x-reverse">
@@ -93,19 +77,7 @@ export const DashboardFilters = ({
   );
 
   if (showOnlyBottomControls) {
-    return (
-      <div className="flex justify-between items-center">
-        <Button 
-          variant="outline" 
-          onClick={handleSignOut} 
-          size="sm"
-          className="w-auto"
-        >
-          <LogOut className="mr-2 h-4 w-4" />
-          {t("signOut")}
-        </Button>
-      </div>
-    );
+    return null; // Don't render anything at the bottom since we removed the sign out button
   }
 
   return (
