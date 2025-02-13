@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
@@ -20,8 +21,10 @@ interface ColorThemeContextType {
   setActiveTheme: (theme: Theme | null) => void;
   themes: Theme[];
   saveTheme: (themeName: string, colors: ElementColor[]) => Promise<void>;
+  deleteTheme: (themeId: string) => Promise<void>;
   resetTheme: () => void;
   updateElementColor: (selector: string, color: string) => void;
+  applyTheme: (theme: Theme) => void;
   isLoading: boolean;
 }
 
@@ -81,6 +84,41 @@ export function ColorThemeProvider({ children }: { children: React.ReactNode }) 
     }
   };
 
+  const applyTheme = (theme: Theme) => {
+    theme.colors.forEach(({ element_selector, color }) => {
+      updateElementColor(element_selector, color);
+    });
+    setActiveTheme(theme);
+  };
+
+  const deleteTheme = async (themeId: string) => {
+    if (!session?.user) return;
+
+    try {
+      const { error: deleteError } = await supabase
+        .from('user_color_themes')
+        .delete()
+        .eq('id', themeId)
+        .eq('user_id', session.user.id)
+        .single();
+
+      if (deleteError) throw deleteError;
+
+      await loadThemes();
+      
+      toast({
+        title: "Theme deleted",
+        description: "The theme has been successfully deleted.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error deleting theme",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   const saveTheme = async (themeName: string, colors: ElementColor[]) => {
     if (!session?.user) return;
 
@@ -106,6 +144,11 @@ export function ColorThemeProvider({ children }: { children: React.ReactNode }) 
       if (colorsError) throw colorsError;
 
       await loadThemes();
+      
+      toast({
+        title: "Theme saved",
+        description: "Your theme has been saved successfully.",
+      });
     } catch (error: any) {
       toast({
         title: "Error saving theme",
@@ -117,12 +160,10 @@ export function ColorThemeProvider({ children }: { children: React.ReactNode }) 
 
   const resetTheme = () => {
     setActiveTheme(null);
-    // Remove CSS variables
     document.documentElement.style.cssText = "";
   };
 
   const updateElementColor = (selector: string, color: string) => {
-    // Convert hex to HSL
     const r = parseInt(color.slice(1, 3), 16) / 255;
     const g = parseInt(color.slice(3, 5), 16) / 255;
     const b = parseInt(color.slice(5, 7), 16) / 255;
@@ -165,8 +206,10 @@ export function ColorThemeProvider({ children }: { children: React.ReactNode }) 
         setActiveTheme,
         themes,
         saveTheme,
+        deleteTheme,
         resetTheme,
         updateElementColor,
+        applyTheme,
         isLoading
       }}
     >

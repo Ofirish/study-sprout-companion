@@ -52,7 +52,7 @@ export function ColorPicker() {
   const [color, setColor] = useState('#000000');
   const [themeName, setThemeName] = useState('');
   const [previewColors, setPreviewColors] = useState<Record<string, string>>({});
-  const { activeTheme, themes, saveTheme, resetTheme, updateElementColor } = useColorTheme();
+  const { activeTheme, themes, saveTheme, deleteTheme, resetTheme, updateElementColor, applyTheme } = useColorTheme();
 
   useEffect(() => {
     if (activeTheme) {
@@ -75,6 +75,7 @@ export function ColorPicker() {
     Object.entries(previewColors).forEach(([selector, color]) => {
       updateElementColor(selector, color);
     });
+    setPreviewColors({});
   };
 
   const handleSaveTheme = async () => {
@@ -87,7 +88,6 @@ export function ColorPicker() {
     }));
     await saveTheme(themeName, colors);
     setThemeName('');
-    setPreviewColors({});
   };
 
   const handleReset = () => {
@@ -147,11 +147,7 @@ export function ColorPicker() {
         <Select onValueChange={(themeId) => {
           const theme = themes.find(t => t.id === themeId);
           if (theme) {
-            const newPreviewColors: Record<string, string> = {};
-            theme.colors.forEach(({ element_selector, color }) => {
-              newPreviewColors[element_selector] = color;
-            });
-            setPreviewColors(newPreviewColors);
+            applyTheme(theme);
           }
         }}>
           <SelectTrigger>
@@ -159,8 +155,26 @@ export function ColorPicker() {
           </SelectTrigger>
           <SelectContent>
             {themes.map(theme => (
-              <SelectItem key={theme.id} value={theme.id}>
-                {theme.theme_name}
+              <SelectItem 
+                key={theme.id} 
+                value={theme.id}
+                className="flex justify-between items-center"
+              >
+                <span>{theme.theme_name}</span>
+                {!theme.is_preset && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      deleteTheme(theme.id);
+                    }}
+                    className="ml-2 p-1 h-6 hover:bg-destructive hover:text-destructive-foreground"
+                  >
+                    Delete
+                  </Button>
+                )}
               </SelectItem>
             ))}
           </SelectContent>
