@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/components/AuthProvider";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,7 +20,7 @@ interface RelatedUser {
 export const UserRelationships = () => {
   const { session } = useAuth();
   const { toast } = useToast();
-  const { t } = useLanguage();
+  const { language } = useLanguage();
   const [userEmail, setUserEmail] = useState("");
   const [relatedUsers, setRelatedUsers] = useState<RelatedUser[]>([]);
   const [loading, setLoading] = useState(true);
@@ -174,12 +174,16 @@ export const UserRelationships = () => {
 
   return (
     <Card className="p-6">
-      <h2 className="text-xl font-semibold mb-4">{t("userRelationships")}</h2>
+      <h2 className="text-xl font-semibold mb-4">
+        {language === "en" ? "User Connections" : "קשרי משתמשים"}
+      </h2>
       
       <form onSubmit={handleAddUser} className="space-y-4 mb-6">
         <div className="flex gap-4">
           <div className="flex-1">
-            <Label htmlFor="userEmail">{t("userEmail")}</Label>
+            <Label htmlFor="userEmail">
+              {language === "en" ? "User Email" : "אימייל משתמש"}
+            </Label>
             <Input
               id="userEmail"
               type="email"
@@ -190,15 +194,19 @@ export const UserRelationships = () => {
           </div>
           <Button type="submit" className="mt-8">
             <UserPlus className="mr-2 h-4 w-4" />
-            {t("addConnection")}
+            {language === "en" ? "Add Connection" : "הוסף קשר"}
           </Button>
         </div>
       </form>
 
       <div className="space-y-4">
-        <h3 className="font-medium">{t("connectedUsers")}</h3>
+        <h3 className="font-medium">
+          {language === "en" ? "Connected Users" : "משתמשים מקושרים"}
+        </h3>
         {relatedUsers.length === 0 ? (
-          <p className="text-muted-foreground">{t("noConnectionsYet")}</p>
+          <p className="text-muted-foreground">
+            {language === "en" ? "No connections yet" : "אין קשרים עדיין"}
+          </p>
         ) : (
           <div className="space-y-2">
             {relatedUsers.map((user) => (
