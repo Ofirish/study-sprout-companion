@@ -69,81 +69,133 @@ export const FloatingNav = () => {
         <AnimatePresence>
           {isOpen && (
             <>
-              <NavButton
-                icon={<Languages className="h-6 w-6" />}
-                label={language === "en" ? "עברית" : "English"}
-                onClick={handleLanguageToggle}
-              />
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: -68 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+                className="absolute bottom-0"
+              >
+                <NavButton
+                  icon={<Languages className="h-6 w-6" />}
+                  label={language === "en" ? "עברית" : "English"}
+                  onClick={handleLanguageToggle}
+                />
+              </motion.div>
 
-              <NavButton
-                icon={<LogOut className="h-6 w-6" />}
-                label="Sign Out"
-                onClick={handleSignOut}
-              />
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: -68 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+                className="absolute bottom-0 mb-14"
+              >
+                <NavButton
+                  icon={<LogOut className="h-6 w-6" />}
+                  label="Sign Out"
+                  onClick={handleSignOut}
+                />
+              </motion.div>
 
-              <NavButton
-                icon={<HomeIcon className="h-6 w-6" />}
-                label="Home"
-                component={
-                  <Link to="/">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-12 w-12 rounded-full shadow-lg"
-                    >
-                      <HomeIcon className="h-6 w-6" />
-                    </Button>
-                  </Link>
-                }
-              />
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: -68 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+                className="absolute bottom-0 mb-28"
+              >
+                <NavButton
+                  icon={<HomeIcon className="h-6 w-6" />}
+                  label="Home"
+                  component={
+                    <Link to="/">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-12 w-12 rounded-full shadow-lg"
+                      >
+                        <HomeIcon className="h-6 w-6" />
+                      </Button>
+                    </Link>
+                  }
+                />
+              </motion.div>
 
-              <NavButton
-                icon={<HelpCircle className="h-6 w-6" />}
-                label="Help"
-                delay={0.1}
-                component={
-                  <Link to="/help">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-12 w-12 rounded-full shadow-lg"
-                    >
-                      <HelpCircle className="h-6 w-6" />
-                    </Button>
-                  </Link>
-                }
-              />
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: -68 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+                className="absolute bottom-0 mb-42"
+              >
+                <NavButton
+                  icon={<HelpCircle className="h-6 w-6" />}
+                  label="Help"
+                  component={
+                    <Link to="/help">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-12 w-12 rounded-full shadow-lg"
+                      >
+                        <HelpCircle className="h-6 w-6" />
+                      </Button>
+                    </Link>
+                  }
+                />
+              </motion.div>
 
-              <NavButton
-                icon={<Settings className="h-6 w-6" />}
-                label="Settings"
-                delay={0.2}
-                component={
-                  <Link to="/settings">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className="h-12 w-12 rounded-full shadow-lg"
-                    >
-                      <Settings className="h-6 w-6" />
-                    </Button>
-                  </Link>
-                }
-              />
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: -68 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+                className="absolute bottom-0 mb-56"
+              >
+                <NavButton
+                  icon={<Settings className="h-6 w-6" />}
+                  label="Settings"
+                  component={
+                    <Link to="/settings">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-12 w-12 rounded-full shadow-lg"
+                      >
+                        <Settings className="h-6 w-6" />
+                      </Button>
+                    </Link>
+                  }
+                />
+              </motion.div>
 
-              <NavButton
-                icon={<PlusCircle className="h-6 w-6" />}
-                label="Quick Add Subject"
-                delay={0.3}
-                onClick={handleQuickAdd}
-              />
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: -68 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+                className="absolute bottom-0 mb-70"
+              >
+                <NavButton
+                  icon={<PlusCircle className="h-6 w-6" />}
+                  label="Quick Add Subject"
+                  onClick={handleQuickAdd}
+                />
+              </motion.div>
 
-              <NavButton
-                icon={<></>}
-                label="Re-Colorize"
-                delay={0.4}
-                component={<ColorizeButton onOpenChange={setIsColorPickerOpen} />}
-              />
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: -68 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+                className="absolute bottom-0 mb-84"
+              >
+                <NavButton
+                  icon={<></>}
+                  label="Re-Colorize"
+                  component={<ColorizeButton onOpenChange={setIsColorPickerOpen} />}
+                />
+              </motion.div>
             </>
           )}
         </AnimatePresence>
