@@ -92,6 +92,30 @@ export type Database = {
         }
         Relationships: []
       }
+      custom_pages: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          slug: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          slug: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          slug?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       custom_subjects: {
         Row: {
           created_at: string | null
