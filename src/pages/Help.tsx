@@ -22,6 +22,14 @@ const Help = () => {
               <li>הוספה מהירה של מקצוע: לחץ על כפתור ה-+ בתפריט הצף והוסף מקצוע חדש באנגלית ובעברית</li>
             </ul>
 
+            <h2 className="text-2xl font-semibold mt-8 mb-4">חיבור תלמידים</h2>
+            <ul className="list-disc space-y-2 mr-6">
+              <li>גישה להגדרות: לחץ על כפתור ההגדרות (⚙️) בתפריט הצף</li>
+              <li>חיבור תלמיד: הכנס את כתובת המייל של התלמיד בטופס "קישור תלמידים"</li>
+              <li>הסרת תלמיד: לחץ על כפתור המחיקה ליד שם התלמיד ברשימת התלמידים המחוברים</li>
+              <li>צפייה במטלות: לאחר החיבור, תוכל לצפות במטלות של התלמיד דרך מסנן "תצוגת תלמיד"</li>
+            </ul>
+
             <h2 className="text-2xl font-semibold mt-8 mb-4">התאמה אישית</h2>
             <ul className="list-disc space-y-2 mr-6">
               <li>שינוי שפה: לחץ על כפתור השפה בפינה השמאלית העליונה</li>
@@ -47,6 +55,14 @@ const Help = () => {
               <li>Filter Assignments: Use the filters at the top to filter by status or view</li>
               <li>Change Status: Click on an assignment's status to change it</li>
               <li>Quick Add Subject: Click the + button in the floating menu to add a new subject in both English and Hebrew</li>
+            </ul>
+
+            <h2 className="text-2xl font-semibold mt-8 mb-4">Student Connections</h2>
+            <ul className="list-disc space-y-2 ml-6">
+              <li>Access Settings: Click the settings button (⚙️) in the floating menu</li>
+              <li>Connect Student: Enter the student's email in the "Student Relationships" form</li>
+              <li>Remove Student: Click the delete button next to the student's name in the connected students list</li>
+              <li>View Assignments: After connecting, you can view student assignments through the "Student View" filter</li>
             </ul>
 
             <h2 className="text-2xl font-semibold mt-8 mb-4">Customization</h2>
