@@ -9,6 +9,7 @@ import { AuthProvider } from "@/components/AuthProvider";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { FunModeProvider } from "@/contexts/FunModeContext";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import { FloatingNav } from "@/components/FloatingNav";
 import { supabase } from "@/integrations/supabase/client";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -49,6 +50,12 @@ const App = () => {
     };
   }, []);
 
+  const navCustomPages = customPages.map(page => ({
+    id: page.id,
+    name: page.name,
+    path: `/${page.slug}`
+  }));
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -79,6 +86,7 @@ const App = () => {
                   ))}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
+                <FloatingNav customPages={navCustomPages} />
               </div>
             </LanguageProvider>
           </AuthProvider>
