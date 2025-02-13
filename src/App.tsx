@@ -1,8 +1,9 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/components/AuthProvider";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { FunModeProvider } from "@/contexts/FunModeContext";
@@ -21,17 +22,15 @@ const App = () => (
         <FunModeProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter>
-            <AuthProvider>
-              <LanguageToggle />
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </AuthProvider>
-          </BrowserRouter>
+          <AuthProvider>
+            <LanguageToggle />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AuthProvider>
         </FunModeProvider>
       </LanguageProvider>
     </TooltipProvider>
