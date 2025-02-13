@@ -12,6 +12,7 @@ import { DashboardLoading } from "@/components/dashboard/DashboardLoading";
 import { DashboardContent } from "@/components/dashboard/DashboardContent";
 import { AttachmentDialog } from "@/components/dashboard/AttachmentDialog";
 import { Sparkles } from "@/components/Sparkles";
+import { Confetti } from "@/components/Confetti";
 import { useFilteredAssignments } from "@/hooks/useFilteredAssignments";
 import { useDashboardEffects } from "@/hooks/useDashboardEffects";
 import { useAssignmentManager } from "@/hooks/useAssignmentManager";
@@ -37,6 +38,7 @@ const Index = () => {
     isLoading,
     handleAddAssignment,
     handleStatusChange,
+    showConfetti,
   } = useAssignmentManager();
 
   useDashboardEffects({
@@ -74,6 +76,7 @@ const Index = () => {
   return (
     <div className={containerClasses} dir={language === "he" ? "rtl" : "ltr"}>
       {funMode && <Sparkles />}
+      {showConfetti && <Confetti />}
       <DashboardContent
         assignments={assignments}
         showFlyingName={showFlyingName}

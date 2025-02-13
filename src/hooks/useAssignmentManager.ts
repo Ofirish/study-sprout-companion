@@ -1,12 +1,15 @@
 
 import { Assignment } from "@/types/assignment";
 import { useAssignments } from "@/hooks/useAssignments";
+import { useState } from "react";
 
 interface AssignmentManagerResult {
   assignments: Assignment[];
   isLoading: boolean;
   handleAddAssignment: (newAssignment: Omit<Assignment, "id" | "status">) => Promise<string | undefined>;
   handleStatusChange: (id: string, status: Assignment["status"]) => void;
+  showConfetti: boolean;
+  setShowConfetti: (show: boolean) => void;
 }
 
 export const useAssignmentManager = (): AssignmentManagerResult => {
@@ -16,6 +19,7 @@ export const useAssignmentManager = (): AssignmentManagerResult => {
     addAssignmentMutation, 
     updateAssignmentMutation 
   } = useAssignments();
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const handleAddAssignment = async (
     newAssignment: Omit<Assignment, "id" | "status">
@@ -31,6 +35,10 @@ export const useAssignmentManager = (): AssignmentManagerResult => {
 
   const handleStatusChange = (id: string, status: Assignment["status"]) => {
     updateAssignmentMutation.mutate({ id, status });
+    if (status === "Completed") {
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 3000);
+    }
   };
 
   return {
@@ -38,5 +46,7 @@ export const useAssignmentManager = (): AssignmentManagerResult => {
     isLoading,
     handleAddAssignment,
     handleStatusChange,
+    showConfetti,
+    setShowConfetti,
   };
 };
