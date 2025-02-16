@@ -49,6 +49,8 @@ export const FloatingNav = () => {
     setShowDialog(true);
   };
 
+  const buttonSpacing = 14; // Base spacing in rem units
+
   return (
     <>
       <QuickAddSubjectDialog open={showDialog} onOpenChange={setShowDialog} />
@@ -88,7 +90,7 @@ export const FloatingNav = () => {
                 animate={{ opacity: 1, x: -68 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.2 }}
-                className="absolute bottom-[56px]"
+                className="absolute bottom-14"
               >
                 <NavButton
                   icon={<LogOut className="h-6 w-6" />}
@@ -102,7 +104,7 @@ export const FloatingNav = () => {
                 animate={{ opacity: 1, x: -68 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.2 }}
-                className="absolute bottom-[112px]"
+                className="absolute bottom-28"
               >
                 <NavButton
                   icon={<HomeIcon className="h-6 w-6" />}
@@ -126,7 +128,7 @@ export const FloatingNav = () => {
                 animate={{ opacity: 1, x: -68 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.2 }}
-                className="absolute bottom-[168px]"
+                className="absolute bottom-42"
               >
                 <NavButton
                   icon={<HelpCircle className="h-6 w-6" />}
@@ -150,7 +152,7 @@ export const FloatingNav = () => {
                 animate={{ opacity: 1, x: -68 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.2 }}
-                className="absolute bottom-[224px]"
+                className="absolute bottom-56"
               >
                 <NavButton
                   icon={<Settings className="h-6 w-6" />}
@@ -174,7 +176,7 @@ export const FloatingNav = () => {
                 animate={{ opacity: 1, x: -68 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.2 }}
-                className="absolute bottom-[280px]"
+                className="absolute bottom-70"
               >
                 <NavButton
                   icon={<PlusCircle className="h-6 w-6" />}
@@ -188,7 +190,7 @@ export const FloatingNav = () => {
                 animate={{ opacity: 1, x: -68 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.2 }}
-                className="absolute bottom-[336px]"
+                className="absolute bottom-84"
               >
                 <NavButton
                   icon={<></>}
