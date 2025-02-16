@@ -69,12 +69,13 @@ export const FloatingNav = () => {
         <AnimatePresence>
           {isOpen && (
             <>
+              {/* Left side buttons */}
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: -68 }}
-                exit={{ opacity: 0, x: -20 }}
+                exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.2 }}
-                className="absolute bottom-[0px]"
+                className="absolute bottom-0 right-[68px]"
               >
                 <NavButton
                   icon={<Languages className="h-6 w-6" />}
@@ -84,11 +85,11 @@ export const FloatingNav = () => {
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: -68 }}
-                exit={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: -140 }}
+                exit={{ opacity: 0, x: 20 }}
                 transition={{ duration: 0.2 }}
-                className="absolute bottom-[56px]"
+                className="absolute bottom-0 right-[68px]"
               >
                 <NavButton
                   icon={<LogOut className="h-6 w-6" />}
@@ -97,12 +98,13 @@ export const FloatingNav = () => {
                 />
               </motion.div>
 
+              {/* Top buttons */}
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: -68 }}
-                exit={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.2 }}
-                className="absolute bottom-[112px]"
+                className="absolute bottom-[56px]"
               >
                 <NavButton
                   icon={<HomeIcon className="h-6 w-6" />}
@@ -122,11 +124,11 @@ export const FloatingNav = () => {
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: -68 }}
-                exit={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.2 }}
-                className="absolute bottom-[168px]"
+                className="absolute bottom-[112px]"
               >
                 <NavButton
                   icon={<HelpCircle className="h-6 w-6" />}
@@ -146,11 +148,11 @@ export const FloatingNav = () => {
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: -68 }}
-                exit={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.2 }}
-                className="absolute bottom-[224px]"
+                className="absolute bottom-[168px]"
               >
                 <NavButton
                   icon={<Settings className="h-6 w-6" />}
@@ -170,11 +172,11 @@ export const FloatingNav = () => {
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: -68 }}
-                exit={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.2 }}
-                className="absolute bottom-[280px]"
+                className="absolute bottom-[224px]"
               >
                 <NavButton
                   icon={<PlusCircle className="h-6 w-6" />}
@@ -184,11 +186,11 @@ export const FloatingNav = () => {
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: -68 }}
-                exit={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.2 }}
-                className="absolute bottom-[336px]"
+                className="absolute bottom-[280px]"
               >
                 <NavButton
                   icon={<></>}
